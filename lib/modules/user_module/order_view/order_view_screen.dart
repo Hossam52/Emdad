@@ -1,5 +1,12 @@
+import 'dart:developer';
+
 import 'package:emdad/models/enums/order_status.dart';
 import 'package:emdad/modules/user_module/cart_module/cart_screen.dart';
+import 'package:emdad/modules/user_module/order_view/order_statuses_views/new_order_screen.dart';
+import 'package:emdad/modules/user_module/order_view/order_statuses_views/order_completed_screen.dart';
+import 'package:emdad/modules/user_module/order_view/order_statuses_views/order_in_progress_screen.dart';
+import 'package:emdad/modules/user_module/order_view/order_statuses_views/order_offer_screen.dart';
+import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_total_row_item.dart';
 import 'package:emdad/modules/user_module/order_view/order_tracking/order_tracking_screen.dart';
 import 'package:emdad/modules/user_module/order_view/shipping/shipping_card_build_item.dart';
 import 'package:emdad/modules/user_module/vendors_module/vendor_view/vendor_view_componants/vendor_info_build_item.dart';
@@ -21,7 +28,6 @@ class OrderViewScreen extends StatelessWidget {
     Key? key,
     required this.title,
     required this.status,
-
   }) : super(key: key);
 
   final OrderStatus status;
@@ -29,6 +35,19 @@ class OrderViewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (status == OrderStatus.completed) {
+      return OrderCompletedScreen(title: title, status: status);
+    }
+    if (status == OrderStatus.offer) {
+      return OrderOfferScreen(title: title, status: status);
+    }
+    if (status == OrderStatus.inProgress) {
+      return OrderInPorgressScreen(title: title, status: status);
+    } else {
+      return OrderNewScreen(title: title, status: status);
+    }
+
+    log(status.toString());
     return Scaffold(
       appBar: AppBar(
         title: Text(title, style: const TextStyle(color: Colors.white)),
@@ -41,14 +60,16 @@ class OrderViewScreen extends StatelessWidget {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: status == OrderStatus.inProgress ? FloatingActionButton.extended(
-        onPressed: () {
-          navigateTo(context, const OrderTrackingScreen());
-        },
-        label: const Text('متابعة العملية'),
-        icon: const Icon(MyIcons.track_order),
-        backgroundColor: AppColors.primaryColor,
-      ) : null,
+      floatingActionButton: status == OrderStatus.inProgress
+          ? FloatingActionButton.extended(
+              onPressed: () {
+                navigateTo(context, const OrderTrackingScreen());
+              },
+              label: const Text('متابعة العملية'),
+              icon: const Icon(MyIcons.track_order),
+              backgroundColor: AppColors.primaryColor,
+            )
+          : null,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -83,16 +104,18 @@ class OrderViewScreen extends StatelessWidget {
                   style: TextStyle(color: Colors.black)),
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 22, horizontal: 16),
-              trailing: status == OrderStatus.inProgress ? null : CustomIconButton(
-                width: 45.w,
-                height: 45.h,
-                icon: const Icon(MyIcons.edit, color: Colors.white),
-                buttonColor: AppColors.secondaryColor,
-                onPressed: () {
-                  navigateTo(
-                      context, CartScreen(title: 'الهدي للتوريدات الغذائيه'));
-                },
-              ),
+              trailing: status == OrderStatus.inProgress
+                  ? null
+                  : CustomIconButton(
+                      width: 45.w,
+                      height: 45.h,
+                      icon: const Icon(MyIcons.edit, color: Colors.white),
+                      buttonColor: AppColors.secondaryColor,
+                      onPressed: () {
+                        navigateTo(context,
+                            CartScreen(title: 'الهدي للتوريدات الغذائيه'));
+                      },
+                    ),
             ),
             ListView.separated(
               itemCount: 3,
@@ -129,8 +152,9 @@ class OrderViewScreen extends StatelessWidget {
               onPressed: () {},
               hasButton: false,
             ),
-            if (status == OrderStatus.inProgress || status == OrderStatus.completed
-            || status == OrderStatus.offer )
+            if (status == OrderStatus.inProgress ||
+                status == OrderStatus.completed ||
+                status == OrderStatus.offer)
               const ShippingCardBuildItem(
                 name: 'عربه نصف نقل',
                 info: 'المدة المتوقعة: 12 ساعة',
@@ -158,6 +182,7 @@ class OrderViewScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
+                      const OrderTotalRowItem(title: 'الضريبة', value: '١٢٪'),
                       Row(
                         children: [
                           Text('الضريبة',
@@ -170,8 +195,9 @@ class OrderViewScreen extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 10),
-                      if (status == OrderStatus.inProgress || status == OrderStatus.completed
-                      || status == OrderStatus.offer)
+                      if (status == OrderStatus.inProgress ||
+                          status == OrderStatus.completed ||
+                          status == OrderStatus.offer)
                         Row(
                           children: [
                             Text('الشحن',
@@ -199,21 +225,24 @@ class OrderViewScreen extends StatelessWidget {
                   ),
                 )),
             const SizedBox(height: 10),
-            if(status == OrderStatus.completed || status == OrderStatus.newOrder
-            || status == OrderStatus.offer)
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: CustomButton(
-                onPressed: () {
-                  if(status == OrderStatus.newOrder) {
-                    showOrderConfirmationDialog(context);
-                  }
-                },
-                text: status == OrderStatus.completed ? 'إعاده ارسال طلب عرض سعر' : 'إرسال طلب أمر شراء',
-                width: MediaQuery.of(context).size.width * 0.6,
-                radius: 10,
+            if (status == OrderStatus.completed ||
+                status == OrderStatus.newOrder ||
+                status == OrderStatus.offer)
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: CustomButton(
+                  onPressed: () {
+                    if (status == OrderStatus.newOrder) {
+                      showOrderConfirmationDialog(context);
+                    }
+                  },
+                  text: status == OrderStatus.completed
+                      ? 'إعاده ارسال طلب عرض سعر'
+                      : 'إرسال طلب أمر شراء',
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  radius: 10,
+                ),
               ),
-            ),
             const SizedBox(height: 50),
           ],
         ),

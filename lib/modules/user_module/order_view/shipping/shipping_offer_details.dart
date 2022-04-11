@@ -1,4 +1,5 @@
 import 'package:emdad/models/enums/order_status.dart';
+import 'package:emdad/modules/user_module/checkout/checkout_screen.dart';
 import 'package:emdad/modules/user_module/order_view/shipping/shipping_card_build_item.dart';
 import 'package:emdad/modules/user_module/vendors_module/vendor_view/vendor_view_componants/review_build_item.dart';
 import 'package:emdad/shared/componants/components.dart';
@@ -70,7 +71,17 @@ class ShippingOfferDetails extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: CustomButton(
               onPressed: () {
-                navigateTo(context, const OrderViewScreen(status: OrderStatus.newOrder, title: 'عرض سعر جديد',));
+                navigateTo(
+                  context,
+                  CheckoutScreen(onConfirmPressed: () {
+                    navigateTo(
+                        context,
+                        const OrderViewScreen(
+                          status: OrderStatus.inProgress,
+                          title: 'عرض سعر جديد',
+                        ));
+                  }),
+                );
               },
               text: 'قبول عرض السعر',
               width: MediaQuery.of(context).size.width * 0.6,

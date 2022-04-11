@@ -24,7 +24,8 @@ class TransporterDeliveryOrdersScreen extends StatelessWidget {
               itemCount: 5,
               itemBuilder: (context, index) => OrderBuildItem1(
                 title: 'الرحمة للمأكولات',
-                image: 'https://upload.wikimedia.org/wikipedia/sco/thumb/b/bf/KFC_logo.svg/1200px-KFC_logo.svg.png',
+                image:
+                    'https://upload.wikimedia.org/wikipedia/sco/thumb/b/bf/KFC_logo.svg/1200px-KFC_logo.svg.png',
                 hasBadge: true,
                 onTap: () {
                   navigateTo(context, TransporterOrderDetailsScreen());

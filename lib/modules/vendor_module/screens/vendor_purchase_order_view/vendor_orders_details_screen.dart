@@ -80,12 +80,12 @@ class VendorOrderDetailsScreen extends StatelessWidget {
               separatorBuilder: (context, index) => const SizedBox(height: 15),
               itemBuilder: (context, index) => InkWell(
                 onTap: () {
-                  if(isCompleted == false) {
+                  if (isCompleted == false) {
                     showModalSheet(
-                      context: context,
-                      title: 'تحديد سعر المنتج',
-                      isTransporter: false,
-                      isOutList: false);
+                        context: context,
+                        title: 'تحديد سعر المنتج',
+                        isTransporter: false,
+                        isOutList: false);
                   }
                 },
                 child: const OrderItemBuild(
@@ -108,12 +108,12 @@ class VendorOrderDetailsScreen extends StatelessWidget {
               separatorBuilder: (context, index) => const SizedBox(height: 15),
               itemBuilder: (context, index) => InkWell(
                 onTap: () {
-                  if(isCompleted == false) {
+                  if (isCompleted == false) {
                     showModalSheet(
-                      context: context,
-                      title: 'تحديد سعر الطلب',
-                      isTransporter: false,
-                      isOutList: true);
+                        context: context,
+                        title: 'تحديد سعر الطلب',
+                        isTransporter: false,
+                        isOutList: true);
                   }
                 },
                 child: const OrderItemBuild(
@@ -131,12 +131,12 @@ class VendorOrderDetailsScreen extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                if(isCompleted == false) {
+                if (isCompleted == false) {
                   showModalSheet(
-                    context: context,
-                    title: 'تحديد سعر النقل',
-                    isTransporter: true,
-                    isOutList: false);
+                      context: context,
+                      title: 'تحديد سعر النقل',
+                      isTransporter: true,
+                      isOutList: false);
                 }
               },
               child: Card(
@@ -216,18 +216,20 @@ class VendorOrderDetailsScreen extends StatelessWidget {
                       width: 103.w,
                       height: 63.h,
                       color: AppColors.textButtonColor,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text('إجمالي',
-                              style: subTextStyle().copyWith(
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white)),
-                          SizedBox(height: 10.h),
-                          Text('٩٠٩٠ ريال سعودي',
-                              style:
-                                  subTextStyle().copyWith(color: Colors.white)),
-                        ],
+                      child: FittedBox(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text('إجمالي',
+                                style: subTextStyle().copyWith(
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.white)),
+                            SizedBox(height: 10.h),
+                            Text('٩٠٩٠ ريال سعودي',
+                                style: subTextStyle()
+                                    .copyWith(color: Colors.white)),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -237,8 +239,12 @@ class VendorOrderDetailsScreen extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: CustomButton(
                 onPressed: () {
-                  if(isCompleted) {
-                    navigateTo(context, const OrderViewScreen(title: 'طلب عرض سعر', status: OrderStatus.inProgress));
+                  if (isCompleted) {
+                    navigateTo(
+                        context,
+                        const OrderViewScreen(
+                            title: 'طلب عرض سعر',
+                            status: OrderStatus.inProgress));
                   } else {
                     showOrderConfirmationDialog(context);
                   }
@@ -254,5 +260,4 @@ class VendorOrderDetailsScreen extends StatelessWidget {
       ),
     );
   }
-
 }

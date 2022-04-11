@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
-  final Function()? onPressed;
+  final VoidCallback? onPressed;
   final Color backgroundColor;
   final Color textColor;
   final Color borderColor;
@@ -44,7 +44,9 @@ class CustomButton extends StatelessWidget {
         disabledColor: Colors.grey,
         shape: RoundedRectangleBorder(
           side: hasBorder
-              ? BorderSide(width: 1.5, color: onPressed != null ? borderColor : Colors.grey)
+              ? BorderSide(
+                  width: 1.5,
+                  color: onPressed != null ? borderColor : Colors.grey)
               : BorderSide.none,
           borderRadius: BorderRadius.circular(radius),
         ),

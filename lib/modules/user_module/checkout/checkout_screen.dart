@@ -1,16 +1,33 @@
+import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 
 class CheckoutScreen extends StatelessWidget {
-  const CheckoutScreen({Key? key}) : super(key: key);
-
+  const CheckoutScreen({Key? key, required this.onConfirmPressed})
+      : super(key: key);
+  final VoidCallback onConfirmPressed;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("PAYMENT"),
       ),
-      body: const Center(
-        child: Text('PAYMENT Screen'),
+      body: Center(
+        child: Column(
+          children: [
+            const Expanded(child: Center(child: Text('PAYMENT Screen'))),
+            const Spacer(
+              flex: 5,
+            ),
+            CustomButton(
+              onPressed: () {
+                Navigator.pop(context);
+                onConfirmPressed();
+              },
+              text: 'Pay',
+            ),
+            const Spacer(),
+          ],
+        ),
       ),
     );
   }

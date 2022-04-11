@@ -3,15 +3,17 @@ import 'package:emdad/modules/user_module/checkout/checkout_screen.dart';
 import 'package:emdad/modules/user_module/order_view/shipping/shipping_offers_screen.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/widgets/dialogs/confirm_order_dialog.dart';
 import 'package:emdad/shared/widgets/custom_buton_with_icon.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:emdad/shared/widgets/custom_text.dart';
+import 'package:emdad/shared/widgets/dialogs/request_transform_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'icons/my_icons_icons.dart';
 
-void navigateTo(context, widget) => Navigator.push(
+Future<void> navigateTo(context, widget) async => await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => widget,
@@ -77,53 +79,19 @@ void showAppFilter({
       ),
     );
 
-void showOrderConfirmationDialog(BuildContext context) => showDialog(
-      context: context,
-      builder: (context) => Dialog(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'تأكيد أمر الشراء',
-                style: thirdTextStyle().copyWith(fontWeight: FontWeight.w600),
-              ),
-              SizedBox(height: 66.h),
-              CheckboxListTile(
-                value: false,
-                checkColor: Colors.white,
-                activeColor: AppColors.successColor,
-                contentPadding: EdgeInsets.zero,
-                onChanged: (value) {},
-                title: Text(
-                  'هل لديك توصيل خاص ؟',
-                  style:
-                      thirdTextStyle().copyWith(color: AppColors.primaryColor),
-                ),
-              ),
-              SizedBox(height: 50.h),
-              CustomButton(
-                onPressed: () {
-                  navigateTo(context, const CheckoutScreen());
-                },
-                text: 'إرسال أمر الشراء',
-                radius: 10,
-              ),
-              SizedBox(height: 20.h),
-              CustomButton(
-                onPressed: () {
-                  navigateTo(context, const ShippingOffersScreen());
-                },
-                text: 'إرسال طلب عرض سعر لشركة نقل',
-                backgroundColor: AppColors.thirdColor,
-                radius: 10,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+Future<bool?> showOrderConfirmationDialog(BuildContext context) async {
+  return await showDialog<bool>(
+    context: context,
+    builder: (context) => const ConfirmOrderDialog(),
+  );
+}
+
+Future<bool?> showRequestTransformMethod(BuildContext context) async {
+  return await showDialog<bool>(
+    context: context,
+    builder: (context) => const RequestTransformDialog(),
+  );
+}
 
 Widget buildModalSheetTransporterItem({
   required BuildContext context,
@@ -455,6 +423,7 @@ void showSnackBar({
     ),
   );
 }
+
 Color generateSnackBarColors(SnackBarStates states) {
   Color color;
   switch (states) {
@@ -473,6 +442,7 @@ Color generateSnackBarColors(SnackBarStates states) {
   }
   return color;
 }
+
 Icon? generateSnackBarIcons(SnackBarStates states) {
   Icon? icon;
   switch (states) {

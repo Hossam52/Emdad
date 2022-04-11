@@ -1,5 +1,7 @@
+import 'package:emdad/modules/auth_module/screens/update_profile/change_password/change_password.dart';
 import 'package:emdad/modules/settings/profile_info_build_item.dart';
 import 'package:emdad/modules/settings/setting_tile_build_item.dart';
+import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/constants.dart';
 import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';
@@ -36,7 +38,9 @@ class SettingsScreen extends StatelessWidget {
                 title: 'تغيير الرقم السري',
                 leading: const Icon(MyIcons.lock,
                     color: AppColors.primaryColor, size: 17),
-                onTap: () {},
+                onTap: () {
+                  navigateTo(context, ChangePasswordScreen());
+                },
               ),
               const Divider(height: 0),
               SettingTileBuildItem(

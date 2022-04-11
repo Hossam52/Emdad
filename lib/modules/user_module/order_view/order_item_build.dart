@@ -35,33 +35,33 @@ class OrderItemBuild extends StatelessWidget {
               child: CustomDataTable(
                 columns: columns,
                 rows: rows,
-                columnSpacing: 22.w,
+                columnSpacing: 5.w,
                 headingRowColor: Colors.grey.withOpacity(0.2),
                 headingTextColor: AppColors.primaryColor,
                 dataTextColor: Colors.black,
               ),
             ),
-            if(hasTotal)
-            Container(
-              color: Colors.grey,
-              padding: const EdgeInsets.symmetric(horizontal: 18),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'إجمالي',
-                    style: subTextStyle().copyWith(
-                        color: Colors.white, fontWeight: FontWeight.w700),
-                  ),
-                  Text(
-                    '١٨٠٠ ر.س',
-                    style: subTextStyle().copyWith(
-                        color: Colors.white, fontWeight: FontWeight.w700),
-                  ),
-                ],
-              ),
-            )
+            if (hasTotal)
+              Container(
+                color: Colors.grey,
+                padding: const EdgeInsets.symmetric(horizontal: 18),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'إجمالي',
+                      style: subTextStyle().copyWith(
+                          color: Colors.white, fontWeight: FontWeight.w700),
+                    ),
+                    Text(
+                      '١٨٠٠ ر.س',
+                      style: subTextStyle().copyWith(
+                          color: Colors.white, fontWeight: FontWeight.w700),
+                    ),
+                  ],
+                ),
+              )
           ],
         ),
       ),
