@@ -1,0 +1,8 @@
+{
+  "language":"English",
+  "@language":{
+    "description":"the current language"
+  },
+  "no_data": "Sorry, there's no data",
+  "try_again": "Try again"
+}

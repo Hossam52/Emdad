@@ -1,0 +1,111 @@
+import 'package:country_code_picker/country_code_picker.dart';
+import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'custom_text.dart';
+
+class CustomPhoneTextFormField extends StatelessWidget {
+  final TextEditingController? controller;
+  final TextInputType? type;
+  final String? hint;
+  final Function(String)? onSubmit;
+  final Function(String)? onChange;
+  final String? Function(String?)? validate;
+  final String? labelText;
+  final String? titleText;
+  final Function()? onTap;
+  final IconData? suffixIcon;
+  final bool isPassword;
+  final bool enabled;
+  final Function? suffixPressed;
+  final Function(String?)? onSaved;
+  final FocusNode? focusNode;
+
+  const CustomPhoneTextFormField({
+    Key? key,
+    this.controller,
+    required this.type,
+    required this.hint,
+    this.onSubmit,
+    this.onChange,
+    required this.validate,
+    this.labelText,
+    this.titleText,
+    this.onTap,
+    this.suffixIcon,
+    this.isPassword = false,
+    this.enabled = true,
+    this.suffixPressed,
+    this.onSaved,
+    this.focusNode,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      height: 80.h,
+      width: double.infinity,
+      child: Row(
+        children: [
+          Expanded(
+            child: TextFormField(
+              enabled: enabled,
+              focusNode: focusNode,
+              textAlignVertical: TextAlignVertical.center,
+              textAlign: TextAlign.left,
+              controller: controller,
+              keyboardType: type,
+              onFieldSubmitted: onSubmit,
+              onChanged: onChange,
+              onTap: onTap,
+              onSaved: onSaved,
+              validator: validate,
+              obscureText: isPassword,
+              style: TextStyle(
+                fontSize: 18.sp,
+                fontWeight: FontWeight.w300,
+                color: Colors.black,
+              ),
+              decoration: InputDecoration(
+                labelText: labelText,
+                labelStyle: TextStyle(
+                  fontSize: 18.sp,
+                ),
+                hintText: hint,
+                hintStyle: TextStyle(color: Colors.black, fontSize: 18.sp),
+                prefixIcon: CountryCodePicker(
+                  backgroundColor: Colors.white,
+                  enabled: true,
+                  // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
+                  initialSelection: 'Eg',
+                  padding: EdgeInsets.zero,
+                  flagWidth: 20.w,
+                  showDropDownButton: true,
+                  boxDecoration: const BoxDecoration(
+                    color: Colors.white,
+                  ),
+                  flagDecoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5.r),
+                  ),
+                  showFlagMain: true,
+                  onChanged: print,
+                  favorite: const ['+20', 'Eg', '+966'],
+                  // barrierColor: AppColors.primaryColor,
+                ),
+                suffixIcon: SizedBox(
+                  width: 50.w,
+                  height: 10.h,
+                  child: CustomText(
+                    text: titleText,
+                    textStyle: subTextStyle(),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

@@ -1,0 +1,86 @@
+name: emdad
+description: A new Flutter project.
+
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # localization plugins
+  flutter_localizations: # Add this line
+    sdk: flutter
+  # network
+  dio: ^4.0.4
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.4
+  flutter_svg:
+  shared_preferences:
+  country_code_picker: ^2.0.2
+  flutter_screenutil:
+  pin_code_fields: ^7.3.0
+  bloc: ^8.0.3
+  flutter_bloc: ^8.0.1
+  flutter_snake_navigationbar:
+  shimmer: ^2.0.0
+  carousel_slider: ^4.0.0
+  flutter_rating_bar: ^4.0.0
+  flutter_lints:
+  smooth_page_indicator: ^1.0.0+2
+  dotted_line: ^3.1.0
+  image_picker:
+  cached_network_image: ^3.2.0
+  progress_state_button: ^1.0.4
+  flutter_conditional_rendering: ^2.0.0
+
+  # Maps
+  open_location_picker: ^0.0.3
+  location: ^4.2.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  intl: ^0.17.0
+
+
+
+# The following section is specific to Flutter.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  generate: true
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/icons/
+    - assets/images/
+
+  # To add custom fonts to your application, add a fonts section here,
+  fonts:
+      - family: Cairo
+        fonts:
+          - asset: assets/fonts/Cairo/Cairo_Bold.ttf
+            weight: 700
+          - asset: assets/fonts/Cairo/Cairo_SemiBold.ttf
+            weight: 600
+          - asset: assets/fonts/Cairo/Cairo_Medium.ttf
+            weight: 500
+          - asset: assets/fonts/Cairo/Cairo_Regular.ttf
+            weight: 400
+
+      - family: MyIcons
+        fonts:
+          - asset: assets/fonts/MyIcons.ttf
