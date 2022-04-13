@@ -1,3 +1,4 @@
+import 'package:emdad/modules/transporter_module/screens/transporter_offers_view/transporter_offer_details_screen.dart';
 import 'package:emdad/modules/user_module/vendors_module/vendor_view/vendor_view_componants/vendor_info_build_item.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
@@ -103,7 +104,13 @@ class CartScreen extends StatelessWidget {
                 children: [
                   Expanded(
                       child: CustomButton(
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () async {
+                      await showDialog(
+                          context: context,
+                          builder: (_) =>
+                              SuccessSendingOffer(onPressed: () {}));
+                      Navigator.pop(context);
+                    },
                     text: 'تأكيد طلب عرض سعر',
                     backgroundColor: AppColors.primaryColor,
                   )),

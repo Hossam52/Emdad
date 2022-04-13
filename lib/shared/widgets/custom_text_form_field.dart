@@ -28,7 +28,8 @@ class CustomTextFormField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final bool isOptional;
   final bool isRequired;
-
+  final int minLines;
+  final int? maxLines;
   const CustomTextFormField({
     Key? key,
     this.controller,
@@ -54,6 +55,8 @@ class CustomTextFormField extends StatelessWidget {
     this.inputFormatters,
     this.isOptional = false,
     this.isRequired = false,
+    this.minLines = 1,
+    this.maxLines = 1,
   }) : super(key: key);
 
   @override
@@ -68,9 +71,14 @@ class CustomTextFormField extends StatelessWidget {
               style: thirdTextStyle(),
               children: <TextSpan>[
                 if (isOptional)
-                  TextSpan(text: ' (اختيارى)', style: subTextStyle().copyWith(color: Colors.grey)),
-                if(isRequired)
-                  TextSpan(text: ' *', style: thirdTextStyle().copyWith(color: AppColors.errorColor)),
+                  TextSpan(
+                      text: ' (اختيارى)',
+                      style: subTextStyle().copyWith(color: Colors.grey)),
+                if (isRequired)
+                  TextSpan(
+                      text: ' *',
+                      style: thirdTextStyle()
+                          .copyWith(color: AppColors.errorColor)),
               ],
             ),
           ),
@@ -90,6 +98,8 @@ class CustomTextFormField extends StatelessWidget {
             onTap: onTap,
             onSaved: onSaved,
             validator: validation,
+            minLines: minLines,
+            maxLines: maxLines,
             obscureText: isSecure,
             style: secondaryTextStyle(),
             inputFormatters: inputFormatters,
@@ -111,7 +121,10 @@ class CustomTextFormField extends StatelessWidget {
                     )
                   : null,
               prefixIcon: prefix,
-              border: hasBorder ? null : InputBorder.none,
+              border: hasBorder
+                  ? OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(borderRadius))
+                  : InputBorder.none,
             ),
           ),
         ),

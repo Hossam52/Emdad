@@ -55,7 +55,9 @@ class SharedMethods {
       FilteringTextInputFormatter.digitsOnly;
 
   static String? getUserToken() {
-    String? token = Constants.userToken?? Constants.vendorToken?? Constants.transporterToken;
+    String? token = Constants.userToken ??
+        Constants.vendorToken ??
+        Constants.transporterToken;
     return token;
   }
 
@@ -66,24 +68,36 @@ class SharedMethods {
       return null;
     }
   }
-  static void signOutVendor(BuildContext context) {
-      try {
-        CacheHelper.removeData(key: 'vendorToken');
-        CacheHelper.removeData(key: 'userToken');
-        CacheHelper.removeData(key: 'transporterToken');
-        Constants.vendorToken = null;
-        Constants.userToken = null;
-        Constants.transporterToken = null;
-        navigateToAndFinish(context, LoginScreen());
-      } catch (e) {
-        rethrow;
-      }
-    }
-    static void unFocusTextField(BuildContext context) {
-      FocusScopeNode currentFocus = FocusScope.of(context);
 
-      if (!currentFocus.hasPrimaryFocus) {
-        currentFocus.unfocus();
-      }
+  static void signOutVendor(BuildContext context) {
+    try {
+      CacheHelper.removeData(key: 'vendorToken');
+      CacheHelper.removeData(key: 'userToken');
+      CacheHelper.removeData(key: 'transporterToken');
+      Constants.vendorToken = null;
+      Constants.userToken = null;
+      Constants.transporterToken = null;
+      navigateToAndFinish(context, LoginScreen());
+    } catch (e) {
+      rethrow;
     }
+  }
+
+  static void unFocusTextField(BuildContext context) {
+    FocusScopeNode currentFocus = FocusScope.of(context);
+
+    if (!currentFocus.hasPrimaryFocus) {
+      currentFocus.unfocus();
+    }
+  }
+
+  static double getWidth(BuildContext context) =>
+      MediaQuery.of(context).size.width;
+  static double getHeight(BuildContext context) =>
+      MediaQuery.of(context).size.height;
+
+  static double getWidthFraction(BuildContext context, double ratio) =>
+      getWidth(context) * ratio;
+  static double getHeightFraction(BuildContext context, double ratio) =>
+      getHeight(context) * ratio;
 }

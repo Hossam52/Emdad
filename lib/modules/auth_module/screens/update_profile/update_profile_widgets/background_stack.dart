@@ -7,16 +7,23 @@ class BackgroundStack extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Stack(
       children: [
+        Positioned(
+            top: -height * 0.3 * 1.3,
+            child: buildCircle(height * 0.3, AppColors.secondaryColor)),
+        Positioned(
+            right: -height * 0.3 * 1.2,
+            top: 0,
+            bottom: 0,
+            child: buildCircle(
+                height * 0.3, AppColors.thirdColor.withOpacity(0.17))),
         Container(
           height: double.infinity,
           width: double.infinity,
           child: child,
         ),
-        Positioned(
-            top: height * 0.3 + height * 0.28,
-            child: buildCircle(height * 0.3, AppColors.primaryColor))
       ],
     );
   }

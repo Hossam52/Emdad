@@ -187,29 +187,32 @@ class _TestAccounts extends StatelessWidget {
       children: [
         TextButton(
             onPressed: () {
-              login(context, 'testuser@gmail.com');
+              login(context, 'testuser@gmail.com', type: 'user');
             },
-            child: const Text('User')),
+            child: const Text(
+              'User',
+            )),
         TextButton(
             onPressed: () {
-              login(context, 'testvendor@gmail.com');
+              login(context, 'testvendor@gmail.com', type: 'vendor');
             },
             child: const Text('Vendor')),
         TextButton(
             onPressed: () {
-              login(context, 'testtransporter@gmail.com');
+              login(context, 'testtransporter@gmail.com', type: 'transporter');
             },
             child: const Text('Transporter')),
       ],
     );
   }
 
-  void login(BuildContext context, String email, [String password = '123456']) {
+  void login(BuildContext context, String email,
+      {String password = '123456', String? type}) {
     AuthCubit.get(context).loginUser(
-      email: email,
-      password: password,
-      firebaseToken: '',
-      context: context,
-    );
+        email: email,
+        password: password,
+        firebaseToken: '',
+        context: context,
+        type: type);
   }
 }

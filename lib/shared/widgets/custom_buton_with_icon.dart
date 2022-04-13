@@ -23,7 +23,7 @@ class CustomButtonWithIcon extends StatelessWidget {
     this.text = 'write text',
     this.textColor = Colors.white,
     this.color = AppColors.textButtonColor,
-    this.radius = 5.0,
+    this.radius = 10.0,
     this.padding = 5.0,
     this.width = double.infinity,
     this.height = 50,

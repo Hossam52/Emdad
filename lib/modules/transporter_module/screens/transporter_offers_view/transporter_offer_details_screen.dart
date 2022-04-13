@@ -88,8 +88,6 @@ class _TransporterOfferDetailsScreenState
             ),
             SizedBox(height: 20.h),
 
-
-
             /// put list view here //
 
             ListView.separated(
@@ -136,11 +134,13 @@ class _TransporterOfferDetailsScreenState
                 SizedBox(width: 20.w),
                 Card(
                   elevation: 5,
-                  child: Container(padding: EdgeInsets.all(5.w),
+                  child: Container(
+                    padding: EdgeInsets.all(5.w),
                     height: 40.h,
                     child: DropdownButton(
                       underline: const Text(''),
-                      style: subTextStyle().copyWith(color: Colors.black, fontWeight: FontWeight.w500),
+                      style: subTextStyle().copyWith(
+                          color: Colors.black, fontWeight: FontWeight.w500),
                       value: dropDownValue,
                       icon: const Icon(Icons.keyboard_arrow_down),
                       items: items.map((String items) {
@@ -230,8 +230,8 @@ class _TransporterOfferDetailsScreenState
                               CustomText(
                                 text: 'إجمالي',
                                 textAlign: TextAlign.start,
-                                textStyle:
-                                    subTextStyle().copyWith(color: Colors.white),
+                                textStyle: subTextStyle()
+                                    .copyWith(color: Colors.white),
                               ),
                               CustomText(
                                 text: '٩٠٩٠ ريال سعودي',
@@ -256,41 +256,52 @@ class _TransporterOfferDetailsScreenState
               onPressed: () {
                 showDialog(
                     context: context,
-                    builder: (ctx) => AlertDialog(
-                      title: CustomText(
-                        text: 'تم إرسال العرض بنجاح',
-                        textStyle: thirdTextStyle()
-                            .copyWith(fontWeight: FontWeight.w500),
-                      ),
-                      content: CircleAvatar(
-                        radius: 40.r,
-                        backgroundColor: const Color(0xff39AA2D),
-                        child: const Icon(Icons.check, color: Colors.white),
-                      ),
-                      actions: <Widget>[
-                        CustomButton(
-                          width: 215.w,
-                          text: 'إغلاق',
-                          backgroundColor: Colors.red,
-                          textStyle: thirdTextStyle().copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500),
-                          onPressed: () {
-                            Navigator.of(ctx).pop(true);
-                            navigateToAndFinish(
-                                context, const TransporterLayout());
-                          },
-                        ),
-                      ],
-                      actionsAlignment: MainAxisAlignment.center,
-                    ));
+                    builder: (ctx) => SuccessSendingOffer(onPressed: () {
+                          navigateToAndFinish(
+                              context, const TransporterLayout());
+                        }));
               },
               text: 'إرسال عرض سعر توصيل',
-              textStyle: thirdTextStyle().copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+              textStyle: thirdTextStyle()
+                  .copyWith(color: Colors.white, fontWeight: FontWeight.w500),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class SuccessSendingOffer extends StatelessWidget {
+  const SuccessSendingOffer({Key? key, required this.onPressed})
+      : super(key: key);
+  final VoidCallback onPressed;
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: CustomText(
+        text: 'تم إرسال العرض بنجاح',
+        textStyle: thirdTextStyle().copyWith(fontWeight: FontWeight.w500),
+      ),
+      content: CircleAvatar(
+        radius: 40.r,
+        backgroundColor: const Color(0xff39AA2D),
+        child: const Icon(Icons.check, color: Colors.white),
+      ),
+      actions: <Widget>[
+        CustomButton(
+          width: 215.w,
+          text: 'إغلاق',
+          backgroundColor: Colors.red,
+          textStyle: thirdTextStyle()
+              .copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+          onPressed: () {
+            Navigator.of(context).pop(true);
+            onPressed();
+          },
+        ),
+      ],
+      actionsAlignment: MainAxisAlignment.center,
     );
   }
 }

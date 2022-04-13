@@ -1,3 +1,4 @@
+import 'package:emdad/modules/auth_module/screens/update_profile/change_email/change_email.dart';
 import 'package:emdad/modules/auth_module/screens/update_profile/change_password/change_password.dart';
 import 'package:emdad/modules/settings/profile_info_build_item.dart';
 import 'package:emdad/modules/settings/setting_tile_build_item.dart';
@@ -40,6 +41,14 @@ class SettingsScreen extends StatelessWidget {
                     color: AppColors.primaryColor, size: 17),
                 onTap: () {
                   navigateTo(context, ChangePasswordScreen());
+                },
+              ),
+              SettingTileBuildItem(
+                title: 'تغيير الايميل',
+                leading: const Icon(Icons.email,
+                    color: AppColors.primaryColor, size: 17),
+                onTap: () {
+                  navigateTo(context, const ChangeEmailScreen());
                 },
               ),
               const Divider(height: 0),
