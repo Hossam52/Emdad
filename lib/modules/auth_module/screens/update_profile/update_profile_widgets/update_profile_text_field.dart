@@ -26,6 +26,7 @@ class UpdateProfileTextField extends StatelessWidget {
         ),
         CustomTextFormField(
           borderRadius: 15,
+          hasBorder: false,
           controller: textEditingController,
           type: TextInputType.visiblePassword,
           validation: (txt) {},

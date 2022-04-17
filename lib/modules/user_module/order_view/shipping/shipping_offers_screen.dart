@@ -1,3 +1,4 @@
+import 'package:emdad/layout/vendor_layout/cubit/vendor_cubit.dart';
 import 'package:emdad/modules/user_module/my_orders/orders_build_item.dart';
 import 'package:emdad/modules/user_module/offers_module/title_with_filter_build_item.dart';
 import 'package:emdad/modules/user_module/order_view/shipping/shipping_offer_details.dart';
@@ -25,6 +26,11 @@ class ShippingOffersScreen extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) => OrderBuildItem(
+                order: VendorCubit.instance(context)
+                    .allVendorRequests!
+                    .supplyRequests
+                    .first, //Replace it
+
                 title: 'شركه النور للنقل',
                 image:
                     'https://media-exp1.licdn.com/dms/image/C4E0BAQG6W8dqXakgSg/company-logo_200_200/0/1519911646250?e=1643241600&v=beta&t=PnYJyb4ht9NLo9zL3t6KZr8ngN0no6smC7abRaiCFBs',

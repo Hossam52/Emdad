@@ -2,10 +2,14 @@ import 'dart:io';
 
 import 'package:emdad/layout/vendor_layout/cubit/vendor_cubit.dart';
 import 'package:emdad/models/general_models/product_detailes.dart';
+import 'package:emdad/modules/vendor_module/price_details_table.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:emdad/shared/widgets/custom_text.dart';
+import 'package:emdad/shared/widgets/custom_text_form_field.dart';
+import 'package:emdad/shared/widgets/dialogs/add_new_price.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -33,10 +37,10 @@ class _VendorEditProductScreenState extends State<VendorEditProductScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<VendorCubit, VendorState>(
+    return VendorBlocConsumer(
       listener: (context, state) {},
       builder: (context, state) {
-        var vendorCubit = VendorCubit.get(context);
+        var vendorCubit = VendorCubit.instance(context);
         return Scaffold(
           backgroundColor: AppColors.scaffoldBackgroundColor,
           appBar: AppBar(
@@ -59,6 +63,11 @@ class _VendorEditProductScreenState extends State<VendorEditProductScreen> {
                 fontWeight: FontWeight.w700,
               ),
             ),
+            actions: const [
+              ChangeLangWidget(
+                color: Colors.white,
+              )
+            ],
           ),
           body: SizedBox(
             height: 900,
@@ -249,114 +258,7 @@ class _VendorEditProductScreenState extends State<VendorEditProductScreen> {
                           ],
                         ),
                         SizedBox(height: 20.h),
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12.r),
-                            shape: BoxShape.rectangle,
-                            border: Border.all(
-                              width: 2,
-                              color: AppColors.textButtonColor,
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12.r),
-                                  shape: BoxShape.rectangle,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    CustomText(
-                                      text: 'وحدة القياس',
-                                      textStyle: subTextStyle().copyWith(
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                    CustomText(
-                                      text: 'الحد الادني',
-                                      textStyle: subTextStyle().copyWith(
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                    CustomText(
-                                      text: 'سعر الوحدة',
-                                      textStyle: subTextStyle().copyWith(
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                    CustomText(
-                                      text: 'الضريبة',
-                                      textStyle: subTextStyle().copyWith(
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 10.h),
-                              SizedBox(
-                                height: 100.h,
-                                child: ListView.separated(
-                                  itemBuilder: (context, index) => Dismissible(
-                                    key: ValueKey<ProductDetailsModel>(
-                                        vendorCubit.products[index]),
-                                    confirmDismiss: (direction) {
-                                      return showDialog(
-                                        context: context,
-                                        builder: (ctx) => AlertDialog(
-                                          title: const Text("حذف سعر"),
-                                          content: const Text("هل أنت متأكد"),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () {
-                                                vendorCubit
-                                                    .deletePriceDetails(index);
-                                                Navigator.of(ctx).pop(true);
-                                              },
-                                              child: Text(
-                                                "نعم",
-                                                style:
-                                                    thirdTextStyle().copyWith(
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all<
-                                                        Color>(Colors.red),
-                                              ),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(ctx).pop(false);
-                                              },
-                                              child: Text(
-                                                "لا",
-                                                style:
-                                                    thirdTextStyle().copyWith(
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all<
-                                                        Color>(Colors.green),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                    background: Container(color: Colors.red),
-                                    child: buildPriceDetailsItem(),
-                                  ),
-                                  separatorBuilder: (context, index) =>
-                                      SizedBox(height: 20.h),
-                                  itemCount: vendorCubit.products.length,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                        const PriceDetailsTable(),
                         SizedBox(height: 40.h),
                         ListTile(
                           trailing: Checkbox(
@@ -405,7 +307,7 @@ class _VendorEditProductScreenState extends State<VendorEditProductScreen> {
       ),
       context: context,
       builder: (BuildContext context) {
-        return buildModalSheetItem();
+        return const AddNewPriceDialog();
       },
     );
   }
@@ -509,128 +411,17 @@ class _VendorEditProductScreenState extends State<VendorEditProductScreen> {
     );
   }
 
-  Widget buildModalSheetItem() {
-    return SizedBox(
-      height: 450.h,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-        child: ListView(
-          physics: const BouncingScrollPhysics(),
-          children: [
-            ListTile(
-              leading: CustomText(
-                text: 'وحدة القياس',
-                textStyle: subTextStyle().copyWith(fontWeight: FontWeight.w700),
-              ),
-              trailing: SizedBox(
-                width: 200.w,
-                child: buildTextFormField(
-                  controller: null,
-                  onChanged: (String? value) {},
-                  onSubmitted: (String? value) {},
-                ),
-              ),
-              title: SizedBox(width: 20.w),
-            ),
-            SizedBox(height: 20.h),
-            ListTile(
-              leading: CustomText(
-                text: 'الحد الادني',
-                textStyle: subTextStyle().copyWith(fontWeight: FontWeight.w700),
-              ),
-              trailing: SizedBox(
-                width: 200.w,
-                child: buildTextFormField(
-                  controller: null,
-                  onChanged: (String? value) {},
-                  onSubmitted: (String? value) {},
-                ),
-              ),
-              title: SizedBox(width: 20.w),
-            ),
-            SizedBox(height: 30.h),
-            ListTile(
-              leading: CustomText(
-                text: 'سعر الوحدة',
-                textStyle: subTextStyle().copyWith(fontWeight: FontWeight.w700),
-              ),
-              trailing: SizedBox(
-                width: 200.w,
-                child: buildTextFormField(
-                  controller: null,
-                  onChanged: (String? value) {},
-                  onSubmitted: (String? value) {},
-                ),
-              ),
-              title: SizedBox(width: 20.w),
-            ),
-            SizedBox(height: 20.h),
-            ListTile(
-              leading: CustomText(
-                text: 'الضريبة',
-                textStyle: subTextStyle().copyWith(fontWeight: FontWeight.w700),
-              ),
-              trailing: SizedBox(
-                width: 200.w,
-                child: buildTextFormField(
-                  controller: null,
-                  onChanged: (String? value) {},
-                  onSubmitted: (String? value) {},
-                ),
-              ),
-              title: SizedBox(width: 20.w),
-            ),
-            SizedBox(height: 30.h),
-            Align(
-              child: CustomButton(
-                width: 176.w,
-                height: 60.h,
-                backgroundColor: AppColors.primaryColor,
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                text: 'حفظ',
-                radius: 4.r,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget buildTextFormField({
     required TextEditingController? controller,
     required Function(String)? onChanged,
     required Function(String)? onSubmitted,
   }) {
-    return SizedBox(
-      height: 50.h,
-      child: TextFormField(
-        cursorColor: Colors.grey,
-        textAlignVertical: TextAlignVertical.center,
-        controller: controller,
-        decoration: InputDecoration(
-          contentPadding:
-              EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
-          border: InputBorder.none,
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(4.r),
-            borderSide: const BorderSide(
-              color: AppColors.textButtonColor,
-            ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(4.r),
-            borderSide: const BorderSide(
-              color: AppColors.textButtonColor,
-            ),
-          ),
-        ),
-        style: thirdTextStyle().copyWith(fontWeight: FontWeight.w700),
-        onChanged: onChanged,
-        onFieldSubmitted: onSubmitted,
-      ),
+    return CustomTextFormField(
+      validation: (val) {},
+      controller: controller,
+      contentPadding: const EdgeInsets.all(4),
+      onChange: onChanged,
+      onSubmit: onSubmitted,
     );
   }
 }

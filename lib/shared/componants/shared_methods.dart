@@ -2,6 +2,7 @@ import 'package:emdad/modules/auth_module/screens/login_view/login_screen.dart';
 import 'package:emdad/shared/componants/constants.dart';
 import 'package:emdad/shared/network/local/cache_helper.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'components.dart';
@@ -89,6 +90,18 @@ class SharedMethods {
     if (!currentFocus.hasPrimaryFocus) {
       currentFocus.unfocus();
     }
+  }
+
+  static void showToast(BuildContext context, String text,
+      {Color color = Colors.green, Color textColor = Colors.black}) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+        text,
+        style: TextStyle(color: textColor),
+      ),
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: color,
+    ));
   }
 
   static double getWidth(BuildContext context) =>

@@ -2,22 +2,32 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:emdad/models/general_models/product_detailes.dart';
+import 'package:emdad/models/users/vendor/all_vendor_request_model.dart';
 import 'package:emdad/modules/settings/setting_screen.dart';
 import 'package:emdad/modules/vendor_module/screens/vendor_offers_view/vendor_offers_screen.dart';
 import 'package:emdad/modules/vendor_module/screens/vendor_products_screen.dart';
 import 'package:emdad/modules/vendor_module/screens/vendor_purchase_order_view/vendor_purchase_orders_screen.dart';
+import 'package:emdad/shared/network/services/vendor/vendor_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 part 'vendor_state.dart';
 
-class VendorCubit extends Cubit<VendorState> {
-  VendorCubit() : super(VendorInitial());
+//Bloc builder and bloc consumer methods
+typedef VendorBlocBuilder = BlocBuilder<VendorCubit, VendorStates>;
+typedef VendorBlocConsumer = BlocConsumer<VendorCubit, VendorStates>;
 
-  static VendorCubit get(context) => BlocProvider.of(context);
-
+//
+class VendorCubit extends Cubit<VendorStates> {
+  VendorCubit() : super(IntitalVendorState());
+  static VendorCubit instance(BuildContext context) =>
+      BlocProvider.of<VendorCubit>(context);
+  final vendorServices = VendorServices.instance;
   File? productImage;
   List<XFile>? productOtherImages = [];
   ImagePicker get picker => _picker;
@@ -123,5 +133,23 @@ class VendorCubit extends Cubit<VendorState> {
   void changeIndex(int index) {
     currentPageIndex = index;
     emit(ChangeBottomNavBarState());
+  }
+
+  //APIS
+  AllVendorRequestsModel? allVendorRequests;
+  Future<void> getAllSupplyRequests() async {
+    try {
+      emit(GetAllSuplyRequestsLoadingState());
+      final map = await vendorServices.getAllSuplayRequests();
+      final allRequestModel = AllVendorRequestsModel.fromMap(map);
+      if (allRequestModel.status) {
+        allVendorRequests = allRequestModel;
+      } else {
+        throw allRequestModel.message;
+      }
+      emit(GetAllSuplyRequestsSuccessState());
+    } catch (e) {
+      emit(GetAllSuplyRequestsErrorState(error: e.toString()));
+    }
   }
 }

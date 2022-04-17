@@ -33,7 +33,7 @@ class CustomTextFormField extends StatelessWidget {
   const CustomTextFormField({
     Key? key,
     this.controller,
-    required this.type,
+    this.type = TextInputType.text,
     this.hint,
     this.onSubmit,
     this.onChange,
@@ -121,7 +121,10 @@ class CustomTextFormField extends StatelessWidget {
                     )
                   : null,
               prefixIcon: prefix,
-              border: hasBorder ? null : InputBorder.none,
+              border: hasBorder
+                  ? OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(borderRadius))
+                  : null,
             ),
           ),
         ),

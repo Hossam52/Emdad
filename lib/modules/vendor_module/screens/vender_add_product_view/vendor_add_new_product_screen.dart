@@ -1,3 +1,4 @@
+import 'package:emdad/modules/vendor_module/price_details_table.dart';
 import 'package:emdad/modules/vendor_module/screens/vender_add_product_view/vendor_edit_product_screen.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
@@ -5,6 +6,8 @@ import 'package:emdad/shared/styles/font_styles.dart';
 import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:emdad/shared/widgets/custom_text.dart';
+import 'package:emdad/shared/widgets/custom_text_form_field.dart';
+import 'package:emdad/shared/widgets/dialogs/add_new_price.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -140,6 +143,13 @@ class _VendorAddNewProductScreenState extends State<VendorAddNewProductScreen> {
                         textStyle: secondaryTextStyle()
                             .copyWith(fontWeight: FontWeight.w700),
                       ),
+                      CustomTextFormField(
+                        validation: (val) {},
+                        hint: 'اسم المنتج',
+                        hasBorder: true,
+                        contentPadding: const EdgeInsets.all(4),
+                        borderRadius: 15,
+                      ),
                       CustomText(
                         text: 'دجاج',
                         textStyle: secondaryTextStyle()
@@ -158,69 +168,35 @@ class _VendorAddNewProductScreenState extends State<VendorAddNewProductScreen> {
                         textStyle: thirdTextStyle()
                             .copyWith(fontWeight: FontWeight.normal),
                       ),
-                      CustomText(
-                        text: 'تفاصيل السعر',
-                        textStyle: secondaryTextStyle()
-                            .copyWith(fontWeight: FontWeight.w700),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CustomText(
+                            text: 'تفاصيل السعر',
+                            textStyle: secondaryTextStyle()
+                                .copyWith(fontWeight: FontWeight.w700),
+                          ),
+                          GestureDetector(
+                              onTap: () {
+                                showModalBottomSheet<void>(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(30.r),
+                                      topRight: Radius.circular(30.r),
+                                    ),
+                                  ),
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return const AddNewPriceDialog();
+                                  },
+                                );
+                              },
+                              child:
+                                  const CircleAvatar(child: Icon(Icons.add))),
+                        ],
                       ),
                       SizedBox(height: 20.h),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12.r),
-                          shape: BoxShape.rectangle,
-                          border: Border.all(
-                            width: 2,
-                            color: AppColors.textButtonColor,
-                          ),
-                        ),
-                        child: Column(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12.r),
-                                shape: BoxShape.rectangle,
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  CustomText(
-                                    text: 'وحدة القياس',
-                                    textStyle: subTextStyle()
-                                        .copyWith(fontWeight: FontWeight.w700),
-                                  ),
-                                  CustomText(
-                                    text: 'الحد الادني',
-                                    textStyle: subTextStyle()
-                                        .copyWith(fontWeight: FontWeight.w700),
-                                  ),
-                                  CustomText(
-                                    text: 'سعر الوحدة',
-                                    textStyle: subTextStyle()
-                                        .copyWith(fontWeight: FontWeight.w700),
-                                  ),
-                                  CustomText(
-                                    text: 'الضريبة',
-                                    textStyle: subTextStyle()
-                                        .copyWith(fontWeight: FontWeight.w700),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 5.h),
-                            ListView.separated(
-                              itemBuilder: (context, index) =>
-                                  buildPriceDetailsItem(),
-                              shrinkWrap: true,
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              physics: const NeverScrollableScrollPhysics(),
-                              separatorBuilder: (context, index) =>
-                                  SizedBox(height: 20.h),
-                              itemCount: 3,
-                            ),
-                          ],
-                        ),
-                      ),
+                      const PriceDetailsTable(),
                       SizedBox(height: 40.h),
                       ListTile(
                         trailing: Checkbox(
@@ -258,58 +234,6 @@ class _VendorAddNewProductScreenState extends State<VendorAddNewProductScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget buildPriceDetailsItem() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Container(
-          width: 60.w,
-          decoration: const BoxDecoration(
-            color: AppColors.textButtonColor,
-          ),
-          child: CustomText(
-            text: 'طن',
-            textStyle: subTextStyle().copyWith(
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
-            ),
-          ),
-        ),
-        Container(
-          width: 60.w,
-          decoration: const BoxDecoration(color: AppColors.textButtonColor),
-          child: CustomText(
-            text: '٤',
-            textStyle: subTextStyle().copyWith(
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
-            ),
-          ),
-        ),
-        Container(
-          width: 60.w,
-          decoration: const BoxDecoration(color: AppColors.textButtonColor),
-          child: CustomText(
-            text: '٤٠٠',
-            textStyle: subTextStyle().copyWith(
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
-            ),
-          ),
-        ),
-        SizedBox(
-          width: 60.w,
-          child: CustomText(
-            text: '١٥٪',
-            textStyle: subTextStyle().copyWith(
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

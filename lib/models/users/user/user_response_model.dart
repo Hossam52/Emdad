@@ -48,23 +48,23 @@ class User {
 
   User(
       {this.sId,
-        this.name,
-        this.isVerified,
-        this.password,
-        this.primaryPhoneNumber,
-        this.primaryEmail,
-        this.secondaryEmail,
-        this.modificationDate,
-        this.vendorType,
-        this.firebaseToken,
-        this.creationDate,
-        this.iV,
-        this.city,
-        this.commercialRegister,
-        this.country,
-        this.location,
-        this.organizationName,
-        this.userType});
+      this.name,
+      this.isVerified,
+      this.password,
+      this.primaryPhoneNumber,
+      this.primaryEmail,
+      this.secondaryEmail,
+      this.modificationDate,
+      this.vendorType,
+      this.firebaseToken,
+      this.creationDate,
+      this.iV,
+      this.city,
+      this.commercialRegister,
+      this.country,
+      this.location,
+      this.organizationName,
+      this.userType});
 
   User.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -86,13 +86,11 @@ class User {
     city = json['city'];
     commercialRegister = json['commercialRegister'];
     country = json['country'];
-    location = json['location'] != null
-        ? Location.fromJson(json['location'])
-        : null;
+    location =
+        json['location'] != null ? Location.fromJson(json['location']) : null;
     organizationName = json['oraganizationName'];
     userType = json['userType'];
   }
-
 }
 
 class Location {
@@ -106,5 +104,13 @@ class Location {
     type = json['type'];
     coordinates = json['coordinates'].cast<double>();
     sId = json['_id'];
+  }
+
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> json = {};
+    json['type'] = type;
+    json['coordinates'] = coordinates;
+    json['_id'] = sId;
+    return json;
   }
 }

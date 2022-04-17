@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:emdad/shared/componants/constants.dart';
 import 'package:emdad/shared/network/end_points.dart';
@@ -9,13 +8,13 @@ class DioHelper {
   static init() {
     dio = Dio(
       BaseOptions(
-        baseUrl: EndPoints.baseUrl,
+        baseUrl: baseUrl,
         receiveDataWhenStatusError: true,
         followRedirects: false,
         validateStatus: (status) => true,
         headers: {
           'Content-Type': 'application/json',
-          'Accept-Language' : Constants.lang,
+          'Accept-Language': Constants.lang,
         },
       ),
     );
@@ -28,8 +27,8 @@ class DioHelper {
     Options? options,
   }) async {
     dio.options.headers = {
-      'Authorization': token != null ? 'Bearer $token' :'',
-      'Accept-Language' : Constants.lang,
+      'Authorization': token != null ? 'Bearer $token' : '',
+      'Accept-Language': Constants.lang,
     };
 
     return await dio.get(
@@ -45,13 +44,11 @@ class DioHelper {
     Map<String, dynamic>? query,
     String? token,
     Options? options,
-  }) async
-  {
-    dio.options.headers =
-    {
-      'Content-Type' : 'application/json',
-      'Authorization': token != null ? 'Bearer $token' :'',
-      'Accept-Language' : Constants.lang,
+  }) async {
+    dio.options.headers = {
+      'Content-Type': 'application/json',
+      'Authorization': token != null ? 'Bearer $token' : '',
+      'Accept-Language': Constants.lang,
     };
 
     return await dio.post(
@@ -61,18 +58,17 @@ class DioHelper {
       options: options,
     );
   }
+
   static Future<Response> postFormData({
     required String url,
     required FormData formData,
     Map<String, dynamic>? query,
     String? token,
     Options? options,
-  }) async
-  {
-    dio.options.headers =
-    {
-      'Authorization': token != null ? 'Bearer $token' :'',
-      'Accept-Language' : Constants.lang,
+  }) async {
+    dio.options.headers = {
+      'Authorization': token != null ? 'Bearer $token' : '',
+      'Accept-Language': Constants.lang,
     };
 
     return await dio.post(
@@ -82,19 +78,18 @@ class DioHelper {
       options: options,
     );
   }
+
   /// Put Data Function
   static Future<Response> putData({
     required String url,
     Map<String, dynamic>? data,
     Map<String, dynamic>? query,
     String? token,
-  }) async
-  {
-    dio.options.headers =
-    {
-      'Content-Type' : 'application/json',
-      'Accept-Language':Constants.lang,
-      'Authorization': token != null ? 'Bearer $token' :'',
+  }) async {
+    dio.options.headers = {
+      'Content-Type': 'application/json',
+      'Accept-Language': Constants.lang,
+      'Authorization': token != null ? 'Bearer $token' : '',
     };
     return dio.put(
       url,
@@ -102,6 +97,7 @@ class DioHelper {
       queryParameters: query,
     );
   }
+
   /// Delete data function
   static Future<Response> deleteData({
     required String url,
@@ -109,11 +105,10 @@ class DioHelper {
     Map<String, dynamic>? query,
     String? token,
   }) async {
-    dio.options.headers =
-    {
-      'Content-Type' : 'application/json',
+    dio.options.headers = {
+      'Content-Type': 'application/json',
       'Accept-Language': Constants.lang,
-      'Authorization': token != null ? 'Bearer $token' :'',
+      'Authorization': token != null ? 'Bearer $token' : '',
     };
 
     return dio.delete(

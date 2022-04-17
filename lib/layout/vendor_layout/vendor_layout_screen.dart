@@ -16,10 +16,10 @@ class VendorLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<VendorCubit, VendorState>(
+    return VendorBlocConsumer(
       listener: (context, state) {},
       builder: (context, state) {
-        var vendorCubit = VendorCubit.get(context);
+        var vendorCubit = VendorCubit.instance(context);
         return Scaffold(
           resizeToAvoidBottomInset: false,
           drawer: const Drawer(

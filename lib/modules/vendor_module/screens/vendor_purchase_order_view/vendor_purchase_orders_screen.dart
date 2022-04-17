@@ -1,3 +1,4 @@
+import 'package:emdad/layout/vendor_layout/cubit/vendor_cubit.dart';
 import 'package:emdad/models/enums/order_status.dart';
 import 'package:emdad/modules/user_module/my_orders/orders_build_item.dart';
 import 'package:emdad/modules/user_module/offers_module/title_with_filter_build_item.dart';
@@ -21,11 +22,20 @@ class VendorPurchaseOrdersScreen extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             itemCount: 5,
             itemBuilder: (context, index) => OrderBuildItem(
+              order: VendorCubit.instance(context)
+                  .allVendorRequests!
+                  .supplyRequests
+                  .first, //Replace it
+
               title: 'مطعم كنتاكي',
-              image: 'https://upload.wikimedia.org/wikipedia/sco/thumb/b/bf/KFC_logo.svg/1200px-KFC_logo.svg.png',
+              image:
+                  'https://upload.wikimedia.org/wikipedia/sco/thumb/b/bf/KFC_logo.svg/1200px-KFC_logo.svg.png',
               hasBadge: false,
               onTap: () {
-                navigateTo(context, const VendorOrderDetailsScreen(title: 'طلب عرض سعر', isCompleted: true));
+                navigateTo(
+                    context,
+                    const VendorOrderDetailsScreen(
+                        title: 'طلب عرض سعر', isCompleted: true));
               },
             ),
           ),

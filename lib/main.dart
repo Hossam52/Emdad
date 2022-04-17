@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:emdad/layout/transporter_layout/cubit/transporter_cubit.dart';
 import 'package:emdad/layout/transporter_layout/transporter_layout.dart';
 import 'package:emdad/layout/user_layout/user_layout.dart';
@@ -11,6 +12,7 @@ import 'package:emdad/shared/cubit/app_cubit.dart';
 import 'package:emdad/shared/network/local/cache_helper.dart';
 import 'package:emdad/shared/network/remote/dio_helper.dart';
 import 'package:emdad/shared/styles/app_theme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +21,6 @@ import 'l10n/l10n.dart';
 import 'modules/auth_module/screens/login_view/login_screen.dart';
 import 'modules/auth_module/screens/on_boarding_view/on_boarding_screen.dart';
 import 'shared/componants/constants.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
@@ -27,7 +28,6 @@ void main() async {
   await CacheHelper.init();
   DioHelper.init(); // Dio Initialize
   // await Firebase.initializeApp();
-
 
   await SystemChrome.setPreferredOrientations(
     [
@@ -41,15 +41,16 @@ void main() async {
   Constants.lang = await CacheHelper.getData(key: 'lang');
   Constants.userToken = await CacheHelper.getData(key: 'userToken');
   Constants.vendorToken = await CacheHelper.getData(key: 'vendorToken');
-  Constants.transporterToken = await CacheHelper.getData(key: 'transporterToken');
+  Constants.transporterToken =
+      await CacheHelper.getData(key: 'transporterToken');
 
-  if(Constants.lang != null) {
+  if (Constants.lang != null) {
     if (onBoarding != null) {
       if (Constants.vendorToken != null) {
         startWidget = const VendorLayout();
-      } else if(Constants.userToken != null) {
+      } else if (Constants.userToken != null) {
         startWidget = const UserLayout();
-      } else if(Constants.transporterToken != null) {
+      } else if (Constants.transporterToken != null) {
         startWidget = const TransporterLayout();
       } else {
         startWidget = LoginScreen();
@@ -61,15 +62,18 @@ void main() async {
     startWidget = const ChooseLanguageScreen();
   }
   BlocOverrides.runZoned(
-        () {
-      runApp(MyApp(startWidget: startWidget));
+    () {
+      runApp(
+        DevicePreview(
+          enabled: !kReleaseMode,
+          builder: (context) => MyApp(
+            startWidget: startWidget,
+          ), // Wrap your app
+        ),
+      );
     },
     blocObserver: MyBlocObserver(),
   );
-
-  runApp(MyApp(
-    startWidget: startWidget,
-  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -85,7 +89,10 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => AuthCubit()),
-        BlocProvider(create: (context) => AppCubit()),
+        BlocProvider(
+          create: (context) => AppCubit()..getSettings(),
+          lazy: false,
+        ),
         BlocProvider(create: (context) => TransporterCubit()),
         BlocProvider(create: (context) => VendorCubit()),
       ],
@@ -101,11 +108,12 @@ class MyApp extends StatelessWidget {
             themeMode: ThemeMode.light,
             home: startWidget,
             supportedLocales: L10n.all,
-            locale: Constants.lang != null
-                ? Locale(Constants.lang!)
-                : AppCubit.get(context).localeApp,
+            locale: Locale('ar'),
+            // locale: Constants.lang != null
+            //     ? Locale(Constants.lang!)
+            //     : AppCubit.get(context).localeApp,
             localizationsDelegates: const [
-              AppLocalizations.delegate,
+              // AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,

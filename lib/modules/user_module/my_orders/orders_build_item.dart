@@ -1,3 +1,4 @@
+import 'package:emdad/models/supply_request/supply_request.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,9 +12,10 @@ class OrderBuildItem extends StatelessWidget {
     required this.onTap,
     required this.title,
     required this.image,
+    required this.order,
     this.trailing,
   }) : super(key: key);
-
+  final SupplyRequest order;
   final bool hasBadge;
   final Function() onTap;
   final String title;
@@ -51,7 +53,7 @@ class OrderBuildItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      title,
+                      order.user.name,
                       style: thirdTextStyle().copyWith(
                         fontWeight: FontWeight.w700,
                       ),
@@ -71,8 +73,7 @@ class OrderBuildItem extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
                       ),
-                    if(trailing != null)
-                      trailing!,
+                    if (trailing != null) trailing!,
                   ],
                 ),
               ),

@@ -1,25 +1,37 @@
 part of 'vendor_cubit.dart';
 
-@immutable
-abstract class VendorState {}
+//
+abstract class VendorStates {}
 
-class VendorInitial extends VendorState {}
+class IntitalVendorState extends VendorStates {}
+//
 
-class ChangeBottomNavBarState extends VendorState {}
+class VendorInitial extends VendorStates {}
 
-class ChangeCheckBoxState extends VendorState {}
+class ChangeBottomNavBarState extends VendorStates {}
 
-class DeletePriceDetailsState extends VendorState {}
+class ChangeCheckBoxState extends VendorStates {}
 
-class RemoveProductImageStateState extends VendorState {}
+class DeletePriceDetailsState extends VendorStates {}
 
-class RemoveProductOtherImagesStateState extends VendorState {}
+class RemoveProductImageStateState extends VendorStates {}
 
-class ProductImagePickedSuccessState extends VendorState {}
+class RemoveProductOtherImagesStateState extends VendorStates {}
 
-class ProductImagePickedErrorState extends VendorState {}
+class ProductImagePickedSuccessState extends VendorStates {}
 
-class ProductPickedMultiImagesSuccessState extends VendorState {}
+class ProductImagePickedErrorState extends VendorStates {}
 
-class ProductPickedMultiImagesErrorState extends VendorState {}
+class ProductPickedMultiImagesSuccessState extends VendorStates {}
 
+class ProductPickedMultiImagesErrorState extends VendorStates {}
+
+//GetAllSuplyRequests online fetch data
+class GetAllSuplyRequestsLoadingState extends VendorStates {}
+
+class GetAllSuplyRequestsSuccessState extends VendorStates {}
+
+class GetAllSuplyRequestsErrorState extends VendorStates {
+  final String error;
+  GetAllSuplyRequestsErrorState({required this.error});
+}

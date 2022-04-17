@@ -1,5 +1,6 @@
 import 'package:emdad/layout/user_layout/cubit/user_layout_cubit.dart';
 import 'package:emdad/layout/user_layout/layout_components/user_bottom_navigation_bar.dart';
+import 'package:emdad/modules/user_module/home_module/user_home_cubit/user_home_cubit.dart';
 import 'package:emdad/shared/componants/constants.dart';
 import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
@@ -15,8 +16,15 @@ class UserLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => UserLayoutCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => UserLayoutCubit(),
+        ),
+        BlocProvider(
+          create: (context) => UserHomeCubit()..getHomeData(),
+        ),
+      ],
       child: BlocConsumer<UserLayoutCubit, UserLayoutState>(
         listener: (context, state) {},
         builder: (context, state) {
@@ -45,7 +53,7 @@ class UserLayout extends StatelessWidget {
                   const ChangeLangWidget(),
                   IconButton(
                     icon: SvgPicture.asset(
-                        '${Constants.defaultIconUrl}/notification.svg'),
+                        '//${Constants.defaultIconUrl}/notification.svg'),
                     onPressed: () {},
                   ),
                 ],
