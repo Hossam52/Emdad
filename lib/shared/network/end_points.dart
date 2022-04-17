@@ -1,5 +1,5 @@
-class EndPoints{
-  static const String baseUrl = 'https://emdad-platform.herokuapp.com';
+class EndPoints {
+  static const String baseUrl = 'https://emdad-ecommerce.herokuapp.com';
 
   static const String login = '/api/mobile/auth/login';
 

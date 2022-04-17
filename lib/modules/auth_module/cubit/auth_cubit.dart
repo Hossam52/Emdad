@@ -58,11 +58,11 @@ class AuthCubit extends Cubit<AuthState> {
         },
       );
       print(response.data);
-      validateLogin(response, context, type);
-      emit(LoginSuccessState());
-      return;
+      // validateLogin(response, context, type);
+      // emit(LoginSuccessState());
+      // return;
       if (response.data['status']) {
-        // validateLogin(response, context);
+        validateLogin(response, context);
         loginButtonState = ButtonState.success;
         emit(LoginSuccessState());
       } else {
@@ -85,13 +85,13 @@ class AuthCubit extends Cubit<AuthState> {
   UserResponseModel? userResponseModel;
 
   void validateLogin(Response response, BuildContext context, [String? type]) {
-    final UserResponseModel responseUser = UserResponseModel(
-        status: true,
-        message: '',
-        data: userModel.Data(
-            accessToken: 'test', user: userModel.User(userType: type)));
-    navigateToLayout(context, responseUser);
-    return;
+    // final UserResponseModel responseUser = UserResponseModel(
+    //     status: true,
+    //     message: '',
+    //     data: userModel.Data(
+    //         accessToken: 'test', user: userModel.User(userType: type)));
+    // navigateToLayout(context, responseUser);
+    // return;
     if (response.data['data']['step'] == 'verification') {
       showSnackBar(
         context: context,

@@ -2,6 +2,7 @@ import 'package:emdad/modules/vendor_module/screens/vender_add_product_view/vend
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:emdad/shared/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
@@ -44,6 +45,11 @@ class _VendorAddNewProductScreenState extends State<VendorAddNewProductScreen> {
             fontWeight: FontWeight.w700,
           ),
         ),
+        actions: const [
+          ChangeLangWidget(
+            color: Colors.white,
+          )
+        ],
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(
@@ -54,8 +60,7 @@ class _VendorAddNewProductScreenState extends State<VendorAddNewProductScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding:
-                    EdgeInsets.only(right: 16.w, top: 20.h, bottom: 20.h),
+                padding: EdgeInsets.only(right: 16.w, top: 20.h, bottom: 20.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -125,8 +130,8 @@ class _VendorAddNewProductScreenState extends State<VendorAddNewProductScreen> {
                   color: Colors.white,
                 ),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: 20.h, horizontal: 20.w),
+                  padding:
+                      EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -148,7 +153,7 @@ class _VendorAddNewProductScreenState extends State<VendorAddNewProductScreen> {
                       ),
                       CustomText(
                         text:
-                        'هذا المنتج من افضل المنتجات الموجده وجميع المنتجات من خير مزارعنا',
+                            'هذا المنتج من افضل المنتجات الموجده وجميع المنتجات من خير مزارعنا',
                         textAlign: TextAlign.start,
                         textStyle: thirdTextStyle()
                             .copyWith(fontWeight: FontWeight.normal),
@@ -177,34 +182,35 @@ class _VendorAddNewProductScreenState extends State<VendorAddNewProductScreen> {
                               ),
                               child: Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceAround,
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   CustomText(
                                     text: 'وحدة القياس',
-                                    textStyle: subTextStyle().copyWith(
-                                        fontWeight: FontWeight.w700),
+                                    textStyle: subTextStyle()
+                                        .copyWith(fontWeight: FontWeight.w700),
                                   ),
                                   CustomText(
                                     text: 'الحد الادني',
-                                    textStyle: subTextStyle().copyWith(
-                                        fontWeight: FontWeight.w700),
+                                    textStyle: subTextStyle()
+                                        .copyWith(fontWeight: FontWeight.w700),
                                   ),
                                   CustomText(
                                     text: 'سعر الوحدة',
-                                    textStyle: subTextStyle().copyWith(
-                                        fontWeight: FontWeight.w700),
+                                    textStyle: subTextStyle()
+                                        .copyWith(fontWeight: FontWeight.w700),
                                   ),
                                   CustomText(
                                     text: 'الضريبة',
-                                    textStyle: subTextStyle().copyWith(
-                                        fontWeight: FontWeight.w700),
+                                    textStyle: subTextStyle()
+                                        .copyWith(fontWeight: FontWeight.w700),
                                   ),
                                 ],
                               ),
                             ),
                             SizedBox(height: 5.h),
                             ListView.separated(
-                              itemBuilder: (context, index) => buildPriceDetailsItem(),
+                              itemBuilder: (context, index) =>
+                                  buildPriceDetailsItem(),
                               shrinkWrap: true,
                               padding: const EdgeInsets.symmetric(vertical: 16),
                               physics: const NeverScrollableScrollPhysics(),
@@ -255,10 +261,9 @@ class _VendorAddNewProductScreenState extends State<VendorAddNewProductScreen> {
     );
   }
 
-  Widget buildPriceDetailsItem(){
+  Widget buildPriceDetailsItem() {
     return Row(
-      mainAxisAlignment:
-      MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         Container(
           width: 60.w,
@@ -275,8 +280,7 @@ class _VendorAddNewProductScreenState extends State<VendorAddNewProductScreen> {
         ),
         Container(
           width: 60.w,
-          decoration: const BoxDecoration(
-              color: AppColors.textButtonColor),
+          decoration: const BoxDecoration(color: AppColors.textButtonColor),
           child: CustomText(
             text: '٤',
             textStyle: subTextStyle().copyWith(
@@ -287,8 +291,7 @@ class _VendorAddNewProductScreenState extends State<VendorAddNewProductScreen> {
         ),
         Container(
           width: 60.w,
-          decoration: const BoxDecoration(
-              color: AppColors.textButtonColor),
+          decoration: const BoxDecoration(color: AppColors.textButtonColor),
           child: CustomText(
             text: '٤٠٠',
             textStyle: subTextStyle().copyWith(
@@ -309,6 +312,4 @@ class _VendorAddNewProductScreenState extends State<VendorAddNewProductScreen> {
       ],
     );
   }
-
-
 }

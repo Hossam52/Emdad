@@ -1,5 +1,6 @@
 import 'package:emdad/modules/user_module/vendors_module/vendor_view/vendor_view_screen.dart';
 import 'package:emdad/shared/componants/components.dart';
+import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/default_search_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class VendorsListScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
+        actions: const [ChangeLangWidget()],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -35,7 +37,8 @@ class VendorsListScreen extends StatelessWidget {
               physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) => VendorBuildItem(
                 onTap: () {
-                  navigateTo(context, const VendorViewScreen(title: 'الرحمه للمواد الغذائية'));
+                  navigateTo(context,
+                      const VendorViewScreen(title: 'الرحمه للمواد الغذائية'));
                 },
               ),
             ),

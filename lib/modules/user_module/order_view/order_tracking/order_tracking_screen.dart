@@ -1,6 +1,7 @@
 import 'package:emdad/modules/user_module/order_view/order_tracking/tracking_list_tile.dart';
 import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'tracking_line_dotes.dart';
@@ -14,6 +15,11 @@ class OrderTrackingScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('حالة الطلب'),
+        actions: const [
+          ChangeLangWidget(
+            color: Colors.black,
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(

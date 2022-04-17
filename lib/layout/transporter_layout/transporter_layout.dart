@@ -5,6 +5,7 @@ import 'package:emdad/layout/user_layout/layout_components/user_layout_drawer.da
 import 'package:emdad/shared/componants/constants.dart';
 import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
+import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -37,14 +38,16 @@ class TransporterLayout extends StatelessWidget {
                       Scaffold.of(context).openDrawer();
                     },
                     tooltip:
-                    MaterialLocalizations.of(context).openAppDrawerTooltip,
+                        MaterialLocalizations.of(context).openAppDrawerTooltip,
                   );
                 }),
                 actions: [
                   IconButton(
-                    icon: SvgPicture.asset('${Constants.defaultIconUrl}/notification.svg'),
+                    icon: SvgPicture.asset(
+                        '${Constants.defaultIconUrl}/notification.svg'),
                     onPressed: () {},
                   ),
+                  const ChangeLangWidget(),
                 ],
               ),
               bottomNavigationBar: TransporterBottomNavigationBar(cubit: cubit),

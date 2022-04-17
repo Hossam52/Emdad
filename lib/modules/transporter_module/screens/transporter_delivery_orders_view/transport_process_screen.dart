@@ -2,6 +2,7 @@ import 'package:emdad/layout/transporter_layout/transporter_layout.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:emdad/shared/widgets/custom_text.dart';
 import 'package:emdad/shared/widgets/custom_transporter_order_list_tile.dart';
@@ -18,7 +19,6 @@ class TransportProcessScreen extends StatefulWidget {
 int initialProcessValue = 0;
 
 class _TransportProcessScreenState extends State<TransportProcessScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -48,6 +48,7 @@ class _TransportProcessScreenState extends State<TransportProcessScreen> {
             fontWeight: FontWeight.w700,
           ),
         ),
+        actions: const [ChangeLangWidget(color: Colors.white)],
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 16.w),
@@ -88,7 +89,8 @@ class _TransportProcessScreenState extends State<TransportProcessScreen> {
                           textStyle: thirdTextStyle().copyWith(
                               color: Colors.white, fontWeight: FontWeight.w500),
                           onPressed: () {},
-                          backgroundColor: AppColors.textButtonColor.withOpacity(0.5),
+                          backgroundColor:
+                              AppColors.textButtonColor.withOpacity(0.5),
                         ),
                         Container(
                           width: 40.w,
@@ -141,7 +143,8 @@ class _TransportProcessScreenState extends State<TransportProcessScreen> {
                           textStyle: thirdTextStyle().copyWith(
                               color: Colors.white, fontWeight: FontWeight.w500),
                           onPressed: () {},
-                          backgroundColor: AppColors.textButtonColor.withOpacity(0.5),
+                          backgroundColor:
+                              AppColors.textButtonColor.withOpacity(0.5),
                         ),
                         Container(
                           width: 40.w,

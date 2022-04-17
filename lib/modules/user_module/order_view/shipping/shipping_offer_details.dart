@@ -6,6 +6,7 @@ import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:emdad/shared/widgets/default_circle_image.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,7 @@ class ShippingOfferDetails extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('تفاصيل عرض توصيل'),
+        actions: const [ChangeLangWidget(color: Colors.black)],
       ),
       body: Column(
         children: [

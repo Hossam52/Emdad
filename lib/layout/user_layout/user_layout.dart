@@ -3,6 +3,7 @@ import 'package:emdad/layout/user_layout/layout_components/user_bottom_navigatio
 import 'package:emdad/shared/componants/constants.dart';
 import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
+import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -41,8 +42,10 @@ class UserLayout extends StatelessWidget {
                   );
                 }),
                 actions: [
+                  const ChangeLangWidget(),
                   IconButton(
-                    icon: SvgPicture.asset('${Constants.defaultIconUrl}/notification.svg'),
+                    icon: SvgPicture.asset(
+                        '${Constants.defaultIconUrl}/notification.svg'),
                     onPressed: () {},
                   ),
                 ],

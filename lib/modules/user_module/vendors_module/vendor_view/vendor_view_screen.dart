@@ -1,6 +1,7 @@
 import 'package:emdad/modules/user_module/vendors_module/vendor_view/vendor_reviews_screen.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
+import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/default_home_title_build_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,11 @@ class VendorViewScreen extends StatelessWidget {
           statusBarBrightness: Brightness.light,
           statusBarIconBrightness: Brightness.light,
         ),
+        actions: const [
+          ChangeLangWidget(
+            color: Colors.white,
+          )
+        ],
       ),
       body: Stack(
         alignment: Alignment.bottomCenter,
@@ -76,7 +82,8 @@ class VendorViewScreen extends StatelessWidget {
                   physics: const BouncingScrollPhysics(),
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(
-                    children: List.generate(4,
+                    children: List.generate(
+                      4,
                       (index) => const ProductCardBuildItem(
                         name: 'لحم بقرى',
                         hasCart: false,
@@ -101,12 +108,13 @@ class VendorViewScreen extends StatelessWidget {
                   physics: const BouncingScrollPhysics(),
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(
-                    children: List.generate(4,
-                          (index) => const ProductCardBuildItem(
-                            name: 'برتقال',
-                            hasCart: false,
-                            isList: true,
-                            image:
+                    children: List.generate(
+                      4,
+                      (index) => const ProductCardBuildItem(
+                        name: 'برتقال',
+                        hasCart: false,
+                        isList: true,
+                        image:
                             'https://unsplash.com/photos/A4BBdJQu2co/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MTl8fG9yYW5nZXx8MHx8fHwxNjM4NjMxMjUx&force=true&w=640',
                       ),
                     ),

@@ -3,6 +3,7 @@ import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/responsive/responsive_widget.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/custom_text_form_field.dart';
 import 'package:emdad/shared/widgets/default_cached_image.dart';
 import 'package:flutter/material.dart';
@@ -234,6 +235,9 @@ class ProductDetailsScreen extends StatelessWidget {
                       },
                     ),
                   ),
+                ),
+                const ChangeLangWidget(
+                  color: Colors.white,
                 ),
               ],
               systemOverlayStyle: const SystemUiOverlayStyle(

@@ -3,6 +3,7 @@ import 'package:emdad/modules/user_module/order_view/order_item_build.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/custom_buton_with_icon.dart';
 import 'package:emdad/shared/widgets/custom_text.dart';
 import 'package:emdad/shared/widgets/custom_transporter_order_list_tile.dart';
@@ -42,6 +43,7 @@ class _TransporterOfferDetailsScreenState
             fontWeight: FontWeight.w700,
           ),
         ),
+        actions: const [ChangeLangWidget(color: Colors.white)],
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
@@ -81,7 +83,8 @@ class _TransporterOfferDetailsScreenState
                 itemCount: 3,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                separatorBuilder: (context, index) => const SizedBox(height: 15),
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 15),
                 itemBuilder: (context, index) => const OrderItemBuild(
                   columns: ['صنف', 'كمية', 'وحدة'],
                   rows: ['طماطم', '3', 'طن'],
@@ -101,8 +104,8 @@ class _TransporterOfferDetailsScreenState
                   CustomText(
                     text: 'سيارة نصف نقل',
                     textAlign: TextAlign.start,
-                    textStyle:
-                        thirdTextStyle().copyWith(fontWeight: FontWeight.normal),
+                    textStyle: thirdTextStyle()
+                        .copyWith(fontWeight: FontWeight.normal),
                   ),
                 ],
               ),
@@ -118,8 +121,8 @@ class _TransporterOfferDetailsScreenState
                   CustomText(
                     text: 'يفضل نص نقل شيفروليه ٤*٤',
                     textAlign: TextAlign.start,
-                    textStyle:
-                        thirdTextStyle().copyWith(fontWeight: FontWeight.normal),
+                    textStyle: thirdTextStyle()
+                        .copyWith(fontWeight: FontWeight.normal),
                   ),
                 ],
               ),
@@ -202,8 +205,8 @@ class _TransporterOfferDetailsScreenState
                               CustomText(
                                 text: 'إجمالي',
                                 textAlign: TextAlign.start,
-                                textStyle:
-                                    subTextStyle().copyWith(color: Colors.white),
+                                textStyle: subTextStyle()
+                                    .copyWith(color: Colors.white),
                               ),
                               CustomText(
                                 text: '٩٠٩٠ ريال سعودي',
@@ -230,8 +233,8 @@ class _TransporterOfferDetailsScreenState
                   },
                   text: 'بدأعملية التوصيل',
                   iconData: Icons.place,
-                  textStyle: thirdTextStyle()
-                      .copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+                  textStyle: thirdTextStyle().copyWith(
+                      color: Colors.white, fontWeight: FontWeight.w500),
                 ),
               ),
             ],
@@ -241,4 +244,3 @@ class _TransporterOfferDetailsScreenState
     );
   }
 }
-

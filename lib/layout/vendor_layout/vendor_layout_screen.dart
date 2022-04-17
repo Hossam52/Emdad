@@ -4,6 +4,7 @@ import 'package:emdad/modules/vendor_module/screens/vender_add_product_view/vend
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,7 +45,8 @@ class VendorLayout extends StatelessWidget {
               IconButton(
                 onPressed: () {},
                 icon: SvgPicture.asset('assets/images/alert.svg'),
-              )
+              ),
+              const ChangeLangWidget()
             ],
           ),
           body: vendorCubit.screens[vendorCubit.currentPageIndex],
@@ -59,7 +61,7 @@ class VendorLayout extends StatelessWidget {
             backgroundColor: AppColors.primaryColor,
           ),
           floatingActionButtonLocation:
-          FloatingActionButtonLocation.centerDocked,
+              FloatingActionButtonLocation.centerDocked,
           bottomNavigationBar: BottomAppBar(
             shape: const CircularNotchedRectangle(),
             color: Colors.white,

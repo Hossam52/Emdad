@@ -17,6 +17,7 @@ import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:emdad/shared/widgets/custom_icon_button.dart';
 import 'package:emdad/shared/widgets/default_home_title_build_item.dart';
@@ -47,6 +48,11 @@ class OrderOfferScreen extends StatelessWidget {
           statusBarBrightness: Brightness.light,
           statusBarIconBrightness: Brightness.light,
         ),
+        actions: const [
+          ChangeLangWidget(
+            color: Colors.white,
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(

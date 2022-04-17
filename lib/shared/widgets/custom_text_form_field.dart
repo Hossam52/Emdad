@@ -121,10 +121,7 @@ class CustomTextFormField extends StatelessWidget {
                     )
                   : null,
               prefixIcon: prefix,
-              border: hasBorder
-                  ? OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(borderRadius))
-                  : InputBorder.none,
+              border: hasBorder ? null : InputBorder.none,
             ),
           ),
         ),
