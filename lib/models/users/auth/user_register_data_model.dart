@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class UserRegisterDataModel {
   late String name;
   late String password;
@@ -22,7 +24,7 @@ class UserRegisterDataModel {
     data['name'] = name;
     data['password'] = password;
     data['primaryPhoneNumber'] = primaryPhoneNumber.toJson();
-    if(secondaryPhoneNumber != null) {
+    if (secondaryPhoneNumber != null) {
       data['secondaryPhoneNumber'] = secondaryPhoneNumber!.toJson();
     }
     data['primaryEmail'] = primaryEmail;
@@ -52,5 +54,13 @@ class PhoneNumberDataModel {
     data['countryCode'] = countryCode;
     data['number'] = number;
     return data;
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'countryCode': countryCode,
+      'number': number,
+      'sId': sId,
+    };
   }
 }

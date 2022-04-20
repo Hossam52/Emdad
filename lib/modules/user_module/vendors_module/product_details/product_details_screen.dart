@@ -1,3 +1,4 @@
+import 'package:emdad/models/products_and_categories/product_model.dart';
 import 'package:emdad/modules/vendor_module/screens/vender_add_product_view/vendor_edit_product_screen.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/responsive/responsive_widget.dart';
@@ -17,18 +18,14 @@ import 'size_build_item.dart';
 class ProductDetailsScreen extends StatelessWidget {
   ProductDetailsScreen({
     Key? key,
-    required this.title,
-    required this.image,
     required this.isVendor,
+    required this.product,
   }) : super(key: key);
-
-  final String title;
-  final String image;
+  final ProductModel? product;
   final bool isVendor;
 
   final PageController pageController = PageController();
-  final TextEditingController quantityController =
-      TextEditingController(text: '1');
+
   final List images = [
     'https://images.unsplash.com/photo-1613454320437-0c228c8b1723?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&dl=eiliv-sonas-aceron-AQ_BdsvLgqA-unsplash.jpg&w=640',
     'https://unsplash.com/photos/utTJUcvNXXo/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8NXx8YmVlZnx8MHx8fHwxNjM4Njk0NDMx&force=true&w=640',
@@ -40,171 +37,13 @@ class ProductDetailsScreen extends StatelessWidget {
     return responsiveWidget(
       responsive: (_, deviceInfo) => Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: isVendor
-            ? null
-            : FloatingActionButton.extended(
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(10),
-                      ),
-                    ),
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    enableDrag: true,
-                    builder: (context) => Padding(
-                      padding: MediaQuery.of(context).viewInsets,
-                      child: Padding(
-                        padding: const EdgeInsets.all(25.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(14),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                    color: AppColors.primaryColor, width: 2),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text('الكمية'),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      CircleAvatar(
-                                        backgroundColor: AppColors.thirdColor,
-                                        foregroundColor: Colors.white,
-                                        child: IconButton(
-                                          onPressed: () {},
-                                          icon: const Icon(Icons.remove),
-                                        ),
-                                      ),
-                                      SizedBox(width: 20.w),
-                                      Container(
-                                        width: 72.w,
-                                        height: 40.h,
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: AppColors.primaryColor),
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: CustomTextFormField(
-                                          controller: quantityController,
-                                          type: TextInputType.number,
-                                          hint: '',
-                                          validation: (value) {},
-                                          // hasBorder: false,
-                                        ),
-                                      ),
-                                      SizedBox(width: 20.w),
-                                      CircleAvatar(
-                                        backgroundColor: AppColors.thirdColor,
-                                        foregroundColor: Colors.white,
-                                        child: IconButton(
-                                          onPressed: () {},
-                                          icon: const Icon(Icons.add),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 12),
-                                  const Text('الوحدة'),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        width: 140.w,
-                                        height: 40.h,
-                                        padding: const EdgeInsets.all(8),
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: AppColors.primaryColor),
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        child: DropdownButton<Object>(
-                                          onChanged: (val) {},
-                                          items: const [
-                                            DropdownMenuItem(child: Text('KG')),
-                                          ],
-                                          underline: Container(),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            const Text('ملاحظاتك'),
-                            Container(
-                              width: double.infinity,
-                              height: 100.h,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 8),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                    color: AppColors.primaryColor, width: 2),
-                              ),
-                              child: const TextField(
-                                maxLines: 6,
-                                minLines: 3,
-                                decoration: InputDecoration(
-                                  hintText: 'اكتب ملاحظاتك',
-                                  border: InputBorder.none,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-                label: const Text('إضافة إلى طلب عرض السعر'),
-                icon: const Icon(Icons.add_shopping_cart),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                backgroundColor: AppColors.secondaryColor,
-                extendedIconLabelSpacing: 20,
-              ),
+        floatingActionButton: isVendor ? null : const _AddToPriceOffer(),
         body: CustomScrollView(
           slivers: [
             SliverAppBar(
               flexibleSpace: FlexibleSpaceBar(
-                background: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    PageView.builder(
-                      controller: pageController,
-                      itemCount: images.length,
-                      scrollDirection: Axis.horizontal,
-                      physics: const PageScrollPhysics(),
-                      itemBuilder: (context, index) =>
-                          DefaultCachedNetworkImage(
-                        imageUrl: images[index],
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: SmoothPageIndicator(
-                        controller: pageController,
-                        count: images.length,
-                        effect: const ScrollingDotsEffect(
-                          dotWidth: 8,
-                          dotHeight: 8,
-                          activeDotColor: AppColors.thirdColor,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                background: _ProductImages(
+                    pageController: pageController, product: product),
               ),
               pinned: true,
               expandedHeight: 250.h,
@@ -251,9 +90,9 @@ class ProductDetailsScreen extends StatelessWidget {
               sliver: SliverList(
                 delegate: SliverChildListDelegate(
                   [
-                    Text('لحم بقرى', style: headersTextStyle()),
+                    Text(product!.name, style: headersTextStyle()),
                     const SizedBox(height: 5),
-                    Text('الرحمه للمواد الغذائية',
+                    Text(product!.productType, // 'الرحمه للمواد الغذائية',
                         style: thirdTextStyle()
                             .copyWith(color: AppColors.thirdColor)),
                     const SizedBox(height: 20),
@@ -261,37 +100,31 @@ class ProductDetailsScreen extends StatelessWidget {
                       title: 'تفاصيل المنتج',
                       children: [
                         Text(
-                          'هذا المنتج من افضل المنتجات الموجده وجميع المنتجات من خير مزارعنا و مذبوحة علي الطريقة الاسلامية'
-                          'هذا المنتج من افضل المنتجات الموجده وجميع المنتجات من خير مزارعنا و مذبوحة علي الطريقة الاسلامية',
+                          product!.description,
                           style: thirdTextStyle()
                               .copyWith(fontWeight: FontWeight.w400),
                         ),
                       ],
                     ),
                     const SizedBox(height: 20),
-                    const ProductCustomTile(
+                    ProductCustomTile(
                       title: 'وحدات القياس',
                       children: [
-                        SizeBuildItem(
+                        const SizeBuildItem(
                           title: 'وحدة القياس',
                           value: 'الحد الادني',
                           price: 'سعر الوحدة',
                         ),
-                        SizeBuildItem(
-                          title: 'كيلو جرام',
-                          value: '٤',
-                          price: '10 ر.س',
-                        ),
-                        SizeBuildItem(
-                          title: 'طن',
-                          value: '٢',
-                          price: '220 ر.س',
-                        ),
-                        SizeBuildItem(
-                          title: 'كرتونة',
-                          value: '٥',
-                          price: '350 ر.س',
-                        ),
+                        ...product!.units
+                            .map(
+                              (unit) => SizeBuildItem(
+                                  title: unit.productUnit,
+                                  value: unit.minimumAmountPerOrder.toString(),
+                                  price: product!.isPriceShown
+                                      ? unit.pricePerUnit.toString()
+                                      : 'السعر مخفي'),
+                            )
+                            .toList()
                       ],
                     ),
                     const SizedBox(height: 210),
@@ -302,6 +135,191 @@ class ProductDetailsScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _ProductImages extends StatelessWidget {
+  const _ProductImages({
+    Key? key,
+    required this.pageController,
+    required this.product,
+  }) : super(key: key);
+
+  final PageController pageController;
+  final ProductModel? product;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        PageView.builder(
+          controller: pageController,
+          itemCount: product!.images.length,
+          scrollDirection: Axis.horizontal,
+          physics: const PageScrollPhysics(),
+          itemBuilder: (context, index) => DefaultCachedNetworkImage(
+            imageUrl: product!.images[index],
+            fit: BoxFit.cover,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: SmoothPageIndicator(
+            controller: pageController,
+            count: product!.images.length,
+            effect: const ScrollingDotsEffect(
+              dotWidth: 8,
+              dotHeight: 8,
+              activeDotColor: AppColors.thirdColor,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _AddToPriceOffer extends StatefulWidget {
+  const _AddToPriceOffer({Key? key}) : super(key: key);
+
+  @override
+  State<_AddToPriceOffer> createState() => _AddToPriceOfferState();
+}
+
+class _AddToPriceOfferState extends State<_AddToPriceOffer> {
+  final TextEditingController quantityController =
+      TextEditingController(text: '1');
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton.extended(
+      onPressed: () {
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(10),
+            ),
+          ),
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          enableDrag: true,
+          builder: (context) => Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border:
+                          Border.all(color: AppColors.primaryColor, width: 2),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('الكمية'),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: AppColors.thirdColor,
+                              foregroundColor: Colors.white,
+                              child: IconButton(
+                                onPressed: () {},
+                                icon: const Icon(Icons.remove),
+                              ),
+                            ),
+                            SizedBox(width: 20.w),
+                            Container(
+                              width: 72.w,
+                              height: 40.h,
+                              decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: AppColors.primaryColor),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: CustomTextFormField(
+                                controller: quantityController,
+                                type: TextInputType.number,
+                                hint: '',
+                                validation: (value) {},
+                                // hasBorder: false,
+                              ),
+                            ),
+                            SizedBox(width: 20.w),
+                            CircleAvatar(
+                              backgroundColor: AppColors.thirdColor,
+                              foregroundColor: Colors.white,
+                              child: IconButton(
+                                onPressed: () {},
+                                icon: const Icon(Icons.add),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        const Text('الوحدة'),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 140.w,
+                              height: 40.h,
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: AppColors.primaryColor),
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: DropdownButton<Object>(
+                                onChanged: (val) {},
+                                items: const [
+                                  DropdownMenuItem(child: Text('KG')),
+                                ],
+                                underline: Container(),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  const Text('ملاحظاتك'),
+                  Container(
+                    width: double.infinity,
+                    height: 100.h,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border:
+                          Border.all(color: AppColors.primaryColor, width: 2),
+                    ),
+                    child: const TextField(
+                      maxLines: 6,
+                      minLines: 3,
+                      decoration: InputDecoration(
+                        hintText: 'اكتب ملاحظاتك',
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+      label: const Text('إضافة إلى طلب عرض السعر'),
+      icon: const Icon(Icons.add_shopping_cart),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      backgroundColor: AppColors.secondaryColor,
+      extendedIconLabelSpacing: 20,
     );
   }
 }

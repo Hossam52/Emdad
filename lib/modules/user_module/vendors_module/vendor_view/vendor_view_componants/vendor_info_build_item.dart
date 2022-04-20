@@ -12,10 +12,16 @@ class VendorInfoBuildItem extends StatelessWidget {
     Key? key,
     required this.isCart,
     required this.tailing,
+    this.logoUrl,
+    this.city,
+    this.vendorType,
   }) : super(key: key);
 
   final bool isCart;
   final Widget tailing;
+  final String? logoUrl;
+  final String? city;
+  final String? vendorType;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +34,7 @@ class VendorInfoBuildItem extends StatelessWidget {
           DefaultCircleImage(
             width: 90.r,
             height: 90.r,
-            imageUrl:
+            imageUrl: logoUrl ??
                 'https://upload.wikimedia.org/wikipedia/sco/thumb/b/bf/KFC_logo.svg/1200px-KFC_logo.svg.png',
           ),
           SizedBox(width: 25.w),
@@ -40,9 +46,9 @@ class VendorInfoBuildItem extends StatelessWidget {
                   Text('الهدي للتوريدات الغذائيه',
                       style: secondaryTextStyle().copyWith(
                           color: Colors.white, fontWeight: FontWeight.w600)),
-                const LocationBuildItem(
-                    location: 'الرياض', textColor: Colors.white),
-                Text('مواد غذائيه',
+                LocationBuildItem(
+                    location: city ?? 'الرياض', textColor: Colors.white),
+                Text(vendorType ?? 'مواد غذائيه',
                     style: thirdTextStyle().copyWith(color: Colors.white)),
                 if (isCart == false) const DefaultRatingbar(rate: 3.0),
                 SizedBox(height: 27.h),

@@ -1,3 +1,4 @@
+import 'package:emdad/models/users/user/user_response_model.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
 import 'package:emdad/shared/widgets/default_cached_image.dart';
@@ -10,12 +11,13 @@ class HomeVendorBuildItem extends StatelessWidget {
     required this.width,
     required this.isFavorite,
     required this.onTap,
+    required this.user,
   }) : super(key: key);
 
   final double width;
   final bool isFavorite;
   final Function() onTap;
-
+  final User user;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -36,8 +38,7 @@ class HomeVendorBuildItem extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: DefaultCachedNetworkImage(
-                    imageUrl:
-                        'https://cdn.dribbble.com/users/230290/screenshots/15128882/media/4175d17c66f179fea9b969bbf946820f.jpg?compress=1&resize=400x300',
+                    imageUrl: user.logoUrl!,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -60,19 +61,19 @@ class HomeVendorBuildItem extends StatelessWidget {
             ),
             SizedBox(height: 12.h),
             Text(
-              'الهدي للتوريدات',
+              user.name!,
               style: subTextStyle().copyWith(
                 fontWeight: FontWeight.w600,
               ),
             ),
             Text(
-              'خضروات',
+              getUserType(),
               style: subTextStyle().copyWith(
                 color: Colors.black54,
               ),
             ),
             Text(
-              'الرياض',
+              user.city!,
               style: subTextStyle().copyWith(
                 color: Colors.black54,
               ),
@@ -96,5 +97,9 @@ class HomeVendorBuildItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String getUserType() {
+    return user.vendorType?.first ?? '';
   }
 }

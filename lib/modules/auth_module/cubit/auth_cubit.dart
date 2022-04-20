@@ -130,18 +130,18 @@ class AuthCubit extends Cubit<AuthState> {
       case 'vendor':
         Constants.vendorToken = model.data!.accessToken;
         CacheHelper.saveData(key: 'vendorToken', value: Constants.vendorToken);
-        navigateToAndFinish(context, const VendorLayout());
+        navigateTo(context, const VendorLayout());
         break;
       case 'user':
         Constants.userToken = model.data!.accessToken;
         CacheHelper.saveData(key: 'userToken', value: Constants.userToken);
-        navigateToAndFinish(context, const UserLayout());
+        navigateTo(context, const UserLayout());
         break;
       case 'transporter':
         Constants.transporterToken = model.data!.accessToken;
         CacheHelper.saveData(
             key: 'transporterToken', value: Constants.transporterToken);
-        navigateToAndFinish(context, const TransporterLayout());
+        navigateTo(context, const TransporterLayout());
         break;
     }
   }

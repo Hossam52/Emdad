@@ -53,7 +53,7 @@ class UserLayout extends StatelessWidget {
                   const ChangeLangWidget(),
                   IconButton(
                     icon: SvgPicture.asset(
-                        '//${Constants.defaultIconUrl}/notification.svg'),
+                        '${Constants.defaultIconUrl}/notification.svg'),
                     onPressed: () {},
                   ),
                 ],

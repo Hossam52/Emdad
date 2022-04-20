@@ -28,3 +28,26 @@ class DefaultRatingbar extends StatelessWidget {
     );
   }
 }
+
+class DefaultRatingBarNotTapped extends StatelessWidget {
+  const DefaultRatingBarNotTapped({
+    Key? key,
+    required this.rate,
+    this.size = 20,
+    this.padding = const EdgeInsets.symmetric(vertical: 4),
+  }) : super(key: key);
+  final double rate;
+  final double size;
+  final EdgeInsets padding;
+  @override
+  Widget build(BuildContext context) {
+    return RatingBarIndicator(
+      rating: rate,
+      direction: Axis.horizontal,
+      itemCount: 5,
+      itemSize: size,
+      itemPadding: padding,
+      itemBuilder: (context, _) => const Icon(Icons.star, color: Colors.amber),
+    );
+  }
+}

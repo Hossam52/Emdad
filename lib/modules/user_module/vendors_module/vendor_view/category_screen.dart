@@ -1,3 +1,4 @@
+import 'package:emdad/models/products_and_categories/category_model.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/widgets/default_search_field.dart';
 import 'package:flutter/material.dart';
@@ -6,9 +7,10 @@ import 'package:flutter/services.dart';
 import 'vendor_view_componants/product_card_build_item.dart';
 
 class CategoryScreen extends StatefulWidget {
-  const CategoryScreen({Key? key, required this.title}) : super(key: key);
+  const CategoryScreen({Key? key, required this.categoryModel})
+      : super(key: key);
 
-  final String title;
+  final CategoryModel categoryModel;
 
   @override
   State<CategoryScreen> createState() => _CategoryScreenState();
@@ -20,7 +22,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title, style: const TextStyle(color: Colors.white)),
+        title: Text(widget.categoryModel.category,
+            style: const TextStyle(color: Colors.white)),
         backgroundColor: AppColors.primaryColor,
         iconTheme: const IconThemeData(color: Colors.white),
         systemOverlayStyle: const SystemUiOverlayStyle(
@@ -41,7 +44,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
               ),
             ),
             GridView.builder(
-              itemCount: 8,
+              itemCount: widget.categoryModel.products.length,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -50,12 +53,14 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 childAspectRatio: 1 / 2,
                 crossAxisSpacing: 8,
               ),
-              itemBuilder: (context, index) => const ProductCardBuildItem(
+              itemBuilder: (context, index) => ProductCardBuildItem(
+                product: widget.categoryModel.products[index],
                 name: 'لحم بقرى',
                 image:
-                'https://images.unsplash.com/photo-1613454320437-0c228c8b1723?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&dl=eiliv-sonas-aceron-AQ_BdsvLgqA-unsplash.jpg&w=640',
+                    'https://images.unsplash.com/photo-1613454320437-0c228c8b1723?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&dl=eiliv-sonas-aceron-AQ_BdsvLgqA-unsplash.jpg&w=640',
               ),
             ),
+            TextButton(onPressed: () {}, child: const Text('Load more')),
           ],
         ),
       ),

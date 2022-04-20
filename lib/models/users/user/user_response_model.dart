@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:emdad/models/users/auth/user_register_data_model.dart';
 
 class UserResponseModel {
@@ -44,6 +46,10 @@ class User {
   String? country;
   Location? location;
   String? organizationName;
+  String? updatedAt;
+  String? logo;
+  String? id;
+  String? logoUrl;
   String? userType;
 
   User(
@@ -64,6 +70,10 @@ class User {
       this.country,
       this.location,
       this.organizationName,
+      this.updatedAt,
+      this.logo,
+      this.id,
+      this.logoUrl,
       this.userType});
 
   User.fromJson(Map<String, dynamic> json) {
@@ -89,7 +99,38 @@ class User {
     location =
         json['location'] != null ? Location.fromJson(json['location']) : null;
     organizationName = json['oraganizationName'];
+    updatedAt = json['updatedAt'];
+    logo = json['logo'];
+    id = json['id'];
+    logoUrl = json['logoUrl'];
     userType = json['userType'];
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'sId': sId,
+      'name': name,
+      'isVerified': isVerified,
+      'password': password,
+      'primaryPhoneNumber': primaryPhoneNumber?.toMap(),
+      'primaryEmail': primaryEmail,
+      'secondaryEmail': secondaryEmail,
+      'modificationDate': modificationDate,
+      'vendorType': vendorType,
+      'firebaseToken': firebaseToken,
+      'creationDate': creationDate,
+      'iV': iV,
+      'city': city,
+      'commercialRegister': commercialRegister,
+      'country': country,
+      'location': location?.toMap(),
+      'organizationName': organizationName,
+      'updatedAt': updatedAt,
+      'logo': logo,
+      'id': id,
+      'logoUrl': logoUrl,
+      'userType': userType,
+    };
   }
 }
 

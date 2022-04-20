@@ -28,7 +28,8 @@ class _VendorOffersScreenState extends State<VendorOffersScreen> {
     return VendorBlocConsumer(
       listener: (context, state) {},
       builder: (context, state) {
-        if (state is GetAllSuplyRequestsLoadingState) return DefaultLoader();
+        if (state is GetAllSuplyRequestsLoadingState)
+          return const DefaultLoader();
 
         final vendorCubit = VendorCubit.instance(context);
         if (vendorCubit.allVendorRequests == null ||
@@ -48,12 +49,8 @@ class _VendorOffersScreenState extends State<VendorOffersScreen> {
                 padding: const EdgeInsets.all(16),
                 itemCount: requests.length,
                 itemBuilder: (context, index) => OrderBuildItem(
-                  order: VendorCubit.instance(context)
-                      .allVendorRequests!
-                      .supplyRequests
-                      .first, //Replace it
-
-                  title: 'مطعم كنتاكي',
+                  order: requests[index],
+                  title: requests[index].user.name,
                   image:
                       'https://upload.wikimedia.org/wikipedia/sco/thumb/b/bf/KFC_logo.svg/1200px-KFC_logo.svg.png',
                   hasBadge: false,

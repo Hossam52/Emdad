@@ -1,3 +1,4 @@
+import 'package:emdad/modules/user_module/home_module/vendor_profile_cubit/vendor_profile_cubit.dart';
 import 'package:emdad/modules/user_module/vendors_module/vendor_view/vendor_view_componants/review_build_item.dart';
 import 'package:flutter/material.dart';
 
@@ -10,11 +11,17 @@ class VendorReviewsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('التعليقات'),
       ),
-      body: ListView.separated(
-        itemCount: 10,
-        padding: const EdgeInsets.all(16),
-        separatorBuilder: (context, index) => const SizedBox(height: 15),
-        itemBuilder: (context, index) => const ReviewBuildItem(hasMargin: false),
+      body: VendorProfileBlocBuilder(
+        builder: (context, state) {
+          final ratings = VendorProfileCubit.instance(context).getRatings;
+          return ListView.separated(
+            itemCount: ratings.length,
+            padding: const EdgeInsets.all(16),
+            separatorBuilder: (context, index) => const SizedBox(height: 15),
+            itemBuilder: (context, index) =>
+                ReviewBuildItem(hasMargin: false, rateModel: ratings[index]),
+          );
+        },
       ),
     );
   }

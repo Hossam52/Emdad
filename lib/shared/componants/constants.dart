@@ -1,4 +1,5 @@
 class Constants {
+  Constants._();
   static const String defaultIconUrl = 'assets/icons';
   static String? lang = 'ar';
 
@@ -7,4 +8,3 @@ class Constants {
   static String? vendorToken;
   static String? transporterToken;
 }
-

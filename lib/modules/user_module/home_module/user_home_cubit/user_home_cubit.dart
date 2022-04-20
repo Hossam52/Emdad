@@ -1,3 +1,5 @@
+import 'package:emdad/models/users/user/home_user_response.dart';
+import 'package:emdad/models/users/user/user_response_model.dart';
 import 'package:emdad/modules/user_module/home_module/user_home_cubit/user_home_states.dart';
 import 'package:emdad/shared/network/services/user/user_services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,11 +15,29 @@ class UserHomeCubit extends Cubit<UserHomeStates> {
   static UserHomeCubit instance(BuildContext context) =>
       BlocProvider.of<UserHomeCubit>(context);
   final userServices = UserServices.instance;
+  //Home data
+  HomeUserModel? _homeModel;
+  bool get isLoadedHomeData => _homeModel != null;
+  //For favorite vendors
+  List<User> get favoriteVendors {
+    return _homeModel?.favouriteVendors ?? [];
+  }
+
+  //For featreched vendors
+  List<User> get featcherdVendors {
+    return _homeModel?.featuredVendors ?? [];
+  }
+
+  //For vendors
+  List<User> get vendors {
+    return _homeModel?.vendors ?? [];
+  }
 
   Future<void> getHomeData() async {
     try {
       emit(GetHomeDataLoadingState());
-      await userServices.userHomeServices.getHomeData();
+      final response = await userServices.userHomeServices.getHomeData();
+      _homeModel = HomeUserModel.fromMap(response);
       emit(GetHomeDataSuccessState());
     } catch (e) {
       emit(GetHomeDataErrorState(error: e.toString()));

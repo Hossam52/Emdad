@@ -1,3 +1,4 @@
+import 'package:emdad/models/products_and_categories/product_model.dart';
 import 'package:emdad/modules/user_module/vendors_module/product_details/product_details_screen.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ class ProductCardBuildItem extends StatelessWidget {
     this.hasCart = true,
     this.isVendor = false,
     this.isList = false,
+    this.product,
   }) : super(key: key);
 
   final String name;
@@ -22,15 +24,18 @@ class ProductCardBuildItem extends StatelessWidget {
   final bool hasCart;
   final bool isVendor;
   final bool isList;
+  final ProductModel? product;
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: isList ? const EdgeInsetsDirectional.only(end: 17) : EdgeInsets.zero,
+      margin:
+          isList ? const EdgeInsetsDirectional.only(end: 17) : EdgeInsets.zero,
       elevation: 0,
       child: GestureDetector(
         onTap: () {
-          navigateTo(context, ProductDetailsScreen(title: name, image: image, isVendor: isVendor));
+          navigateTo(context,
+              ProductDetailsScreen(product: product, isVendor: isVendor));
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,7 +48,7 @@ class ProductCardBuildItem extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: DefaultCachedNetworkImage(
-                imageUrl: image,
+                imageUrl: product!.images.first,
                 fit: BoxFit.cover,
               ),
             ),
@@ -71,13 +76,13 @@ class ProductCardBuildItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          name,
+                          product!.name,
                           style: subTextStyle().copyWith(
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                         Text(
-                          '15لكل كجم',
+                          getPiceAccordingToUnit(),
                           style: subTextStyle().copyWith(
                             color: Colors.black54,
                           ),
@@ -99,13 +104,13 @@ class ProductCardBuildItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    name,
+                    product!.name,
                     style: subTextStyle().copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   Text(
-                    '15لكل كجم',
+                    getPiceAccordingToUnit(),
                     style: subTextStyle().copyWith(
                       color: Colors.black54,
                     ),
@@ -116,5 +121,11 @@ class ProductCardBuildItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String getPiceAccordingToUnit() {
+    return product!.units.isEmpty
+        ? ' '
+        : product!.units.first.generateStringPerUnit;
   }
 }
