@@ -45,11 +45,9 @@ class VendorViewScreen extends StatelessWidget {
           )
         ],
       ),
-      floatingActionButton: const CartBarBuildItem(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: BlocProvider(
         create: (context) =>
-            VendorProfileCubit()..getVendorInfo(vendorId: user!.id!),
+            VendorProfileCubit(vendorId: user!.id!)..getVendorInfo(),
         child: VendorProfileBlocBuilder(
           builder: (context, state) {
             final vendorProfileCubit = VendorProfileCubit.instance(context);
@@ -58,54 +56,61 @@ class VendorViewScreen extends StatelessWidget {
             }
             if (!vendorProfileCubit.isProfileLoaded) {
               return NoDataWidget(onPressed: () {
-                vendorProfileCubit.getVendorInfo(vendorId: user!.id!);
+                vendorProfileCubit.getVendorInfo();
               });
             }
             final categories = vendorProfileCubit.getCategories;
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  VendorInfoBuildItem(
-                    isCart: false,
-                    city: user!.city,
-                    logoUrl: user!.logoUrl,
-                    vendorType: getVendorType(),
-                    tailing: const VendorButtonsBuild(),
+            return Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      VendorInfoBuildItem(
+                        isCart: false,
+                        city: user!.city,
+                        logoUrl: user!.logoUrl,
+                        vendorType: getVendorType(),
+                        tailing: const VendorButtonsBuild(),
+                      ),
+                      Builder(builder: (context) {
+                        return Column(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: DefaultHomeTitleBuildItem(
+                                title: 'التعليقات',
+                                hasButton: true,
+                                onPressed: () {
+                                  navigateTo(
+                                      context,
+                                      BlocProvider.value(
+                                        value: vendorProfileCubit,
+                                        child: const VendorReviewsScreen(),
+                                      ));
+                                },
+                              ),
+                            ),
+                            const _Ratings(),
+                            const SizedBox(height: 20),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              primary: false,
+                              itemBuilder: (_, index) => _CategoryWithProducts(
+                                categoryModel: categories[index],
+                              ),
+                              itemCount: categories.length,
+                            ),
+                            const SizedBox(height: 60),
+                          ],
+                        );
+                      }),
+                    ],
                   ),
-                  Builder(builder: (context) {
-                    return Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: DefaultHomeTitleBuildItem(
-                            title: 'التعليقات',
-                            hasButton: true,
-                            onPressed: () {
-                              navigateTo(
-                                  context,
-                                  BlocProvider.value(
-                                    value: vendorProfileCubit,
-                                    child: const VendorReviewsScreen(),
-                                  ));
-                            },
-                          ),
-                        ),
-                        const _Ratings(),
-                        const SizedBox(height: 20),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          primary: false,
-                          itemBuilder: (_, index) => _CategoryWithProducts(
-                            categoryModel: categories[index],
-                          ),
-                          itemCount: categories.length,
-                        ),
-                        const SizedBox(height: 60),
-                      ],
-                    );
-                  }),
-                ],
-              ),
+                ),
+                const CartBarBuildItem(),
+              ],
             );
           },
         ),

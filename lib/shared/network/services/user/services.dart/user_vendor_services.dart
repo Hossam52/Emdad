@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:emdad/models/request_models/category_request_model.dart';
 import 'package:emdad/shared/componants/constants.dart';
 import 'package:emdad/shared/network/remote/dio_helper.dart';
 import 'package:emdad/shared/network/services/generate_path_variable.dart';
@@ -12,10 +13,31 @@ class UserVendorServices {
   Future<Map<String, dynamic>> getVendorInfo({required String vendorId}) async {
     log(vendorId);
     final response = await DioHelper.getData(
-      url: generatePathVariable(UserEndPoints.vendors, vendorId),
+      url: UserEndPoints.vendor(vendorId),
       token: Constants.userToken,
     );
     log(response.data.toString());
+    return response.data;
+  }
+
+  Future<Map<String, dynamic>> getProductsInCategory(
+      {required String vendorID,
+      required CategoryRequestModel categoryRequestModel}) async {
+    log(categoryRequestModel.toMap().toString());
+    final response = await DioHelper.getData(
+        url: UserEndPoints.vendorProducts(vendorID),
+        token: Constants.userToken,
+        query: categoryRequestModel.toMap());
+    log(response.data.toString());
+    return response.data;
+  }
+
+  Future<Map<String, dynamic>> toggleVendorFavorite(String vendorId) async {
+    final response = await DioHelper.postData(
+      url: UserEndPoints.vendorFavorite(vendorId),
+      token: Constants.userToken,
+      data: {},
+    );
     return response.data;
   }
 }

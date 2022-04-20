@@ -18,11 +18,11 @@ class UserLayoutCubit extends Cubit<UserLayoutState> {
   int currentIndex = 0;
 
   // List of nav screens
-  List<Widget> selectedScreens = const [
+  List<Widget> selectedScreens = [
     UserHomeScreen(),
-    MyOrdersScreen(),
-    OffersScreen(),
-    SettingsScreen(),
+    const MyOrdersScreen(),
+    const OffersScreen(),
+    const SettingsScreen(),
   ];
 
   String selectedTitle() {

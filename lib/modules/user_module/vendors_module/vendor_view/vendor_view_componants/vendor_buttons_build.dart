@@ -1,4 +1,6 @@
 import 'package:emdad/models/enums/enums.dart';
+import 'package:emdad/models/users/user/user_response_model.dart';
+import 'package:emdad/modules/user_module/home_module/vendor_profile_cubit/vendor_profile_cubit.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';
@@ -13,8 +15,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class VendorButtonsBuild extends StatelessWidget {
-  const VendorButtonsBuild({Key? key}) : super(key: key);
-
+  const VendorButtonsBuild({
+    Key? key,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -27,6 +30,9 @@ class VendorButtonsBuild extends StatelessWidget {
         ),
         SizedBox(width: 20.w),
         CustomIconButton(
+          onPressed: () {
+            VendorProfileCubit.instance(context).toggleFavorite(context);
+          },
           width: 32.w,
           height: 32.h,
           icon: const Icon(Icons.star_border,

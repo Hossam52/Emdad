@@ -13,3 +13,23 @@ class GetVendorInfoErrorState extends VendorProfileStates {
   final String error;
   GetVendorInfoErrorState({required this.error});
 }
+
+//GetCategoryProducts online fetch data
+class GetCategoryProductsLoadingState extends VendorProfileStates {}
+
+class GetCategoryProductsSuccessState extends VendorProfileStates {}
+
+class GetCategoryProductsErrorState extends VendorProfileStates {
+  final String error;
+  GetCategoryProductsErrorState({required this.error});
+}
+
+//ToggleFavorite online fetch data
+class ToggleFavoriteLoadingState extends VendorProfileStates {}
+
+class ToggleFavoriteSuccessState extends VendorProfileStates {}
+
+class ToggleFavoriteErrorState extends VendorProfileStates {
+  final String error;
+  ToggleFavoriteErrorState({required this.error});
+}

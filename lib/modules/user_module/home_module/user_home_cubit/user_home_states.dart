@@ -13,3 +13,5 @@ class GetHomeDataErrorState extends UserHomeStates {
   final String error;
   GetHomeDataErrorState({required this.error});
 }
+
+class ToggleFavoriteVendorState extends UserHomeStates {}

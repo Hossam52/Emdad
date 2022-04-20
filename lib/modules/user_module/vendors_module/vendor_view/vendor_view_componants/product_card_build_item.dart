@@ -35,7 +35,7 @@ class ProductCardBuildItem extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           navigateTo(context,
-              ProductDetailsScreen(product: product, isVendor: isVendor));
+              ProductDetailsScreen(productId: product!.id, isVendor: isVendor));
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

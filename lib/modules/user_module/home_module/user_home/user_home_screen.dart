@@ -13,12 +13,16 @@ import 'package:emdad/shared/widgets/default_loader.dart';
 import 'package:emdad/shared/widgets/empty_data.dart';
 import 'package:emdad/shared/widgets/ui_componants/no_data_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'home_vendor_build_item.dart';
 
 class UserHomeScreen extends StatelessWidget {
-  const UserHomeScreen({Key? key}) : super(key: key);
+  UserHomeScreen({Key? key}) : super(key: key);
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +37,14 @@ class UserHomeScreen extends StatelessWidget {
           });
         }
 
-        return RefreshIndicator(
-          onRefresh: () {
-            userHomeCubit.getHomeData();
-            return Future.value();
+        return SmartRefresher(
+          onRefresh: () async {
+            await userHomeCubit.getHomeData();
+
+            _refreshController.loadComplete();
           },
+          header: const WaterDropHeader(),
+          controller: _refreshController,
           child: responsiveWidget(
             responsive: (_, deviceInfo) => UserHomeBlocBuilder(
               builder: (context, state) {
@@ -105,9 +112,12 @@ class _FavoriteVendors extends StatelessWidget {
               onTap: () {
                 navigateTo(
                     context,
-                    VendorViewScreen(
-                      title: favoriteVendors[index].name!,
-                      user: favoriteVendors[index],
+                    BlocProvider.value(
+                      value: UserHomeCubit.instance(context),
+                      child: VendorViewScreen(
+                        title: favoriteVendors[index].name!,
+                        user: favoriteVendors[index],
+                      ),
                     ));
               },
             ),
@@ -164,7 +174,7 @@ class _AllVendors extends StatelessWidget {
   Widget build(BuildContext context) {
     return UserHomeBlocBuilder(
       builder: (context, state) {
-        final vendors = UserHomeCubit.instance(context).vendors;
+        final vendors = UserHomeCubit.instance(context).featcherdVendors;
         if (vendors.isEmpty) return const EmptyData(emptyText: 'No Vendors');
         return GridView.builder(
           shrinkWrap: true,
@@ -182,7 +192,12 @@ class _AllVendors extends StatelessWidget {
             isFavorite: true,
             onTap: () {
               navigateTo(
-                  context, const VendorViewScreen(title: 'الهدي للتوريدات'));
+                  context,
+                  BlocProvider.value(
+                    value: UserHomeCubit.instance(context),
+                    child: VendorViewScreen(
+                        user: vendors[index], title: 'الهدي للتوريدات'),
+                  ));
             },
           ),
         );

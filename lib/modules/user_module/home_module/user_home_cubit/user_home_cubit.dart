@@ -33,6 +33,16 @@ class UserHomeCubit extends Cubit<UserHomeStates> {
     return _homeModel?.vendors ?? [];
   }
 
+  void toggleFavoriteVendor(User user) {
+    int index = favoriteVendors.indexWhere((element) => element.id == user.id);
+    if (index != -1) {
+      _homeModel!.favouriteVendors.removeAt(index);
+    } else {
+      _homeModel!.favouriteVendors.add(user);
+    }
+    emit(ToggleFavoriteVendorState());
+  }
+
   Future<void> getHomeData() async {
     try {
       emit(GetHomeDataLoadingState());

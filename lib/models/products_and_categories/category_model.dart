@@ -5,10 +5,14 @@ import 'package:emdad/models/products_and_categories/product_model.dart';
 class CategoryModel {
   String category;
   List<ProductModel> products;
+  bool lastProducts;
   CategoryModel({
     required this.category,
     required this.products,
-  });
+    this.lastProducts = false,
+  }) {
+    lastProducts = products.isEmpty;
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -29,4 +33,23 @@ class CategoryModel {
 
   factory CategoryModel.fromJson(String source) =>
       CategoryModel.fromMap(json.decode(source));
+  void appendProducts({required List<ProductModel> otherProducts}) {
+    products.addAll(otherProducts);
+  }
+
+  set changeLastProducts(bool val) {
+    lastProducts = val;
+  }
+
+  // CategoryModel copyWith({
+  //   String? category,
+  //   List<ProductModel>? products,
+  //   bool? lastProducts,
+  // }) {
+  //   return CategoryModel(
+  //     category: category ?? this.category,
+  //     products: products ?? this.products,
+  //     lastProducts: lastProducts ?? this.lastProducts,
+  //   );
+  // }
 }
