@@ -1,5 +1,6 @@
 import 'package:emdad/models/enums/order_status.dart';
 import 'package:emdad/modules/user_module/checkout/checkout_screen.dart';
+import 'package:emdad/modules/user_module/order_view/order_statuses_views/order_in_progress_screen.dart';
 import 'package:emdad/modules/user_module/order_view/shipping/shipping_card_build_item.dart';
 import 'package:emdad/modules/user_module/vendors_module/vendor_view/vendor_view_componants/review_build_item.dart';
 import 'package:emdad/shared/componants/components.dart';
@@ -78,7 +79,8 @@ class ShippingOfferDetails extends StatelessWidget {
                   CheckoutScreen(onConfirmPressed: () {
                     navigateTo(
                         context,
-                        const OrderViewScreen(
+                        const OrderInPorgressScreen(
+                          orderId: 'order', //Modify it
                           status: OrderStatus.inProgress,
                           title: 'عرض سعر جديد',
                         ));

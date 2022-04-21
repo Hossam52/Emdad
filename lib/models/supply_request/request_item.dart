@@ -4,15 +4,19 @@ class RequestItem {
   String name;
   String productUnit;
   int quantity;
-  double totalPrice;
-  String id;
+  double? totalPrice;
+  String? id;
+  final double taxesRatio = 0.12;
+  late double totalPriceAfterTaxes;
   RequestItem({
     required this.name,
     required this.productUnit,
     required this.quantity,
-    required this.totalPrice,
-    required this.id,
-  });
+    this.totalPrice,
+    this.id,
+  }) {
+    totalPriceAfterTaxes = totalPrice! + totalPrice! * taxesRatio;
+  }
 
   Map<String, dynamic> toMap() {
     return {

@@ -21,12 +21,14 @@ class SupplyRequest {
   String createdAt;
   String updatedAt;
   int iv;
-  double transportationPrice;
+  double
+      transportationPrice; //only return when the transportation handler is vendor
   String generatedId;
   String paymentStatus;
   String transportationRequestId;
   UserPreviewModel user;
   UserPreviewModel vendor;
+  double totalOrderPrice = 0;
   SupplyRequest({
     required this.id,
     required this.userId,
@@ -71,12 +73,20 @@ class SupplyRequest {
     } else {
       throw 'unkown transportation handler';
     }
+    //To calculate total price for the order
+    for (var requestItem in requestItems) {
+      totalOrderPrice += requestItem.totalPrice!;
+    }
+    for (var additionalItem in additionalItems) {
+      totalOrderPrice += additionalItem.price;
+    }
+    totalOrderPrice += transportationPrice;
   }
   //Make enum
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
+      '_id': id,
       'userId': userId,
       'vendorId': vendorId,
       'requestStatus': requestStatus,
@@ -97,7 +107,7 @@ class SupplyRequest {
 
   factory SupplyRequest.fromMap(Map<String, dynamic> map) {
     return SupplyRequest(
-      id: map['id'] ?? '',
+      id: map['_id'] ?? '',
       userId: map['userId'] ?? '',
       vendorId: map['vendorId'] ?? '',
       requestStatus: map['requestStatus'] ?? '',

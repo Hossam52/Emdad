@@ -7,6 +7,7 @@ class UserEndPoints {
   //
   static const home = _path + 'home';
   static const vendors = _path + 'vendors';
+  static const supplyRequests = _path + 'supplyRequests';
 
 //
   static const products = 'products';
@@ -27,5 +28,9 @@ class UserEndPoints {
   static String vendorProduct(String productId) {
     final productsPath = generatePathVariable(vendors, products);
     return generatePathVariable(productsPath, productId);
+  }
+
+  static String getSupplyRequestInfo(String orderId) {
+    return generatePathVariable(supplyRequests, orderId);
   }
 }

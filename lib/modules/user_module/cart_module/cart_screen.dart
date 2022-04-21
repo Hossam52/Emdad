@@ -34,6 +34,7 @@ class CartScreen extends StatelessWidget {
         child: Column(
           children: [
             VendorInfoBuildItem(
+              name: 'Test name',
               isCart: true,
               tailing: CustomButton(
                 onPressed: () {},

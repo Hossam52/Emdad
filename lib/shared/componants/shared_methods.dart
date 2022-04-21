@@ -4,6 +4,7 @@ import 'package:emdad/shared/network/local/cache_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 import 'components.dart';
 
@@ -102,6 +103,19 @@ class SharedMethods {
       behavior: SnackBarBehavior.floating,
       backgroundColor: color,
     ));
+  }
+
+  static String mappedDate(String source) {
+    final date = DateTime.parse(source);
+    final now = DateTime.now();
+    String formattedString;
+    if (date.year == now.year) {
+      formattedString = 'MM-dd';
+    } else {
+      formattedString = 'yyyy-MM-dd';
+    }
+
+    return DateFormat(formattedString).format(date);
   }
 
   static double getWidth(BuildContext context) =>

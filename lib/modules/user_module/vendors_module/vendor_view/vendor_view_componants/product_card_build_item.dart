@@ -1,6 +1,9 @@
 import 'package:emdad/models/products_and_categories/product_model.dart';
 import 'package:emdad/modules/user_module/vendors_module/product_details/product_details_screen.dart';
+import 'package:emdad/modules/user_module/vendors_module/vendor_view/cart_cubit/cart_cubit.dart';
 import 'package:emdad/shared/componants/components.dart';
+import 'package:emdad/shared/widgets/dialogs/add_new_price.dart';
+import 'package:emdad/shared/widgets/dialogs/add_to_price_request_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
 import 'package:emdad/shared/widgets/default_cached_image.dart';
@@ -93,7 +96,13 @@ class ProductCardBuildItem extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        showModalBottomSheet(
+                            context: context,
+                            builder: (_) => AddToPriceRequestDialog(
+                                  product: product!,
+                                ));
+                      },
                       child: const Icon(Icons.add_shopping_cart, size: 20),
                     ),
                   ),

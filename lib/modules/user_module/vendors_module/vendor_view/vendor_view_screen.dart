@@ -2,6 +2,8 @@ import 'package:emdad/models/products_and_categories/category_model.dart';
 import 'package:emdad/models/users/user/user_response_model.dart';
 import 'package:emdad/modules/user_module/home_module/vendor_profile_cubit/vendor_profile_cubit.dart';
 import 'package:emdad/modules/user_module/home_module/vendor_profile_cubit/vendor_profile_states.dart';
+import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_vendor_info.dart';
+import 'package:emdad/modules/user_module/vendors_module/vendor_view/cart_cubit/cart_cubit.dart';
 import 'package:emdad/modules/user_module/vendors_module/vendor_view/vendor_reviews_screen.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
@@ -45,9 +47,17 @@ class VendorViewScreen extends StatelessWidget {
           )
         ],
       ),
-      body: BlocProvider(
-        create: (context) =>
-            VendorProfileCubit(vendorId: user!.id!)..getVendorInfo(),
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) =>
+                VendorProfileCubit(vendorId: user!.id!)..getVendorInfo(),
+          ),
+          BlocProvider(
+            create: (context) => CartCubit(),
+            lazy: false,
+          ),
+        ],
         child: VendorProfileBlocBuilder(
           builder: (context, state) {
             final vendorProfileCubit = VendorProfileCubit.instance(context);
@@ -67,6 +77,7 @@ class VendorViewScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       VendorInfoBuildItem(
+                        name: user!.organizationName!,
                         isCart: false,
                         city: user!.city,
                         logoUrl: user!.logoUrl,
@@ -168,8 +179,15 @@ class _CategoryWithProducts extends StatelessWidget {
           onTap: () {
             navigateTo(
                 context,
-                BlocProvider.value(
-                  value: VendorProfileCubit.instance(context),
+                MultiBlocProvider(
+                  providers: [
+                    BlocProvider.value(
+                      value: VendorProfileCubit.instance(context),
+                    ),
+                    BlocProvider.value(
+                      value: CartCubit.instance(context),
+                    ),
+                  ],
                   child: CategoryScreen(
                     categoryModel: categoryModel,
                   ),
@@ -189,7 +207,7 @@ class _CategoryWithProducts extends StatelessWidget {
               image: products[index].images.first,
               name: products[index].name,
               hasCart: false,
-              isList: true,
+              // isList: true,
               product: products[index],
             ),
             itemCount: products.length,

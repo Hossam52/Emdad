@@ -1,23 +1,29 @@
-import 'package:emdad/shared/styles/app_colors.dart';
-import 'package:emdad/shared/styles/font_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'package:emdad/models/supply_request/request_item.dart';
+import 'package:emdad/shared/styles/app_colors.dart';
+import 'package:emdad/shared/styles/font_styles.dart';
 
 import 'custom_data_table.dart';
 
 class OrderItemBuild extends StatelessWidget {
   const OrderItemBuild({
     Key? key,
-    required this.columns,
-    required this.rows,
+    // required this.columns,
+    // required this.rows,
+    required this.items,
     this.radius = 10,
-    this.hasTotal = true,
+    // this.hasTotal = true,
+    this.totalPriceAfterTaxes,
   }) : super(key: key);
 
-  final List<String> columns;
-  final List<String> rows;
+  // final List<String> columns;
+  // final List<String> rows;
   final double radius;
-  final bool hasTotal;
+
+  final double? totalPriceAfterTaxes;
+  final List<TableItemData> items;
 
   @override
   Widget build(BuildContext context) {
@@ -33,15 +39,15 @@ class OrderItemBuild extends StatelessWidget {
           children: [
             Expanded(
               child: CustomDataTable(
-                columns: columns,
-                rows: rows,
+                columns: items.map((e) => e.headerName).toList(),
+                rows: items.map((e) => e.valueName).toList(),
                 columnSpacing: 5.w,
                 headingRowColor: Colors.grey.withOpacity(0.2),
                 headingTextColor: AppColors.primaryColor,
                 dataTextColor: Colors.black,
               ),
             ),
-            if (hasTotal)
+            if (totalPriceAfterTaxes != null)
               Container(
                 color: Colors.grey,
                 padding: const EdgeInsets.symmetric(horizontal: 18),
@@ -55,7 +61,7 @@ class OrderItemBuild extends StatelessWidget {
                           color: Colors.white, fontWeight: FontWeight.w700),
                     ),
                     Text(
-                      '١٨٠٠ ر.س',
+                      totalPriceAfterTaxes.toString(),
                       style: subTextStyle().copyWith(
                           color: Colors.white, fontWeight: FontWeight.w700),
                     ),
@@ -67,4 +73,13 @@ class OrderItemBuild extends StatelessWidget {
       ),
     );
   }
+}
+
+class TableItemData {
+  final String headerName;
+  final String valueName;
+  const TableItemData({
+    required this.headerName,
+    required this.valueName,
+  });
 }

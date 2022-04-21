@@ -1,5 +1,6 @@
 import 'package:emdad/models/enums/order_status.dart';
 import 'package:emdad/modules/user_module/order_view/order_item_build.dart';
+import 'package:emdad/modules/user_module/order_view/order_statuses_views/order_in_progress_screen.dart';
 import 'package:emdad/modules/user_module/order_view/order_view_screen.dart';
 import 'package:emdad/modules/user_module/vendors_module/vendor_view/vendor_view_componants/vendor_info_build_item.dart';
 import 'package:emdad/shared/componants/components.dart';
@@ -47,6 +48,7 @@ class VendorOrderDetailsScreen extends StatelessWidget {
         child: Column(
           children: [
             VendorInfoBuildItem(
+              name: 'Test name',
               isCart: true,
               tailing: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -94,9 +96,29 @@ class VendorOrderDetailsScreen extends StatelessWidget {
                         isOutList: false);
                   }
                 },
-                child: const OrderItemBuild(
-                  columns: ['صنف', 'كمية', 'وحدة', 'سعر', 'ضريبة'],
-                  rows: ['طماطم', '3', 'طن', '١٥٠٠ ر.س', '١٢٪'],
+                child: OrderItemBuild(
+                  items: [
+                    TableItemData(
+                      headerName: 'صنف',
+                      valueName: 'طماطم',
+                    ),
+                    TableItemData(
+                      headerName: 'كمية',
+                      valueName: '3',
+                    ),
+                    TableItemData(
+                      headerName: 'وحدة',
+                      valueName: 'طن',
+                    ),
+                    TableItemData(
+                      headerName: 'سعر',
+                      valueName: '١٥٠٠ ر.س',
+                    ),
+                    TableItemData(
+                      headerName: 'ضريبة',
+                      valueName: '١٢٪',
+                    )
+                  ],
                 ),
               ),
             ),
@@ -123,8 +145,20 @@ class VendorOrderDetailsScreen extends StatelessWidget {
                   }
                 },
                 child: const OrderItemBuild(
-                  columns: ['الوصف', 'سعر', 'ضريبة'],
-                  rows: ['٤ كرتونه كاتشب', '١٥٠٠ ر.س', '١٢٪'],
+                  items: [
+                    TableItemData(
+                      headerName: 'الوصف',
+                      valueName: '٤ كرتونه كاتشب',
+                    ),
+                    TableItemData(
+                      headerName: 'سعر',
+                      valueName: '١٥٠٠ ر.س',
+                    ),
+                    TableItemData(
+                      headerName: 'ضريبة',
+                      valueName: '١٢٪',
+                    )
+                  ],
                   radius: 3,
                 ),
               ),
@@ -248,7 +282,8 @@ class VendorOrderDetailsScreen extends StatelessWidget {
                   if (isCompleted) {
                     navigateTo(
                         context,
-                        const OrderViewScreen(
+                        const OrderInPorgressScreen(
+                            orderId: 'orderId', //Modify it
                             title: 'طلب عرض سعر',
                             status: OrderStatus.inProgress));
                   } else {

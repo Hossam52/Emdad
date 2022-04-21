@@ -4,6 +4,8 @@ class AdditionalItem {
   String description;
   double price;
   String id;
+
+  final double taxesRatio = 0.12;
   AdditionalItem({
     required this.description,
     required this.price,

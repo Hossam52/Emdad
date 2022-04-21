@@ -98,9 +98,20 @@ class _TransporterOfferDetailsScreenState
               physics: const NeverScrollableScrollPhysics(),
               separatorBuilder: (context, index) => const SizedBox(height: 15),
               itemBuilder: (context, index) => const OrderItemBuild(
-                columns: ['صنف', 'كمية', 'وحدة'],
-                rows: ['طماطم', '3', 'طن'],
-                hasTotal: false,
+                items: [
+                  TableItemData(
+                    headerName: 'صنف',
+                    valueName: 'طمامطم',
+                  ),
+                  TableItemData(
+                    headerName: 'كمية',
+                    valueName: '3',
+                  ),
+                  TableItemData(
+                    headerName: 'وحدة',
+                    valueName: 'طن',
+                  )
+                ],
               ),
             ),
 

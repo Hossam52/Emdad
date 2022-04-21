@@ -12,6 +12,7 @@ class VendorInfoBuildItem extends StatelessWidget {
     Key? key,
     required this.isCart,
     required this.tailing,
+    required this.name,
     this.logoUrl,
     this.city,
     this.vendorType,
@@ -22,6 +23,7 @@ class VendorInfoBuildItem extends StatelessWidget {
   final String? logoUrl;
   final String? city;
   final String? vendorType;
+  final String name;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +45,7 @@ class VendorInfoBuildItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (isCart)
-                  Text('الهدي للتوريدات الغذائيه',
+                  Text(name,
                       style: secondaryTextStyle().copyWith(
                           color: Colors.white, fontWeight: FontWeight.w600)),
                 LocationBuildItem(

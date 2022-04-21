@@ -10,6 +10,7 @@ import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/custom_text_form_field.dart';
 import 'package:emdad/shared/widgets/default_cached_image.dart';
 import 'package:emdad/shared/widgets/default_loader.dart';
+import 'package:emdad/shared/widgets/dialogs/add_to_price_request_dialog.dart';
 import 'package:emdad/shared/widgets/ui_componants/no_data_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -49,7 +50,11 @@ class ProductDetailsScreen extends StatelessWidget {
             responsive: (_, deviceInfo) => Scaffold(
               floatingActionButtonLocation:
                   FloatingActionButtonLocation.centerFloat,
-              floatingActionButton: isVendor ? null : const _AddToPriceOffer(),
+              floatingActionButton: isVendor
+                  ? null
+                  : _AddToPriceOffer(
+                      product: product,
+                    ),
               body: CustomScrollView(
                 slivers: [
                   SliverAppBar(
@@ -200,8 +205,8 @@ class _ProductImages extends StatelessWidget {
 }
 
 class _AddToPriceOffer extends StatefulWidget {
-  const _AddToPriceOffer({Key? key}) : super(key: key);
-
+  const _AddToPriceOffer({Key? key, required this.product}) : super(key: key);
+  final ProductModel product;
   @override
   State<_AddToPriceOffer> createState() => _AddToPriceOfferState();
 }
@@ -214,124 +219,18 @@ class _AddToPriceOfferState extends State<_AddToPriceOffer> {
     return FloatingActionButton.extended(
       onPressed: () {
         showModalBottomSheet(
-          context: context,
-          isScrollControlled: true,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(10),
-            ),
-          ),
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          enableDrag: true,
-          builder: (context) => Padding(
-            padding: MediaQuery.of(context).viewInsets,
-            child: Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border:
-                          Border.all(color: AppColors.primaryColor, width: 2),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text('الكمية'),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: AppColors.thirdColor,
-                              foregroundColor: Colors.white,
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.remove),
-                              ),
-                            ),
-                            SizedBox(width: 20.w),
-                            Container(
-                              width: 72.w,
-                              height: 40.h,
-                              decoration: BoxDecoration(
-                                  border:
-                                      Border.all(color: AppColors.primaryColor),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: CustomTextFormField(
-                                controller: quantityController,
-                                type: TextInputType.number,
-                                hint: '',
-                                validation: (value) {},
-                                // hasBorder: false,
-                              ),
-                            ),
-                            SizedBox(width: 20.w),
-                            CircleAvatar(
-                              backgroundColor: AppColors.thirdColor,
-                              foregroundColor: Colors.white,
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.add),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        const Text('الوحدة'),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: 140.w,
-                              height: 40.h,
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                  border:
-                                      Border.all(color: AppColors.primaryColor),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: DropdownButton<Object>(
-                                onChanged: (val) {},
-                                items: const [
-                                  DropdownMenuItem(child: Text('KG')),
-                                ],
-                                underline: Container(),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  const Text('ملاحظاتك'),
-                  Container(
-                    width: double.infinity,
-                    height: 100.h,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border:
-                          Border.all(color: AppColors.primaryColor, width: 2),
-                    ),
-                    child: const TextField(
-                      maxLines: 6,
-                      minLines: 3,
-                      decoration: InputDecoration(
-                        hintText: 'اكتب ملاحظاتك',
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  )
-                ],
+            context: context,
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(10),
               ),
             ),
-          ),
-        );
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            enableDrag: true,
+            builder: (context) => AddToPriceRequestDialog(
+                  product: widget.product,
+                ));
       },
       label: const Text('إضافة إلى طلب عرض السعر'),
       icon: const Icon(Icons.add_shopping_cart),

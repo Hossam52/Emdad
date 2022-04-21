@@ -1,4 +1,5 @@
 import 'package:emdad/models/supply_request/supply_request.dart';
+import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -53,13 +54,13 @@ class OrderBuildItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      order.user.name,
+                      order.vendor.oraganizationName,
                       style: thirdTextStyle().copyWith(
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                     Text(
-                      '12-2-2020',
+                      SharedMethods.mappedDate(order.createdAt),
                       style: subTextStyle(),
                     ),
                     if (hasBadge)

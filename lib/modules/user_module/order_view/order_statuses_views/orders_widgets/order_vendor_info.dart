@@ -1,14 +1,24 @@
+import 'package:emdad/models/supply_request/user_preview.dart';
 import 'package:emdad/modules/user_module/vendors_module/vendor_view/vendor_view_componants/vendor_info_build_item.dart';
 import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class OrderVendorInfo extends StatelessWidget {
-  const OrderVendorInfo({Key? key, this.trailing}) : super(key: key);
+  const OrderVendorInfo({
+    Key? key,
+    this.trailing,
+    this.vendor,
+  }) : super(key: key);
   final Widget? trailing;
+  final UserPreviewModel? vendor;
   @override
   Widget build(BuildContext context) {
     return VendorInfoBuildItem(
+      city: vendor!.city,
+      name: vendor!.name,
+      logoUrl: vendor!.logo,
+      // vendorType: vendor.,
       isCart: true,
       tailing: Row(
         mainAxisAlignment: MainAxisAlignment.end,
