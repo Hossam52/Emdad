@@ -31,11 +31,13 @@ class DioHelper {
       'Accept-Language': Constants.lang,
     };
 
-    return await dio.get(
+    final response = await dio.get(
       url,
       queryParameters: query,
       options: options,
     );
+    _checkResponseValid(response);
+    return response;
   }
 
   static Future<Response> postData({
@@ -51,12 +53,14 @@ class DioHelper {
       'Accept-Language': Constants.lang,
     };
 
-    return await dio.post(
+    final response = await dio.post(
       url,
       queryParameters: query,
       data: data,
       options: options,
     );
+    _checkResponseValid(response);
+    return response;
   }
 
   static Future<Response> postFormData({
@@ -71,12 +75,14 @@ class DioHelper {
       'Accept-Language': Constants.lang,
     };
 
-    return await dio.post(
+    final response = await dio.post(
       url,
       queryParameters: query,
       data: formData,
       options: options,
     );
+    _checkResponseValid(response);
+    return response;
   }
 
   /// Put Data Function
@@ -91,11 +97,13 @@ class DioHelper {
       'Accept-Language': Constants.lang,
       'Authorization': token != null ? 'Bearer $token' : '',
     };
-    return dio.put(
+    final response = await dio.put(
       url,
       data: (data)!,
       queryParameters: query,
     );
+    _checkResponseValid(response);
+    return response;
   }
 
   /// Delete data function
@@ -111,10 +119,28 @@ class DioHelper {
       'Authorization': token != null ? 'Bearer $token' : '',
     };
 
-    return dio.delete(
+    final response = await dio.delete(
       url,
       data: data,
       queryParameters: query,
     );
+    _checkResponseValid(response);
+    return response;
+  }
+
+  static void _checkResponseValid(Response response) {
+    final Map<String, dynamic> data = response.data;
+
+    if (data.containsKey('status')) {
+      if (!data['status']) {
+        if (data.containsKey('message')) {
+          throw data['message'];
+        } else {
+          throw 'Status is false';
+        }
+      }
+    } else {
+      throw 'Not contained status';
+    }
   }
 }

@@ -1,12 +1,5 @@
-import 'dart:developer';
-
 import 'package:emdad/models/enums/order_status.dart';
-import 'package:emdad/modules/transporter_module/screens/transporter_delivery_orders_view/transporter_delivery_orders_screen.dart';
-import 'package:emdad/modules/transporter_module/screens/transporter_offers_view/transporter_offer_details_screen.dart';
-import 'package:emdad/modules/user_module/cart_module/cart_screen.dart';
 import 'package:emdad/modules/user_module/order_view/order_cubit/order_cubit.dart';
-import 'package:emdad/modules/user_module/order_view/order_cubit/order_states.dart';
-import 'package:emdad/modules/user_module/order_view/order_item_build.dart';
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/all_orders_list_view.dart';
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_out_of_products.dart';
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_total_overview_price.dart';
@@ -16,17 +9,13 @@ import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders
 import 'package:emdad/modules/user_module/order_view/order_tracking/order_tracking_screen.dart';
 import 'package:emdad/modules/user_module/order_view/shipping/shipping_card_build_item.dart';
 import 'package:emdad/modules/user_module/order_view/shipping/shipping_offers_screen.dart';
-import 'package:emdad/modules/user_module/vendors_module/vendor_view/vendor_view_componants/vendor_info_build_item.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
 import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
-import 'package:emdad/shared/widgets/custom_icon_button.dart';
 import 'package:emdad/shared/widgets/default_home_title_build_item.dart';
-import 'package:emdad/shared/widgets/default_loader.dart';
-import 'package:emdad/shared/widgets/ui_componants/no_data_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -94,7 +83,9 @@ class _OrderInPorgressScreenState extends State<OrderInPorgressScreen> {
                         style: subTextStyle().copyWith(color: Colors.white),
                       ),
                     ),
-                    const AllOrdersListView(),
+                    AllOrdersListView(
+                      vendorId: order.vendorId,
+                    ),
                     const SizedBox(height: 36),
                     const OrderOutOfProducts(),
                     const SizedBox(height: 20),

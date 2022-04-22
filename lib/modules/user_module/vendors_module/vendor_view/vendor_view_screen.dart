@@ -130,7 +130,7 @@ class VendorViewScreen extends StatelessWidget {
   }
 
   String getVendorType() {
-    return user!.vendorType?.first ?? '';
+    return user!.vendorType?.join(' - ') ?? ' ';
   }
 }
 

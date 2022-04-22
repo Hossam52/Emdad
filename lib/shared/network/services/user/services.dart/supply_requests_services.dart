@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:emdad/models/request_models/create_supply_request_model.dart';
 import 'package:emdad/shared/componants/constants.dart';
 import 'package:emdad/shared/network/remote/dio_helper.dart';
 import 'package:emdad/shared/network/services/user/user_endpoints.dart';
@@ -19,6 +20,17 @@ class SupplyRequestServices {
       url: UserEndPoints.getSupplyRequestInfo(orderId),
       token: Constants.userToken,
     );
+    log(response.data.toString());
+    return response.data;
+  }
+
+  Future<Map<String, dynamic>> createSupplyRequest(
+      CreateSupplyRequestModel requestModel) async {
+    log(requestModel.toMap().toString());
+    final response = await DioHelper.putData(
+        url: UserEndPoints.supplyRequests,
+        token: Constants.userToken,
+        data: requestModel.toMap());
     log(response.data.toString());
     return response.data;
   }

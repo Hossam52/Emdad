@@ -68,7 +68,9 @@ class OrderNewScreen extends StatelessWidget {
               child: Column(
                 children: [
                   OrderVendorInfo(vendor: order.vendor),
-                  const AllOrdersListView(),
+                  AllOrdersListView(
+                    vendorId: order.vendorId,
+                  ),
                   const SizedBox(height: 36),
                   DefaultHomeTitleBuildItem(
                     title: 'طلب خارج قائمة المنتجات',

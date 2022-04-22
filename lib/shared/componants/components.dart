@@ -13,7 +13,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'icons/my_icons_icons.dart';
 
-Future<void> navigateTo(context, widget) async => await Navigator.push(
+Future<T> navigateTo<T>(BuildContext context, Widget widget) async =>
+    await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => widget,

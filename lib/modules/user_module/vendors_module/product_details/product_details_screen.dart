@@ -1,6 +1,7 @@
 import 'package:emdad/models/products_and_categories/product_model.dart';
 import 'package:emdad/modules/user_module/vendors_module/product_details/product_cubit.dart/product_cubit.dart';
 import 'package:emdad/modules/user_module/vendors_module/product_details/product_cubit.dart/product_states.dart';
+import 'package:emdad/modules/user_module/vendors_module/vendor_view/cart_cubit/cart_cubit.dart';
 import 'package:emdad/modules/vendor_module/screens/vender_add_product_view/vendor_edit_product_screen.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/responsive/responsive_widget.dart';
@@ -228,8 +229,11 @@ class _AddToPriceOfferState extends State<_AddToPriceOffer> {
             ),
             clipBehavior: Clip.antiAliasWithSaveLayer,
             enableDrag: true,
-            builder: (context) => AddToPriceRequestDialog(
-                  product: widget.product,
+            builder: (_) => BlocProvider.value(
+                  value: CartCubit.instance(context),
+                  child: AddToPriceRequestDialog(
+                    product: widget.product,
+                  ),
                 ));
       },
       label: const Text('إضافة إلى طلب عرض السعر'),

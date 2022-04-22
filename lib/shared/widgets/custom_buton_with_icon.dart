@@ -47,7 +47,7 @@ class CustomButtonWithIcon extends StatelessWidget {
           padding:
               MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(padding)),
           side: MaterialStateProperty.all(
-            const BorderSide(width: 2, color: AppColors.textButtonColor),
+            const BorderSide(width: 0, color: AppColors.textButtonColor),
           ),
         ),
         onPressed: onPressed,

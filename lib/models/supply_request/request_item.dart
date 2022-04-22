@@ -4,7 +4,7 @@ class RequestItem {
   String name;
   String productUnit;
   int quantity;
-  double? totalPrice;
+  double? totalPrice = 0;
   String? id;
   final double taxesRatio = 0.12;
   late double totalPriceAfterTaxes;
