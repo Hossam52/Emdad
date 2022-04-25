@@ -43,4 +43,13 @@ class AppCubit extends Cubit<AppState> {
       emit(GetSettingsErrorState(error: e.toString()));
     }
   }
+
+  List<String> get getCountryNames =>
+      settings.countries!.map((e) => e.countryName!).toList();
+
+  List<String> getCitiesForCountry(String countryName) {
+    final country = settings.countries!
+        .firstWhere((element) => element.countryName == countryName);
+    return country.cities!;
+  }
 }

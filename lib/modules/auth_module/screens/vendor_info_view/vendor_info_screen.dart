@@ -108,13 +108,14 @@ class VendorInfoScreen extends StatelessWidget {
                               .copyWith(fontWeight: FontWeight.w500),
                         ),
                         ChipWrapBuildItem(
-                          items: cubit.userSettingsModel!.data!.settings!
-                              .vendorTypes??[],
+                          items:
+                              cubit.userSettingsModel!.data!.vendorTypes ?? [],
                           selectedItems: cubit.vendorType,
                           onSelected: (selected, index) {
                             cubit.changeVendorTypes(
-                                cubit.userSettingsModel!.data!.settings!
-                                .vendorTypes![index], selected);
+                                cubit.userSettingsModel!.data!
+                                    .vendorTypes![index],
+                                selected);
                           },
                         ),
                         AnimatedOpacity(

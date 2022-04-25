@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:emdad/models/users/user/user_response_model.dart';
 import 'package:emdad/modules/user_module/home_module/user_home/product_slider_build_item.dart';
 import 'package:emdad/modules/user_module/home_module/user_home_cubit/user_home_cubit.dart';
 import 'package:emdad/modules/user_module/home_module/user_home_cubit/user_home_states.dart';
@@ -54,8 +57,14 @@ class UserHomeScreen extends StatelessWidget {
                       DefaultHomeTitleBuildItem(
                         title: 'الموردون المفضلون',
                         onPressed: () {
-                          navigateTo(context,
-                              VendorsListScreen(title: 'الموردون المفضلون'));
+                          navigateTo(
+                            context,
+                            BlocProvider.value(
+                              value: UserHomeCubit.instance(context),
+                              child:
+                                  VendorsListScreen(title: 'الموردون المفضلون'),
+                            ),
+                          );
                         },
                       ),
                       const SizedBox(height: 5),
@@ -66,8 +75,13 @@ class UserHomeScreen extends StatelessWidget {
                       DefaultHomeTitleBuildItem(
                         title: 'جميع الموردين',
                         onPressed: () {
-                          navigateTo(context,
-                              VendorsListScreen(title: 'جميع الموردين'));
+                          navigateTo(
+                              context,
+                              BlocProvider.value(
+                                value: UserHomeCubit.instance(context),
+                                child:
+                                    VendorsListScreen(title: 'جميع الموردين'),
+                              ));
                         },
                       ),
                       const SizedBox(height: 5),
@@ -110,15 +124,7 @@ class _FavoriteVendors extends StatelessWidget {
               width: 100.w,
               isFavorite: false,
               onTap: () {
-                navigateTo(
-                    context,
-                    BlocProvider.value(
-                      value: UserHomeCubit.instance(context),
-                      child: VendorViewScreen(
-                        title: favoriteVendors[index].name!,
-                        user: favoriteVendors[index],
-                      ),
-                    ));
+                _navigateToVendorViewScreen(context, favoriteVendors[index]);
               },
             ),
           ),
@@ -144,20 +150,25 @@ class _FeaturedVendors extends StatelessWidget {
             options: CarouselOptions(
               autoPlay: true,
               pauseAutoPlayOnTouch: true,
+              enableInfiniteScroll: false,
               viewportFraction: 0.9,
               height: 180.h,
             ),
-            itemBuilder: (context, index, int pageViewIndex) => Container(
-              clipBehavior: Clip.antiAliasWithSaveLayer,
-              margin: const EdgeInsets.symmetric(horizontal: 12),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: DefaultCachedNetworkImage(
-                imageUrl: featuredVendors[index].logoUrl!,
-                // 'https://images.unsplash.com/photo-1557844352-761f2565b576?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-                fit: BoxFit.cover,
-                width: double.infinity,
+            itemBuilder: (context, index, int pageViewIndex) => GestureDetector(
+              onTap: () {
+                _navigateToVendorViewScreen(context, featuredVendors[index]);
+              },
+              child: Container(
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                margin: const EdgeInsets.symmetric(horizontal: 12),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: DefaultCachedNetworkImage(
+                  imageUrl: featuredVendors[index].logoUrl!,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                ),
               ),
             ),
           ),
@@ -174,7 +185,7 @@ class _AllVendors extends StatelessWidget {
   Widget build(BuildContext context) {
     return UserHomeBlocBuilder(
       builder: (context, state) {
-        final vendors = UserHomeCubit.instance(context).featcherdVendors;
+        final vendors = UserHomeCubit.instance(context).vendors;
         if (vendors.isEmpty) return const EmptyData(emptyText: 'No Vendors');
         return GridView.builder(
           shrinkWrap: true,
@@ -189,19 +200,22 @@ class _AllVendors extends StatelessWidget {
           itemBuilder: (context, index) => HomeVendorBuildItem(
             width: deviceInfo.screenwidth * 0.5,
             user: vendors[index],
-            isFavorite: true,
+            isFavorite: vendors[index].isFavourite!,
             onTap: () {
-              navigateTo(
-                  context,
-                  BlocProvider.value(
-                    value: UserHomeCubit.instance(context),
-                    child: VendorViewScreen(
-                        user: vendors[index], title: 'الهدي للتوريدات'),
-                  ));
+              _navigateToVendorViewScreen(context, vendors[index]);
             },
           ),
         );
       },
     );
   }
+}
+
+void _navigateToVendorViewScreen(BuildContext context, User vendor) {
+  navigateTo(
+      context,
+      BlocProvider.value(
+        value: UserHomeCubit.instance(context),
+        child: VendorViewScreen(vendorId: vendor.id!, title: vendor.name!),
+      ));
 }

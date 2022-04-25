@@ -37,7 +37,7 @@ class UserRegisterDataModel {
 class PhoneNumberDataModel {
   late String countryCode;
   late String number;
-  String? sId;
+  String? id;
 
   PhoneNumberDataModel({
     required this.countryCode,
@@ -46,7 +46,7 @@ class PhoneNumberDataModel {
   PhoneNumberDataModel.fromJson(Map<String, dynamic> json) {
     countryCode = json['countryCode'];
     number = json['number'];
-    sId = json['_id'];
+    id = json['id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -60,7 +60,7 @@ class PhoneNumberDataModel {
     return {
       'countryCode': countryCode,
       'number': number,
-      'sId': sId,
+      'id': id,
     };
   }
 }

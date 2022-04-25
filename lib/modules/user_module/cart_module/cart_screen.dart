@@ -7,6 +7,7 @@ import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
+import 'package:emdad/shared/widgets/custom_chip.dart';
 import 'package:emdad/shared/widgets/default_home_title_build_item.dart';
 import 'package:emdad/shared/widgets/default_text_form_field.dart';
 import 'package:emdad/shared/widgets/empty_data.dart';
@@ -64,7 +65,7 @@ class CartScreen extends StatelessWidget {
                   isCart: true,
                   city: vendor.city,
                   logoUrl: vendor.logoUrl,
-                  vendorType: vendor.vendorType!.join(' - '),
+                  vendorType: vendor.allVendorTypeString,
                   tailing: CustomButton(
                     onPressed: () {},
                     text: 'إضافه منتج',
@@ -206,23 +207,12 @@ class _AddAdditionalItems extends StatelessWidget {
                   spacing: 5,
                   children: CartCubit.instance(context)
                       .additionalItems
-                      .map(
-                        (item) => Chip(
-                          backgroundColor:
-                              AppColors.primaryColor.withOpacity(0.7),
-                          deleteIcon: const Icon(Icons.close),
+                      .map((item) => CustomChip(
+                          item: item,
                           onDeleted: () {
                             CartCubit.instance(context)
                                 .removeAdditionalItem(item);
-                          },
-                          deleteIconColor: Colors.white,
-                          label: Text(
-                            item,
-                            style:
-                                thirdTextStyle().copyWith(color: Colors.white),
-                          ),
-                        ),
-                      )
+                          }))
                       .toList(),
                 ),
               ),

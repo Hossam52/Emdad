@@ -86,7 +86,7 @@ class SupplyRequest {
 
   Map<String, dynamic> toMap() {
     return {
-      '_id': id,
+      'id': id,
       'userId': userId,
       'vendorId': vendorId,
       'requestStatus': requestStatus,
@@ -107,7 +107,7 @@ class SupplyRequest {
 
   factory SupplyRequest.fromMap(Map<String, dynamic> map) {
     return SupplyRequest(
-      id: map['_id'] ?? '',
+      id: map['id'] ?? '',
       userId: map['userId'] ?? '',
       vendorId: map['vendorId'] ?? '',
       requestStatus: map['requestStatus'] ?? '',

@@ -29,13 +29,14 @@ void navigateToAndFinish(context, widget) => Navigator.pushAndRemoveUntil(
       (Route<dynamic> route) => false,
     );
 
-void showAppFilter({
+Future<void> showAppFilter({
   required BuildContext context,
   required Widget filterItem,
   required Function() onSearch,
   required Function() onDelete,
 }) =>
     showModalBottomSheet(
+      isScrollControlled: true,
       context: context,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -63,7 +64,7 @@ void showAppFilter({
                   onPressed: onDelete,
                   text: 'مسح الكل',
                   width: 75,
-                  height: 35,
+                  // height: 35,
                   backgroundColor: AppColors.errorColor,
                 ),
                 const Spacer(),
@@ -71,7 +72,7 @@ void showAppFilter({
                   onPressed: onSearch,
                   text: 'بحث',
                   width: 75,
-                  height: 35,
+                  // height: 35,
                 ),
               ],
             ),

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CustomTextFormField extends StatelessWidget {
+class CustomTextFormField extends StatefulWidget {
   final TextEditingController? controller;
   final TextInputType? type;
   final String? hint;
@@ -60,21 +60,26 @@ class CustomTextFormField extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<CustomTextFormField> createState() => _CustomTextFormFieldState();
+}
+
+class _CustomTextFormFieldState extends State<CustomTextFormField> {
+  @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (titleText != null)
+        if (widget.titleText != null)
           RichText(
             text: TextSpan(
-              text: titleText!,
+              text: widget.titleText!,
               style: thirdTextStyle(),
               children: <TextSpan>[
-                if (isOptional)
+                if (widget.isOptional)
                   TextSpan(
                       text: ' (اختيارى)',
                       style: subTextStyle().copyWith(color: Colors.grey)),
-                if (isRequired)
+                if (widget.isRequired)
                   TextSpan(
                       text: ' *',
                       style: thirdTextStyle()
@@ -85,45 +90,45 @@ class CustomTextFormField extends StatelessWidget {
         Container(
           clipBehavior: Clip.antiAliasWithSaveLayer,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(borderRadius),
+            borderRadius: BorderRadius.circular(widget.borderRadius),
           ),
           child: TextFormField(
-            enabled: enabled,
-            focusNode: focusNode,
+            enabled: widget.enabled,
+            focusNode: widget.focusNode,
             textAlignVertical: TextAlignVertical.center,
-            controller: controller,
-            keyboardType: type,
-            onFieldSubmitted: onSubmit,
-            onChanged: onChange,
-            onTap: onTap,
-            onSaved: onSaved,
-            validator: validation,
-            minLines: minLines,
-            maxLines: maxLines,
-            obscureText: isSecure,
+            controller: widget.controller,
+            keyboardType: widget.type,
+            onFieldSubmitted: widget.onSubmit,
+            onChanged: widget.onChange,
+            onTap: widget.onTap,
+            onSaved: widget.onSaved,
+            validator: widget.validation,
+            minLines: widget.minLines,
+            maxLines: widget.maxLines,
+            obscureText: widget.isSecure,
             style: secondaryTextStyle(),
-            inputFormatters: inputFormatters,
+            inputFormatters: widget.inputFormatters,
             decoration: InputDecoration(
-              filled: backgroundColor != null ? true : false,
-              fillColor: backgroundColor,
-              labelText: labelText,
+              filled: widget.backgroundColor != null ? true : false,
+              fillColor: widget.backgroundColor,
+              labelText: widget.labelText,
               labelStyle: TextStyle(
                 fontSize: 18.sp,
               ),
-              hintText: hint,
-              contentPadding: contentPadding,
+              hintText: widget.hint,
+              contentPadding: widget.contentPadding,
               hintStyle: thirdTextStyle().copyWith(color: Colors.black54),
-              suffixIcon: suffixIcon != null
+              suffixIcon: widget.suffixIcon != null
                   ? IconButton(
-                      icon: Icon(suffixIcon),
-                      onPressed: suffixPressed ?? () {},
+                      icon: Icon(widget.suffixIcon),
+                      onPressed: widget.suffixPressed ?? () {},
                       splashRadius: 1,
                     )
                   : null,
-              prefixIcon: prefix,
-              border: hasBorder
+              prefixIcon: widget.prefix,
+              border: widget.hasBorder
                   ? OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(borderRadius))
+                      borderRadius: BorderRadius.circular(widget.borderRadius))
                   : null,
             ),
           ),

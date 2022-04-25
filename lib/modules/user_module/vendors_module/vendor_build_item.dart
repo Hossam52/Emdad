@@ -1,14 +1,18 @@
+import 'package:emdad/models/users/user/user_response_model.dart';
+import 'package:emdad/modules/user_module/home_module/user_home_cubit/user_home_cubit.dart';
+import 'package:emdad/modules/user_module/vendors_module/vendor_view/vendor_view_screen.dart';
+import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/widgets/default_circle_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
 
 import 'vendor_view/vendor_view_componants/location_build_item.dart';
 
 class VendorBuildItem extends StatelessWidget {
-  const VendorBuildItem({Key? key, required this.onTap}) : super(key: key);
-
-  final Function() onTap;
+  const VendorBuildItem({Key? key, required this.user}) : super(key: key);
+  final User user;
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +23,17 @@ class VendorBuildItem extends StatelessWidget {
       shadowColor: Colors.black.withOpacity(0.6),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: InkWell(
-        onTap: onTap,
+        onTap: () {
+          navigateTo(
+              context,
+              BlocProvider.value(
+                value: UserHomeCubit.instance(context),
+                child: VendorViewScreen(
+                  title: user.name!,
+                  vendorId: user.id!, //Need to edit
+                ),
+              ));
+        },
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(
@@ -27,8 +41,7 @@ class VendorBuildItem extends StatelessWidget {
               DefaultCircleImage(
                 width: 53.w,
                 height: 53.w,
-                imageUrl:
-                    'https://upload.wikimedia.org/wikipedia/sco/thumb/b/bf/KFC_logo.svg/1200px-KFC_logo.svg.png',
+                imageUrl: user.logoUrl!,
               ),
               SizedBox(width: 13.5.w),
               Expanded(
@@ -36,14 +49,15 @@ class VendorBuildItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'الرحمه للمواد الغذائية',
+                      user.organizationName!,
+                      // 'الرحمه للمواد الغذائية',
                       style: thirdTextStyle().copyWith(
                         fontWeight: FontWeight.w700,
                       ),
                     ),
-                    const LocationBuildItem(location: 'الرياض'),
+                    LocationBuildItem(location: user.city!),
                     Text(
-                      'مواد غذائيه',
+                      user.allVendorTypeString,
                       style: subTextStyle(),
                     ),
                   ],

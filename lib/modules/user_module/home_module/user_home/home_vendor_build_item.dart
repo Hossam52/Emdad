@@ -67,7 +67,7 @@ class HomeVendorBuildItem extends StatelessWidget {
               ),
             ),
             Text(
-              getUserType(),
+              user.firstVendorType,
               style: subTextStyle().copyWith(
                 color: Colors.black54,
               ),
@@ -97,9 +97,5 @@ class HomeVendorBuildItem extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String getUserType() {
-    return user.vendorType?.first ?? '';
   }
 }

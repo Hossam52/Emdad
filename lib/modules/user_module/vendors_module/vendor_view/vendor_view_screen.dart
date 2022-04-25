@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:emdad/models/products_and_categories/category_model.dart';
 import 'package:emdad/models/users/user/user_response_model.dart';
 import 'package:emdad/modules/user_module/home_module/vendor_profile_cubit/vendor_profile_cubit.dart';
@@ -10,6 +12,7 @@ import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/default_home_title_build_item.dart';
 import 'package:emdad/shared/widgets/default_loader.dart';
+import 'package:emdad/shared/widgets/empty_data.dart';
 import 'package:emdad/shared/widgets/ui_componants/no_data_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,16 +27,17 @@ import 'vendor_view_componants/vendor_buttons_build.dart';
 import 'vendor_view_componants/vendor_info_build_item.dart';
 
 class VendorViewScreen extends StatelessWidget {
-  const VendorViewScreen({Key? key, required this.title, this.user})
+  const VendorViewScreen(
+      {Key? key, required this.title, required this.vendorId})
       : super(key: key);
 
   final String title;
-  final User? user;
+  final String vendorId;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(user!.name!, style: const TextStyle(color: Colors.white)),
+        title: Text(title, style: const TextStyle(color: Colors.white)),
         backgroundColor: AppColors.primaryColor,
         iconTheme: const IconThemeData(color: Colors.white),
         systemOverlayStyle: const SystemUiOverlayStyle(
@@ -51,7 +55,7 @@ class VendorViewScreen extends StatelessWidget {
         providers: [
           BlocProvider(
             create: (context) =>
-                VendorProfileCubit(vendorId: user!.id!)..getVendorInfo(),
+                VendorProfileCubit(vendorId: vendorId)..getVendorInfo(),
           ),
           BlocProvider(
             create: (context) => CartCubit(),
@@ -69,6 +73,7 @@ class VendorViewScreen extends StatelessWidget {
                 vendorProfileCubit.getVendorInfo();
               });
             }
+            final user = vendorProfileCubit.getVendorData;
             final categories = vendorProfileCubit.getCategories;
             return Stack(
               alignment: Alignment.bottomCenter,
@@ -77,32 +82,18 @@ class VendorViewScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       VendorInfoBuildItem(
-                        name: user!.organizationName!,
+                        name: user.organizationName!,
                         isCart: false,
-                        city: user!.city,
-                        logoUrl: user!.logoUrl,
-                        vendorType: getVendorType(),
-                        tailing: const VendorButtonsBuild(),
+                        city: user.city,
+                        logoUrl: user.logoUrl,
+                        vendorType: user.allVendorTypeString,
+                        tailing: VendorButtonsBuild(
+                          vendor: user,
+                        ),
                       ),
                       Builder(builder: (context) {
                         return Column(
                           children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
-                              child: DefaultHomeTitleBuildItem(
-                                title: 'التعليقات',
-                                hasButton: true,
-                                onPressed: () {
-                                  navigateTo(
-                                      context,
-                                      BlocProvider.value(
-                                        value: vendorProfileCubit,
-                                        child: const VendorReviewsScreen(),
-                                      ));
-                                },
-                              ),
-                            ),
                             const _Ratings(),
                             const SizedBox(height: 20),
                             ListView.builder(
@@ -128,10 +119,6 @@ class VendorViewScreen extends StatelessWidget {
       ),
     );
   }
-
-  String getVendorType() {
-    return user!.vendorType?.join(' - ') ?? ' ';
-  }
 }
 
 class _Ratings extends StatelessWidget {
@@ -144,17 +131,41 @@ class _Ratings extends StatelessWidget {
         var ratings = VendorProfileCubit.instance(context).getRatings;
         ratings =
             ratings.take(ratings.length > 10 ? 10 : ratings.length).toList();
-        return SizedBox(
-          height: 180.h,
-          width: double.infinity,
-          child: ListView.builder(
-            primary: true,
-            itemBuilder: (_, index) => ReviewBuildItem(
-              rateModel: ratings[index],
+        if (ratings.isEmpty) {
+          return const EmptyData(
+            emptyText: 'لا يوجد تعليقات علي هذا المورد',
+          );
+        }
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: DefaultHomeTitleBuildItem(
+                title: 'التعليقات',
+                hasButton: true,
+                onPressed: () {
+                  navigateTo(
+                      context,
+                      BlocProvider.value(
+                        value: VendorProfileCubit.instance(context),
+                        child: const VendorReviewsScreen(),
+                      ));
+                },
+              ),
             ),
-            itemCount: ratings.length,
-            scrollDirection: Axis.horizontal,
-          ),
+            SizedBox(
+              height: 180.h,
+              width: double.infinity,
+              child: ListView.builder(
+                primary: true,
+                itemBuilder: (_, index) => ReviewBuildItem(
+                  rateModel: ratings[index],
+                ),
+                itemCount: ratings.length,
+                scrollDirection: Axis.horizontal,
+              ),
+            ),
+          ],
         );
       },
     );

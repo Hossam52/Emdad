@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class SettingModel {
   bool? status;
   AllSettingsModel? data;
@@ -40,7 +42,7 @@ class AllSettingsModel {
         transportationMethods = [],
         key = '';
   AllSettingsModel.fromMap(Map<String, dynamic> json) {
-    id = json['_id'];
+    id = json['id'];
     vendorTypes = json['vendorTypes'].cast<String>();
     transportationMethods = json['transportationMethods'].cast<String>();
     key = json['key'];
@@ -54,7 +56,7 @@ class AllSettingsModel {
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['_id'] = id;
+    data['id'] = id;
     data['vendorTypes'] = vendorTypes;
     data['transportationMethods'] = transportationMethods;
     data['key'] = key;
@@ -67,19 +69,32 @@ class AllSettingsModel {
 
 class Countries {
   String? countryCode;
+  String? countryName;
   List<String>? cities;
-
-  Countries({this.countryCode, this.cities});
-
-  Countries.fromMap(Map<String, dynamic> json) {
-    countryCode = json['countryCode'];
-    cities = json['cities'].cast<String>();
-  }
+  Countries({
+    this.countryCode,
+    this.countryName,
+    this.cities,
+  });
 
   Map<String, dynamic> toMap() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['countryCode'] = countryCode;
-    data['cities'] = cities;
-    return data;
+    return {
+      'countryCode': countryCode,
+      'countryName': countryName,
+      'cities': cities,
+    };
   }
+
+  factory Countries.fromMap(Map<String, dynamic> map) {
+    return Countries(
+      countryCode: map['countryCode'],
+      countryName: map['countryName'],
+      cities: List<String>.from(map['cities']),
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Countries.fromJson(String source) =>
+      Countries.fromMap(json.decode(source));
 }

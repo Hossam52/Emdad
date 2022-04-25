@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:emdad/models/enums/enums.dart';
 import 'package:emdad/models/users/user/user_response_model.dart';
 import 'package:emdad/modules/user_module/home_module/vendor_profile_cubit/vendor_profile_cubit.dart';
@@ -17,9 +19,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class VendorButtonsBuild extends StatelessWidget {
   const VendorButtonsBuild({
     Key? key,
+    required this.vendor,
   }) : super(key: key);
+  final User vendor;
   @override
   Widget build(BuildContext context) {
+    log(vendor.isFavourite.toString());
     return Row(
       children: [
         CustomIconButton(
@@ -32,10 +37,11 @@ class VendorButtonsBuild extends StatelessWidget {
         CustomIconButton(
           onPressed: () {
             VendorProfileCubit.instance(context).toggleFavorite(context);
+            vendor.isFavourite = !vendor.isFavourite!;
           },
           width: 32.w,
           height: 32.h,
-          icon: const Icon(Icons.star_border,
+          icon: Icon(vendor.isFavourite! ? Icons.star : Icons.star_border,
               size: 21, color: AppColors.thirdColor),
         ),
         SizedBox(width: 20.w),

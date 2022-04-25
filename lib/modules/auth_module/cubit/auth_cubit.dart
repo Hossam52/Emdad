@@ -4,7 +4,7 @@ import 'package:emdad/layout/transporter_layout/transporter_layout.dart';
 import 'package:emdad/layout/user_layout/user_layout.dart';
 import 'package:emdad/layout/vendor_layout/vendor_layout_screen.dart';
 import 'package:emdad/models/enums/enums.dart';
-import 'package:emdad/models/general_models/user_settings_model.dart';
+import 'package:emdad/models/general_models/settings_model.dart';
 import 'package:emdad/models/users/auth/user_register_data_model.dart';
 import 'package:emdad/models/users/user/user_response_model.dart';
 import 'package:emdad/models/users/user/user_response_model.dart' as userModel;
@@ -349,7 +349,7 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  UserSettingsModel? userSettingsModel;
+  SettingModel? userSettingsModel;
   List<String> countries = [];
   List<String> cities = [];
 
@@ -362,8 +362,8 @@ class AuthCubit extends Cubit<AuthState> {
       emit(UserGetSettingsLoadingState());
       Response response = await AuthServices.getUserSettings();
       if (response.data['status']) {
-        userSettingsModel = UserSettingsModel.fromJson(response.data);
-        for (var element in userSettingsModel!.data!.settings!.countries!) {
+        userSettingsModel = SettingModel.fromMap(response.data);
+        for (var element in userSettingsModel!.data!.countries!) {
           countries.add(element.countryCode!);
         }
         emit(UserGetSettingsSuccessState());
@@ -383,9 +383,9 @@ class AuthCubit extends Cubit<AuthState> {
     cities.clear();
     selectedCity = null;
     selectedCountry = value.toString();
-    int index = userSettingsModel!.data!.settings!.countries!
+    int index = userSettingsModel!.data!.countries!
         .indexWhere((element) => element.countryCode == value);
-    cities.addAll(userSettingsModel!.data!.settings!.countries![index].cities!);
+    cities.addAll(userSettingsModel!.data!.countries![index].cities!);
     emit(AuthChangeState());
   }
 

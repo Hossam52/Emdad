@@ -30,12 +30,12 @@ class HomeUserModel {
     return HomeUserModel(
       status: map['status'] ?? false,
       message: map['message'] ?? '',
-      vendors: List<User>.from(
-          map['data']?['vendors']?.map((x) => User.fromJson(x))),
+      vendors:
+          List<User>.from(map['data']?['vendors']?.map((x) => User.fromMap(x))),
       favouriteVendors: List<User>.from(
-          map['data']?['favouriteVendors']?.map((x) => User.fromJson(x))),
+          map['data']?['favouriteVendors']?.map((x) => User.fromMap(x))),
       featuredVendors: List<User>.from(
-          map['data']?['featuredVendors']?.map((x) => User.fromJson(x))),
+          map['data']?['featuredVendors']?.map((x) => User.fromMap(x))),
     );
   }
 

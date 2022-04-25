@@ -5,14 +5,23 @@ import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/widgets/custom_text_form_field.dart';
 import 'package:flutter/cupertino.dart';
 
-class DefaultSearchField extends StatelessWidget {
+class DefaultSearchField extends StatefulWidget {
   const DefaultSearchField(
-      {Key? key, required this.searchController, this.hasFilter = false})
+      {Key? key,
+      required this.searchController,
+      this.onFilterTapped,
+      this.onChanged})
       : super(key: key);
 
   final TextEditingController searchController;
-  final bool hasFilter;
+  final VoidCallback? onFilterTapped;
+  final void Function(String)? onChanged;
 
+  @override
+  State<DefaultSearchField> createState() => _DefaultSearchFieldState();
+}
+
+class _DefaultSearchFieldState extends State<DefaultSearchField> {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -28,27 +37,22 @@ class DefaultSearchField extends StatelessWidget {
               hint: 'بحث',
               validation: (value) {},
               prefix: const Icon(CupertinoIcons.search, color: Colors.grey),
-              controller: searchController,
+              controller: widget.searchController,
               hasBorder: false,
+              onChange: widget.onChanged,
             ),
           ),
         ),
-        if (hasFilter)
+        if (widget.onFilterTapped != null)
           TextButton.icon(
-            onPressed: () {
-              showAppFilter(
-                context: context,
-                onSearch: () {},
-                onDelete: () {},
-                filterItem: Column(),
-              );
-            },
+            onPressed: widget.onFilterTapped,
             label: const Text('تصفية'),
             icon: const Icon(MyIcons.funnel),
             style: TextButton.styleFrom(
               primary: AppColors.primaryColor,
             ),
           ),
+        // if (searchController.text.isNotEmpty) Text('Hello')
       ],
     );
   }

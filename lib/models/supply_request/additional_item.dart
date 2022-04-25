@@ -16,7 +16,7 @@ class AdditionalItem {
     return {
       'description': description,
       'price': price,
-      '_id': id,
+      'id': id,
     };
   }
 
@@ -24,7 +24,7 @@ class AdditionalItem {
     return AdditionalItem(
       description: map['description'] ?? '',
       price: map['price']?.toDouble() ?? 0.0,
-      id: map['_id'] ?? '',
+      id: map['id'] ?? '',
     );
   }
 

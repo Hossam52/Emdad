@@ -23,7 +23,7 @@ class Data {
   Data({this.user, this.accessToken});
 
   Data.fromJson(Map<String, dynamic> json) {
-    user = json['user'] != null ? User.fromJson(json['user']) : null;
+    user = json['user'] != null ? User.fromMap(json['user']) : null;
     accessToken = json['accessToken'];
   }
 }
@@ -50,61 +50,35 @@ class User {
   String? logo;
   String? id;
   String? logoUrl;
+  LocationObject? locationObject;
+  bool? isFavourite;
   String? userType;
-
-  User(
-      {this.sId,
-      this.name,
-      this.isVerified,
-      this.password,
-      this.primaryPhoneNumber,
-      this.primaryEmail,
-      this.secondaryEmail,
-      this.modificationDate,
-      this.vendorType,
-      this.firebaseToken,
-      this.creationDate,
-      this.iV,
-      this.city,
-      this.commercialRegister,
-      this.country,
-      this.location,
-      this.organizationName,
-      this.updatedAt,
-      this.logo,
-      this.id,
-      this.logoUrl,
-      this.userType});
-
-  User.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
-    name = json['name'];
-    isVerified = json['isVerified'];
-    password = json['password'];
-    primaryPhoneNumber = json['primaryPhoneNumber'] != null
-        ? PhoneNumberDataModel.fromJson(json['primaryPhoneNumber'])
-        : null;
-    primaryEmail = json['primaryEmail'];
-    secondaryEmail = json['secondaryEmail'];
-    modificationDate = json['modificationDate'];
-    if (json['vendorType'] != null) {
-      vendorType = json['vendorType'].cast<String>();
-    }
-    firebaseToken = json['firebaseToken'];
-    creationDate = json['creationDate'];
-    iV = json['__v'];
-    city = json['city'];
-    commercialRegister = json['commercialRegister'];
-    country = json['country'];
-    location =
-        json['location'] != null ? Location.fromJson(json['location']) : null;
-    organizationName = json['oraganizationName'];
-    updatedAt = json['updatedAt'];
-    logo = json['logo'];
-    id = json['id'];
-    logoUrl = json['logoUrl'];
-    userType = json['userType'];
-  }
+  User({
+    this.sId,
+    this.name,
+    this.isVerified,
+    this.password,
+    this.primaryPhoneNumber,
+    this.primaryEmail,
+    this.secondaryEmail,
+    this.modificationDate,
+    this.vendorType,
+    this.firebaseToken,
+    this.creationDate,
+    this.iV,
+    this.city,
+    this.commercialRegister,
+    this.country,
+    this.location,
+    this.organizationName,
+    this.updatedAt,
+    this.logo,
+    this.id,
+    this.logoUrl,
+    this.locationObject,
+    this.isFavourite,
+    this.userType,
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -129,8 +103,64 @@ class User {
       'logo': logo,
       'id': id,
       'logoUrl': logoUrl,
+      'locationObject': locationObject?.toMap(),
+      'isFavourite': isFavourite,
       'userType': userType,
     };
+  }
+
+  factory User.fromMap(Map<String, dynamic> map) {
+    return User(
+      sId: map['sId'],
+      name: map['name'],
+      isVerified: map['isVerified'],
+      password: map['password'],
+      primaryPhoneNumber: map['primaryPhoneNumber'] != null
+          ? PhoneNumberDataModel.fromJson(map['primaryPhoneNumber'])
+          : null,
+      primaryEmail: map['primaryEmail'],
+      secondaryEmail: map['secondaryEmail'],
+      modificationDate: map['modificationDate'],
+      vendorType: List<String>.from(map['vendorType']),
+      firebaseToken: map['firebaseToken'],
+      creationDate: map['creationDate'],
+      iV: map['iV']?.toInt(),
+      city: map['city'],
+      commercialRegister: map['commercialRegister'],
+      country: map['country'],
+      location:
+          map['location'] != null ? Location.fromJson(map['location']) : null,
+      organizationName: map['oraganizationName'],
+      updatedAt: map['updatedAt'],
+      logo: map['logo'],
+      id: map['id'],
+      logoUrl: map['logoUrl'],
+      locationObject: map['locationObject'] != null
+          ? LocationObject.fromMap(map['locationObject'])
+          : null,
+      isFavourite: map['isFavourite'] ?? false,
+      userType: map['userType'],
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory User.fromJson(String source) => User.fromMap(json.decode(source));
+
+  String get allVendorTypeString {
+    if (vendorType != null && vendorType!.isNotEmpty) {
+      return vendorType!.join(' - ');
+    } else {
+      return 'لا يوجد قسم';
+    }
+  }
+
+  String get firstVendorType {
+    if (vendorType == null || vendorType!.isEmpty) {
+      return ' ';
+    } else {
+      return vendorType!.first;
+    }
   }
 }
 
@@ -154,4 +184,32 @@ class Location {
     json['_id'] = sId;
     return json;
   }
+}
+
+class LocationObject {
+  double lat;
+  double lng;
+  LocationObject({
+    required this.lat,
+    required this.lng,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'lat': lat,
+      'lng': lng,
+    };
+  }
+
+  factory LocationObject.fromMap(Map<String, dynamic> map) {
+    return LocationObject(
+      lat: map['lat']?.toDouble() ?? 0.0,
+      lng: map['lng']?.toDouble() ?? 0.0,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory LocationObject.fromJson(String source) =>
+      LocationObject.fromMap(json.decode(source));
 }

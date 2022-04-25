@@ -24,7 +24,7 @@ class RateModel {
 
   Map<String, dynamic> toMap() {
     return {
-      '_id': id,
+      'id': id,
       'targetId': targetId,
       'userId': userId,
       'comment': comment,
@@ -38,7 +38,7 @@ class RateModel {
 
   factory RateModel.fromMap(Map<String, dynamic> map) {
     return RateModel(
-      id: map['_id'] ?? '',
+      id: map['id'] ?? '',
       targetId: map['targetId'] ?? '',
       userId: map['userId'] ?? '',
       comment: map['comment'] ?? '',
@@ -57,32 +57,52 @@ class RateModel {
 }
 
 class RaterModel {
-  String sId;
+  bool isVerified;
   String name;
-  String city;
+  String logo;
+  List<String> vendorType;
   String country;
+  String city;
+  List<String> transportationMethods;
+  String id;
+  String logoUrl;
   RaterModel({
-    required this.sId,
+    required this.isVerified,
     required this.name,
-    required this.city,
+    required this.logo,
+    required this.vendorType,
     required this.country,
+    required this.city,
+    required this.transportationMethods,
+    required this.id,
+    required this.logoUrl,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      '_id': sId,
+      'isVerified': isVerified,
       'name': name,
-      'city': city,
+      'logo': logo,
+      'vendorType': vendorType,
       'country': country,
+      'city': city,
+      'transportationMethods': transportationMethods,
+      'id': id,
+      'logoUrl': logoUrl,
     };
   }
 
   factory RaterModel.fromMap(Map<String, dynamic> map) {
     return RaterModel(
-      sId: map['_id'] ?? '',
+      isVerified: map['isVerified'] ?? false,
       name: map['name'] ?? '',
-      city: map['city'] ?? '',
+      logo: map['logo'] ?? '',
+      vendorType: List<String>.from(map['vendorType']),
       country: map['country'] ?? '',
+      city: map['city'] ?? '',
+      transportationMethods: List<String>.from(map['transportationMethods']),
+      id: map['id'] ?? '',
+      logoUrl: map['logoUrl'] ?? '',
     );
   }
 

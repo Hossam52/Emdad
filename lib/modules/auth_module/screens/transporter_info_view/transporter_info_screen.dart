@@ -26,9 +26,11 @@ class TransporterInfoScreen extends StatelessWidget {
   final String token;
   final AuthCubit cubit;
 
-  final TextEditingController organizationNameController = TextEditingController();
+  final TextEditingController organizationNameController =
+      TextEditingController();
 
-  final TextEditingController commercialRegisterController = TextEditingController();
+  final TextEditingController commercialRegisterController =
+      TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
@@ -57,8 +59,8 @@ class TransporterInfoScreen extends StatelessWidget {
                   key: formKey,
                   child: Center(
                     child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10.h, horizontal: 16.w),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 10.h, horizontal: 16.w),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -106,13 +108,13 @@ class TransporterInfoScreen extends StatelessWidget {
                                 .copyWith(fontWeight: FontWeight.w500),
                           ),
                           ChipWrapBuildItem(
-                            items: cubit.userSettingsModel!.data!.settings!
+                            items: cubit.userSettingsModel!.data!
                                     .transportationMethods ??
                                 [],
                             selectedItems: cubit.transporterType,
                             onSelected: (selected, index) {
                               cubit.changeTransporterTypes(
-                                cubit.userSettingsModel!.data!.settings!
+                                cubit.userSettingsModel!.data!
                                     .transportationMethods![index],
                                 selected,
                               );
@@ -152,11 +154,12 @@ class TransporterInfoScreen extends StatelessWidget {
                                 if (formKey.currentState!.validate()) {
                                   cubit.completeProfile(
                                     TransporterDataModel(
-                                      transportationMethods: cubit.transporterType,
+                                      transportationMethods:
+                                          cubit.transporterType,
                                       commercialRegister:
-                                      commercialRegisterController.text,
+                                          commercialRegisterController.text,
                                       organizationName:
-                                      organizationNameController.text,
+                                          organizationNameController.text,
                                       city: cubit.selectedCity!,
                                       country: cubit.selectedCountry!,
                                       locationData: LocationData(

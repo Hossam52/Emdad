@@ -36,13 +36,12 @@ class VendorInfoModel {
     return VendorInfoModel(
       status: map['status'] ?? false,
       message: map['message'] ?? '',
-      vendorInfo: User.fromJson(map['data']?['vendorInfo']),
+      vendorInfo: User.fromMap(map['data']?['vendorInfo']),
       ratings: List<RateModel>.from(
           map['data']?['ratings']?.map((x) => RateModel.fromMap(x))),
       overAllRating: map['data']?['overAllRating']?.toDouble() ?? 0.0,
-      categories: List<CategoryModel>.from(map['data']?['products']
-              ?['categories']
-          ?.map((x) => CategoryModel.fromMap(x))),
+      categories: List<CategoryModel>.from(
+          map['data']?['categories']?.map((x) => CategoryModel.fromMap(x))),
     );
   }
 
