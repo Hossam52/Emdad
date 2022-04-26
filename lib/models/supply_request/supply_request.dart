@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:emdad/models/enums/enums.dart';
 import 'package:emdad/models/general_models/facility_type_model.dart';
 import 'package:emdad/models/supply_request/additional_item.dart';
+import 'package:emdad/models/supply_request/order_transportation_request.dart';
 import 'package:emdad/models/supply_request/request_item.dart';
 import 'package:emdad/models/supply_request/user_preview.dart';
 import 'package:emdad/models/users/user/user_response_model.dart';
@@ -28,25 +29,26 @@ class SupplyRequest {
   String transportationRequestId;
   UserPreviewModel user;
   UserPreviewModel vendor;
+  OrderTransportationRequestModel? transportationRequest;
   double totalOrderPrice = 0;
-  SupplyRequest({
-    required this.id,
-    required this.userId,
-    required this.vendorId,
-    required this.requestStatus,
-    required this.transportationHandler,
-    required this.requestItems,
-    required this.additionalItems,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.iv,
-    required this.transportationPrice,
-    required this.generatedId,
-    required this.paymentStatus,
-    required this.transportationRequestId,
-    required this.user,
-    required this.vendor,
-  }) {
+  SupplyRequest(
+      {required this.id,
+      required this.userId,
+      required this.vendorId,
+      required this.requestStatus,
+      required this.transportationHandler,
+      required this.requestItems,
+      required this.additionalItems,
+      required this.createdAt,
+      required this.updatedAt,
+      required this.iv,
+      required this.transportationPrice,
+      required this.generatedId,
+      required this.paymentStatus,
+      required this.transportationRequestId,
+      required this.user,
+      required this.vendor,
+      this.transportationRequest}) {
     //Request status enum
     if (requestStatus == SupplyRequestStatus.awaitingApproval.name) {
       requestStatusEnum = SupplyRequestStatus.awaitingApproval;
@@ -82,7 +84,27 @@ class SupplyRequest {
     }
     totalOrderPrice += transportationPrice;
   }
-  //Make enum
+
+  bool get hasTransportation => transportationRequest != null;
+  bool get userRequestTransport {
+    return (transportationHandlerEnum == FacilityType.user &&
+        transportationRequest != null);
+  }
+
+  bool get userHasTransport {
+    return (transportationHandlerEnum == FacilityType.user &&
+        transportationRequest == null);
+  }
+
+  bool get vendorAddTransportationOffer {
+    return (transportationHandlerEnum == FacilityType.vendor &&
+        transportationRequest != null);
+  }
+
+  bool get vendorWaitTransportationOffer {
+    return (transportationHandlerEnum == FacilityType.vendor &&
+        transportationRequest == null);
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -102,6 +124,7 @@ class SupplyRequest {
       'transportationRequestId': transportationRequestId,
       'user': user.toMap(),
       'vendor': vendor.toMap(),
+      'transportationRequest': transportationRequest?.toMap(),
     };
   }
 
@@ -125,6 +148,10 @@ class SupplyRequest {
       transportationRequestId: map['transportationRequestId'] ?? '',
       user: UserPreviewModel.fromMap(map['user']),
       vendor: UserPreviewModel.fromMap(map['vendor']),
+      transportationRequest: map['transportationRequest'] == null
+          ? null
+          : OrderTransportationRequestModel.fromMap(
+              map['transportationRequest']),
     );
   }
 

@@ -12,8 +12,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AllOrdersListView extends StatelessWidget {
-  const AllOrdersListView({Key? key, required this.vendorId}) : super(key: key);
+  const AllOrdersListView({
+    Key? key,
+    required this.vendorId,
+    this.trailing,
+  }) : super(key: key);
   final String vendorId;
+  final Widget? trailing;
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -32,25 +37,11 @@ class AllOrdersListView extends StatelessWidget {
           return Column(
             children: [
               ListTile(
-                title: const Text('قائمة الطلبات',
-                    style: TextStyle(color: Colors.black)),
-                contentPadding:
-                    const EdgeInsets.symmetric(vertical: 22, horizontal: 16),
-                trailing: CustomIconButton(
-                  width: 45.w,
-                  height: 45.h,
-                  icon: const Icon(MyIcons.edit, color: Colors.white),
-                  buttonColor: AppColors.secondaryColor,
-                  onPressed: () {
-                    navigateTo(
-                        context,
-                        BlocProvider.value(
-                          value: CartCubit.instance(context),
-                          child: CartScreen(),
-                        ));
-                  },
-                ),
-              ),
+                  title: const Text('قائمة الطلبات',
+                      style: TextStyle(color: Colors.black)),
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 22, horizontal: 16),
+                  trailing: trailing),
               ListView.separated(
                 itemCount: items.length,
                 shrinkWrap: true,

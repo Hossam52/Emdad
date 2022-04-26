@@ -41,9 +41,6 @@ class OffersScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return OrderBuildItem(
                       order: offersCubit.offers[index],
-                      title: 'الهدى للتوريدات الغذائية',
-                      image:
-                          'https://upload.wikimedia.org/wikipedia/sco/thumb/b/bf/KFC_logo.svg/1200px-KFC_logo.svg.png',
                       hasBadge: true,
                       onTap: () {
                         navigateTo(

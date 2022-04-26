@@ -13,3 +13,13 @@ class GetOrderErrorState extends OrderStates {
   final String error;
   GetOrderErrorState({required this.error});
 }
+
+//CreateTransportationRequest online fetch data
+class CreateTransportationRequestLoadingState extends OrderStates {}
+
+class CreateTransportationRequestSuccessState extends OrderStates {}
+
+class CreateTransportationRequestErrorState extends OrderStates {
+  final String error;
+  CreateTransportationRequestErrorState({required this.error});
+}

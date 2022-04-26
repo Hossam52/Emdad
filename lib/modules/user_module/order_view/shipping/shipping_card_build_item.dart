@@ -11,14 +11,14 @@ class ShippingCardBuildItem extends StatelessWidget {
     required this.info,
     required this.icon,
     this.borderColor = AppColors.primaryColor,
-    this.price,
+    required this.trailing,
   }) : super(key: key);
 
   final String name;
   final String info;
   final Icon icon;
   final Color borderColor;
-  final int? price;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -29,21 +29,26 @@ class ShippingCardBuildItem extends StatelessWidget {
       ),
       margin: const EdgeInsets.all(16),
       child: ListTile(
-          title: Text(name),
-          contentPadding: const EdgeInsets.all(16),
-          leading: icon,
-          subtitle: Text(
-            info,
-            style: subTextStyle(),
-          ),
-          trailing: price != null
-              ? Text('$price ر.س', style: secondaryTextStyle().copyWith(fontWeight: FontWeight.w700))
-              : TextButton(
-            onPressed: () {
-              navigateTo(context, const ShippingOffersScreen());
-            },
-            child: const Text('عروض النقل'),
-          )),
+        title: Text(name),
+        contentPadding: const EdgeInsets.all(16),
+        leading: icon,
+        subtitle: Text(
+          info,
+          style: subTextStyle(),
+        ),
+        trailing: trailing,
+
+        //  price != null
+        //     ? Text('$price ر.س',
+        //         style: secondaryTextStyle()
+        //             .copyWith(fontWeight: FontWeight.w700))
+        //     : TextButton(
+        //         onPressed: () {
+        //           navigateTo(context, const ShippingOffersScreen());
+        //         },
+        //         child: const Text('عروض النقل'),
+        //       )
+      ),
     );
   }
 }

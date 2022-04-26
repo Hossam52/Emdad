@@ -1,16 +1,61 @@
 import 'dart:convert';
 
+import 'package:emdad/models/enums/enums.dart';
 import 'package:emdad/models/supply_request/supply_request.dart';
 
 class AllSupplyRequestsModel {
   bool status;
   String message;
   List<SupplyRequest> supplyRequests;
+
+  List<SupplyRequest> awaitTransportationRequests = [];
+  List<SupplyRequest> preparingRequests = [];
+  List<SupplyRequest> onWayRequests = [];
+  List<SupplyRequest> deliverdRequests = [];
+  bool isLastPage;
   AllSupplyRequestsModel({
     required this.status,
     required this.message,
     required this.supplyRequests,
-  });
+  }) : isLastPage = supplyRequests.isEmpty {
+    _separateOrders();
+  }
+  void _separateOrders() {
+    _assignAwaitTransportation();
+    _assignPreparing();
+    _assignOnWay();
+    _assignDeliverd();
+  }
+
+  // For separate requests every to its own type
+  void _assignAwaitTransportation() {
+    awaitTransportationRequests = supplyRequests
+        .where((request) =>
+            request.requestStatusEnum ==
+            SupplyRequestStatus.awaitingTransportation)
+        .toList();
+  }
+
+  void _assignPreparing() {
+    preparingRequests = supplyRequests
+        .where((request) =>
+            request.requestStatusEnum == SupplyRequestStatus.preparing)
+        .toList();
+  }
+
+  void _assignOnWay() {
+    onWayRequests = supplyRequests
+        .where(
+            (request) => request.requestStatusEnum == SupplyRequestStatus.onWay)
+        .toList();
+  }
+
+  void _assignDeliverd() {
+    deliverdRequests = supplyRequests
+        .where((request) =>
+            request.requestStatusEnum == SupplyRequestStatus.delivered)
+        .toList();
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -33,4 +78,12 @@ class AllSupplyRequestsModel {
 
   factory AllSupplyRequestsModel.fromJson(String source) =>
       AllSupplyRequestsModel.fromMap(json.decode(source));
+
+  // To Append requests to current object
+  void appendObjectToCurrent(AllSupplyRequestsModel requestsModel) {
+    isLastPage = requestsModel.isLastPage; //to override current last page
+    supplyRequests
+        .addAll(requestsModel.supplyRequests); //add model to current model
+    _separateOrders(); //To separate every request according to type
+  }
 }

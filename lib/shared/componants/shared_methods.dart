@@ -76,6 +76,7 @@ class SharedMethods {
       CacheHelper.removeData(key: 'vendorToken');
       CacheHelper.removeData(key: 'userToken');
       CacheHelper.removeData(key: 'transporterToken');
+      CacheHelper.removeData(key: 'userType');
       Constants.vendorToken = null;
       Constants.userToken = null;
       Constants.transporterToken = null;

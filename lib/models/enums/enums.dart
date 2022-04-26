@@ -14,7 +14,7 @@ enum SupplyRequestStatus {
 }
 enum TransportationStatus {
   //Handles inside the request page
-  awaitingOfferes,
+  awaitingOffers,
   pending,
   pickupLocation,
   deliveryLocation,

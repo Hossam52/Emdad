@@ -88,13 +88,6 @@ Future<bool?> showOrderConfirmationDialog(BuildContext context) async {
   );
 }
 
-Future<bool?> showRequestTransformMethod(BuildContext context) async {
-  return await showDialog<bool>(
-    context: context,
-    builder: (context) => const RequestTransformDialog(),
-  );
-}
-
 Widget buildModalSheetTransporterItem({
   required BuildContext context,
   required String title,

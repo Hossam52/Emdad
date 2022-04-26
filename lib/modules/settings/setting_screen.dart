@@ -48,7 +48,7 @@ class SettingsScreen extends StatelessWidget {
                 leading: const Icon(Icons.email,
                     color: AppColors.primaryColor, size: 17),
                 onTap: () {
-                  navigateTo(context, const ChangeEmailScreen());
+                  navigateTo(context, ChangeEmailScreen());
                 },
               ),
               const Divider(height: 0),

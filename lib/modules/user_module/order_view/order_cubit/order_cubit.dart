@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:emdad/models/request_models/create_transportation_request_model.dart';
 import 'package:emdad/models/supply_request/supply_request.dart';
 import 'package:emdad/models/users/user/supply_requests/order_request_model.dart';
 import 'package:emdad/shared/network/services/user/user_services.dart';
@@ -27,6 +30,24 @@ class OrderCubit extends Cubit<OrderStates> {
       emit(GetOrderSuccessState());
     } catch (e) {
       emit(GetOrderErrorState(error: e.toString()));
+    }
+  }
+
+  Future<void> createTransportationRequest(
+      {required String transportationMethod, required String city}) async {
+    try {
+      emit(CreateTransportationRequestLoadingState());
+      final map = await _services.requestServices.createTransportationRequest(
+        CreateTransportationRequestModel(
+            supplyRequestId: orderId,
+            transportationMethod: transportationMethod,
+            city: city),
+      );
+      log(map.toString());
+      emit(CreateTransportationRequestSuccessState());
+    } catch (e) {
+      log(e.toString());
+      emit(CreateTransportationRequestErrorState(error: e.toString()));
     }
   }
 }

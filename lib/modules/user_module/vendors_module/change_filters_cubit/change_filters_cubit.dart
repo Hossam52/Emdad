@@ -19,6 +19,7 @@ class ChangeFiltersCubit extends Cubit<ChangeFiltersStates> {
   List<String> _countries = [];
   List<String> _cities = [];
   List<String> _vendorTypes = [];
+  List<String> _transportationMethods = [];
 
   List<String> get countries => _countries;
   List<String> get cities {
@@ -27,13 +28,16 @@ class ChangeFiltersCubit extends Cubit<ChangeFiltersStates> {
   }
 
   List<String> get vendorTypes => _vendorTypes;
+  List<String> get transportationMethods => _transportationMethods;
 
   String? _selectedCountry;
   String? _selectedCity;
+  String? _selectedTransportation;
   Set<String>? _selectedVendorType = {};
 
   String? get selectedCountry => _selectedCountry;
   String? get selectedCity => _selectedCity;
+  String? get selectedTransportation => _selectedTransportation;
   Set<String>? get selectedVendorType => _selectedVendorType;
 
   void initFilters(BuildContext context) {
@@ -42,7 +46,21 @@ class ChangeFiltersCubit extends Cubit<ChangeFiltersStates> {
     _vendorTypes = appCubit.settings.vendorTypes!;
 
     _countries = appCubit.getCountryNames;
+
+    _transportationMethods = appCubit.getTransportationMethods;
     emit(ChangeFilters());
+  }
+
+  void setIntialValues({
+    bool setSelectedTransportationToFirst = false,
+    bool setSelectedCountryToFirst = false,
+  }) {
+    if (setSelectedCountryToFirst) {
+      _selectedCountry = _countries.first;
+    }
+    if (setSelectedTransportationToFirst) {
+      _selectedTransportation = _transportationMethods.first;
+    }
   }
 
   void changeSelectedCountry(BuildContext context, String country) {
@@ -54,6 +72,12 @@ class ChangeFiltersCubit extends Cubit<ChangeFiltersStates> {
 
   void changeSelectedCity(String city) {
     _selectedCity = city;
+    emit(ChangeFilters());
+  }
+
+  void changeSelectedTransportation(String transportationMethod) {
+    _selectedTransportation = transportationMethod;
+    emit(ChangeFilters());
   }
 
   void addVendorType(String vendorType) {
@@ -71,6 +95,7 @@ class ChangeFiltersCubit extends Cubit<ChangeFiltersStates> {
     _selectedCountry = null;
     _selectedCity = null;
     _selectedVendorType = null;
+    _selectedTransportation = null;
     emit(RemoveAllFiltersState());
   }
 }

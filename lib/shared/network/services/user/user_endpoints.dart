@@ -11,7 +11,9 @@ class UserEndPoints {
 
 //
   static const products = 'products';
+
   static const favorite = 'favourite';
+  static const transportationRequests = _path + 'transportationRequests';
 
   static String vendor(String vendorID) {
     return generatePathVariable(vendors, vendorID);

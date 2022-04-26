@@ -12,4 +12,8 @@ class EndPoints {
   static const String completeProfile = 'profile/complete';
 
   static const String userSettings = 'settings';
+
+  static const String changePassword = 'profile/password';
+
+  static const String changeEmail = 'profile/email';
 }

@@ -50,9 +50,6 @@ class _VendorOffersScreenState extends State<VendorOffersScreen> {
                 itemCount: requests.length,
                 itemBuilder: (context, index) => OrderBuildItem(
                   order: requests[index],
-                  title: requests[index].user.name,
-                  image:
-                      'https://upload.wikimedia.org/wikipedia/sco/thumb/b/bf/KFC_logo.svg/1200px-KFC_logo.svg.png',
                   hasBadge: false,
                   onTap: () {
                     navigateTo(

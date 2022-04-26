@@ -7,21 +7,17 @@ import 'package:emdad/shared/styles/font_styles.dart';
 import 'package:emdad/shared/widgets/default_cached_image.dart';
 
 class OrderBuildItem extends StatelessWidget {
-  OrderBuildItem({
+  const OrderBuildItem({
     Key? key,
     required this.hasBadge,
     required this.onTap,
-    required this.title,
-    required this.image,
     required this.order,
     this.trailing,
   }) : super(key: key);
   final SupplyRequest order;
   final bool hasBadge;
   final Function() onTap;
-  final String title;
-  final String image;
-  Widget? trailing;
+  final Widget? trailing;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -44,7 +40,7 @@ class OrderBuildItem extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 child: DefaultCachedNetworkImage(
-                  imageUrl: image,
+                  imageUrl: order.vendor.logoUrl, // image,
                   fit: BoxFit.cover,
                 ),
               ),

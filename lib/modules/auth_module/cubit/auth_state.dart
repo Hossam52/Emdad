@@ -51,7 +51,26 @@ class UserGetSettingsSuccessState extends AuthState {}
 
 class UserGetSettingsErrorState extends AuthState {}
 
-
 class CountryChangeState extends AuthState {}
 
 class CityChangeState extends AuthState {}
+
+//ChangePassword online fetch data
+class ChangePasswordLoadingState extends AuthState {}
+
+class ChangePasswordSuccessState extends AuthState {}
+
+class ChangePasswordErrorState extends AuthState {
+  final String error;
+  ChangePasswordErrorState({required this.error});
+}
+
+//ChangeEmail online fetch data
+class ChangeEmailLoadingState extends AuthState {}
+
+class ChangeEmailSuccessState extends AuthState {}
+
+class ChangeEmailErrorState extends AuthState {
+  final String error;
+  ChangeEmailErrorState({required this.error});
+}

@@ -8,11 +8,9 @@ import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_total_row_item.dart';
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_vendor_info.dart';
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_widget_wrapper.dart';
-import 'package:emdad/modules/user_module/order_view/shipping/shipping_card_build_item.dart';
-import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
+import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/shipping_widget.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/widgets/change_language_widget.dart';
-import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:emdad/shared/widgets/default_home_title_build_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -63,20 +61,11 @@ class OrderCompletedScreen extends StatelessWidget {
                       vendorId: order.vendorId,
                     ),
                     const SizedBox(height: 36),
-                    DefaultHomeTitleBuildItem(
-                      title: 'طلب خارج قائمة المنتجات',
-                      onPressed: () {},
-                      hasButton: false,
-                    ),
                     const OrderOutOfProducts(),
                     const SizedBox(height: 20),
-                    const ShippingCardBuildItem(
-                      name: 'عربه نصف نقل',
-                      info: 'المدة المتوقعة: 12 ساعة',
-                      icon: Icon(MyIcons.truck_thin,
-                          color: AppColors.primaryColor),
-                      price: 1150,
-                    ),
+                    ShippingWidget(
+                        transportationHandler: order.transportationHandlerEnum,
+                        transportationRequest: order.transportationRequest),
                     const SizedBox(height: 20),
                     DefaultHomeTitleBuildItem(
                       title: 'إجمالي',
@@ -91,16 +80,6 @@ class OrderCompletedScreen extends StatelessWidget {
                       OrderTotalRowItem(
                           title: 'إجمالي', value: '٩٠٩٠ ريال سعودي'),
                     ]),
-                    const SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: CustomButton(
-                        onPressed: () {},
-                        text: 'إعاده ارسال طلب عرض سعر',
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        radius: 10,
-                      ),
-                    ),
                     const SizedBox(height: 50),
                   ],
                 ),

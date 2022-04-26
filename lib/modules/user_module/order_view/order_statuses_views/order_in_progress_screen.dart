@@ -6,8 +6,8 @@ import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_total_row_item.dart';
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_vendor_info.dart';
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_widget_wrapper.dart';
+import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/shipping_widget.dart';
 import 'package:emdad/modules/user_module/order_view/order_tracking/order_tracking_screen.dart';
-import 'package:emdad/modules/user_module/order_view/shipping/shipping_card_build_item.dart';
 import 'package:emdad/modules/user_module/order_view/shipping/shipping_offers_screen.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
@@ -89,18 +89,9 @@ class _OrderInPorgressScreenState extends State<OrderInPorgressScreen> {
                     const SizedBox(height: 36),
                     const OrderOutOfProducts(),
                     const SizedBox(height: 20),
-                    DefaultHomeTitleBuildItem(
-                      title: 'النقل',
-                      onPressed: () {},
-                      hasButton: false,
-                    ),
-                    const ShippingCardBuildItem(
-                      name: 'عربه نصف نقل',
-                      info: 'المدة المتوقعة: 12 ساعة',
-                      icon: Icon(MyIcons.truck_thin,
-                          color: AppColors.primaryColor),
-                      price: 1150,
-                    ),
+                    ShippingWidget(
+                        transportationHandler: order.transportationHandlerEnum,
+                        transportationRequest: order.transportationRequest),
                     const SizedBox(height: 20),
                     DefaultHomeTitleBuildItem(
                       title: 'إجمالي',
@@ -123,30 +114,6 @@ class _OrderInPorgressScreenState extends State<OrderInPorgressScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  CustomButton trailing(BuildContext context) {
-    if (hasRequestedTransport) {
-      return CustomButton(
-        onPressed: () async {
-          navigateTo(context, const ShippingOffersScreen());
-        },
-        width: 125.w,
-        text: 'عروض النقل',
-      );
-    }
-    return CustomButton(
-      onPressed: () async {
-        final res = await showRequestTransformMethod(context);
-        if (res != null && res) {
-          setState(() {
-            hasRequestedTransport = true;
-          });
-        }
-      },
-      width: 125.w,
-      text: 'طلب شركة نقل',
     );
   }
 }

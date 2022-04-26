@@ -1,4 +1,5 @@
 import 'package:emdad/models/enums/order_status.dart';
+import 'package:emdad/modules/user_module/cart_module/cart_screen.dart';
 import 'package:emdad/modules/user_module/checkout/checkout_screen.dart';
 import 'package:emdad/modules/user_module/order_view/order_cubit/order_cubit.dart';
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/order_in_progress_screen.dart';
@@ -8,16 +9,19 @@ import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_total_row_item.dart';
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_vendor_info.dart';
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_widget_wrapper.dart';
-import 'package:emdad/modules/user_module/order_view/shipping/shipping_card_build_item.dart';
+import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/shipping_widget.dart';
+import 'package:emdad/modules/user_module/vendors_module/vendor_view/cart_cubit/cart_cubit.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
+import 'package:emdad/shared/widgets/custom_icon_button.dart';
 import 'package:emdad/shared/widgets/default_home_title_build_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OrderOfferScreen extends StatelessWidget {
   const OrderOfferScreen({
@@ -64,22 +68,27 @@ class OrderOfferScreen extends StatelessWidget {
                     ),
                     AllOrdersListView(
                       vendorId: order.vendorId,
+                      trailing: CustomIconButton(
+                        width: 45.w,
+                        height: 45.h,
+                        icon: const Icon(MyIcons.edit, color: Colors.white),
+                        buttonColor: AppColors.secondaryColor,
+                        onPressed: () {
+                          navigateTo(
+                              context,
+                              BlocProvider.value(
+                                value: CartCubit.instance(context),
+                                child: CartScreen(),
+                              ));
+                        },
+                      ),
                     ),
                     const SizedBox(height: 36),
                     const OrderOutOfProducts(),
                     const SizedBox(height: 20),
-                    DefaultHomeTitleBuildItem(
-                      title: 'النقل',
-                      onPressed: () {},
-                      hasButton: false,
-                    ),
-                    const ShippingCardBuildItem(
-                      name: 'عربه نصف نقل',
-                      info: 'المدة المتوقعة: 12 ساعة',
-                      icon: Icon(MyIcons.truck_thin,
-                          color: AppColors.primaryColor),
-                      price: 1150,
-                    ),
+                    ShippingWidget(
+                        transportationHandler: order.transportationHandlerEnum,
+                        transportationRequest: order.transportationRequest),
                     const SizedBox(height: 20),
                     DefaultHomeTitleBuildItem(
                       title: 'إجمالي',

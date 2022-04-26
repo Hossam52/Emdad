@@ -1,84 +1,112 @@
-import 'package:emdad/modules/user_module/checkout/checkout_screen.dart';
-import 'package:emdad/shared/componants/components.dart';
+import 'dart:developer';
+
+import 'package:emdad/modules/user_module/order_view/order_cubit/order_cubit.dart';
+import 'package:emdad/modules/user_module/order_view/order_cubit/order_states.dart';
+import 'package:emdad/modules/user_module/vendors_module/change_filters_cubit/change_filters_cubit.dart';
+import 'package:emdad/shared/componants/shared_methods.dart';
+import 'package:emdad/shared/cubit/app_cubit.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:emdad/shared/widgets/custom_text.dart';
-import 'package:emdad/shared/widgets/shared_componants/custom_country_city_dropdown.dart';
+import 'package:emdad/shared/widgets/default_loader.dart';
 import 'package:emdad/shared/widgets/ui_componants/default_drop_down.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class RequestTransformDialog extends StatefulWidget {
+class RequestTransformDialog extends StatelessWidget {
   const RequestTransformDialog({Key? key}) : super(key: key);
 
   @override
-  State<RequestTransformDialog> createState() => _RequestTransformDialogState();
-}
-
-class _RequestTransformDialogState extends State<RequestTransformDialog> {
-  final List<String> transportType = ['أي نوع', 'تويوتا', 'نقل'];
-  final List<String> transportCity = ['كل المحافظات', 'القاهرة', 'مصر'];
-  String? selectedTransport;
-  String? selectedCity;
-  @override
-  void initState() {
-    super.initState();
-    if (transportType.isNotEmpty) {
-      selectedTransport = transportType.first;
-    }
-    if (transportCity.isNotEmpty) {
-      selectedCity = transportCity.first;
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Dialog(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'هل تريد طلب شركة نقل؟',
-              style: thirdTextStyle().copyWith(fontWeight: FontWeight.w600),
-            ),
-            SizedBox(height: 66.h),
-            dropDownItem(
-                onChanged: (val) {
-                  selectedTransport = val;
-                },
-                items: transportType,
-                hint: 'ما نوع السيارة التي تقترحها؟',
-                label: 'ما نوع السيارة التي تقترحها؟',
-                selected: selectedTransport),
-            SizedBox(height: 50.h),
-            dropDownItem(
-                onChanged: (val) {
-                  selectedCity = val;
-                },
-                items: transportCity,
-                hint: 'مدينة شركة الشحن',
-                label: 'مدينة شركة الشحن',
-                selected: selectedCity),
-            SizedBox(height: 50.h),
-            CustomButton(
-              onPressed: selectedCity == null ||
-                      selectedTransport == null ||
-                      transportType.isEmpty ||
-                      transportCity.isEmpty
-                  ? null
-                  : () {
-                      Navigator.pop(context, true);
-                    },
-              backgroundColor: AppColors.primaryColor,
-              text: 'إرسال طلب عرض سعر لشركة النقل',
-              radius: 10,
-            ),
-            SizedBox(height: 20.h),
-          ],
+    return BlocProvider(
+      create: (context) => ChangeFiltersCubit()
+        ..initFilters(context)
+        ..setIntialValues(
+          setSelectedCountryToFirst: true,
+          setSelectedTransportationToFirst: true,
         ),
+      child: ChangeFiltersBlocBuilder(
+        builder: (context, changeFilterState) {
+          final filtersCubit = ChangeFiltersCubit.instance(context);
+
+          return Dialog(
+            child: OrderBlocConsumer(
+              listener: (context, state) {
+                if (state is CreateTransportationRequestErrorState) {
+                  SharedMethods.showToast(context, state.error,
+                      color: AppColors.errorColor, textColor: Colors.white);
+                  Navigator.pop(context);
+                }
+                if (state is CreateTransportationRequestSuccessState) {
+                  Navigator.pop(context, true);
+                }
+              },
+              builder: (context, orderState) {
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'هل تريد طلب شركة نقل؟',
+                          style: thirdTextStyle()
+                              .copyWith(fontWeight: FontWeight.w600),
+                        ),
+                        SizedBox(height: 66.h),
+                        dropDownItem(
+                            onChanged:
+                                filtersCubit.changeSelectedTransportation,
+                            items: filtersCubit.transportationMethods,
+                            hint: 'ما نوع السيارة التي تقترحها؟',
+                            label: 'ما نوع السيارة التي تقترحها؟',
+                            selected: filtersCubit.selectedTransportation),
+                        SizedBox(height: 50.h),
+                        dropDownItem(
+                            onChanged: (country) => filtersCubit
+                                .changeSelectedCountry(context, country),
+                            items: filtersCubit.countries,
+                            hint: 'دولة شركة الشحن',
+                            label: 'دولة شركة الشحن',
+                            selected: filtersCubit.selectedCountry),
+                        SizedBox(height: 50.h),
+                        dropDownItem(
+                            onChanged: filtersCubit.changeSelectedCity,
+                            items: filtersCubit.cities,
+                            hint: 'مدينة شركة الشحن',
+                            label: 'مدينة شركة الشحن',
+                            selected: filtersCubit.selectedCity),
+                        SizedBox(height: 50.h),
+                        if (orderState
+                            is CreateTransportationRequestLoadingState)
+                          const DefaultLoader()
+                        else
+                          CustomButton(
+                            onPressed: filtersCubit.selectedCity == null
+                                ? null
+                                : () {
+                                    OrderCubit.instance(context)
+                                        .createTransportationRequest(
+                                      city: filtersCubit.selectedCity!,
+                                      transportationMethod:
+                                          filtersCubit.selectedTransportation!,
+                                    );
+                                  },
+                            backgroundColor: AppColors.primaryColor,
+                            text: 'إرسال طلب عرض سعر لشركة النقل',
+                            radius: 10,
+                          ),
+                        SizedBox(height: 20.h),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        },
       ),
     );
   }

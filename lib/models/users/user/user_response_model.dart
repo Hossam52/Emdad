@@ -121,7 +121,9 @@ class User {
       primaryEmail: map['primaryEmail'],
       secondaryEmail: map['secondaryEmail'],
       modificationDate: map['modificationDate'],
-      vendorType: List<String>.from(map['vendorType']),
+      vendorType: map['vendorType'] == null
+          ? null
+          : List<String>.from(map['vendorType']),
       firebaseToken: map['firebaseToken'],
       creationDate: map['creationDate'],
       iV: map['iV']?.toInt(),

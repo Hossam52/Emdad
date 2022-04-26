@@ -9,11 +9,13 @@ class UpdateProfileTextField extends StatelessWidget {
       {Key? key,
       required this.textEditingController,
       required this.label,
-      required this.hint})
+      required this.hint,
+      required this.validator})
       : super(key: key);
   final TextEditingController textEditingController;
   final String label;
   final String hint;
+  final String? Function(String?) validator;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -29,7 +31,7 @@ class UpdateProfileTextField extends StatelessWidget {
           hasBorder: false,
           controller: textEditingController,
           type: TextInputType.visiblePassword,
-          validation: (txt) {},
+          validation: validator,
           hint: hint,
           backgroundColor: Colors.white,
         ),

@@ -52,4 +52,6 @@ class AppCubit extends Cubit<AppState> {
         .firstWhere((element) => element.countryName == countryName);
     return country.cities!;
   }
+
+  List<String> get getTransportationMethods => settings.transportationMethods!;
 }

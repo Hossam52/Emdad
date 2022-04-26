@@ -31,9 +31,6 @@ class ShippingOffersScreen extends StatelessWidget {
                     .supplyRequests
                     .first, //Replace it
 
-                title: 'شركه النور للنقل',
-                image:
-                    'https://media-exp1.licdn.com/dms/image/C4E0BAQG6W8dqXakgSg/company-logo_200_200/0/1519911646250?e=1643241600&v=beta&t=PnYJyb4ht9NLo9zL3t6KZr8ngN0no6smC7abRaiCFBs',
                 hasBadge: false,
                 trailing: const Text('عربه نصف نقل'),
                 onTap: () {

@@ -12,6 +12,8 @@ class BackgroundStack extends StatelessWidget {
       children: [
         Positioned(
             top: -height * 0.3 * 1.3,
+            right: 0,
+            left: 0,
             child: buildCircle(height * 0.3, AppColors.secondaryColor)),
         Positioned(
             right: -height * 0.3 * 1.2,

@@ -63,11 +63,13 @@ class ShippingOfferDetails extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 40),
-          const ShippingCardBuildItem(
+          ShippingCardBuildItem(
             name: 'عربه نصف نقل',
             info: 'المدة المتوقعة: 12 ساعة',
-            icon: Icon(MyIcons.truck_thin, color: AppColors.primaryColor),
-            price: 1150,
+            icon: const Icon(MyIcons.truck_thin, color: AppColors.primaryColor),
+            trailing: Text('1150 ر.س',
+                style:
+                    secondaryTextStyle().copyWith(fontWeight: FontWeight.w700)),
           ),
           const SizedBox(height: 20),
           Padding(

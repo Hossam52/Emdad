@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:emdad/layout/transporter_layout/transporter_layout.dart';
@@ -5,6 +7,8 @@ import 'package:emdad/layout/user_layout/user_layout.dart';
 import 'package:emdad/layout/vendor_layout/vendor_layout_screen.dart';
 import 'package:emdad/models/enums/enums.dart';
 import 'package:emdad/models/general_models/settings_model.dart';
+import 'package:emdad/models/request_models/change_email_request_model.dart';
+import 'package:emdad/models/request_models/change_password_request_model.dart';
 import 'package:emdad/models/users/auth/user_register_data_model.dart';
 import 'package:emdad/models/users/user/user_response_model.dart';
 import 'package:emdad/models/users/user/user_response_model.dart' as userModel;
@@ -12,6 +16,7 @@ import 'package:emdad/modules/auth_module/screens/facility_type_view/facility_ty
 import 'package:emdad/modules/auth_module/screens/phone_confirm_view/phone_confirm_screen.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/constants.dart';
+import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/network/local/cache_helper.dart';
 import 'package:emdad/shared/network/services/auth_services.dart';
 import 'package:flutter/material.dart';
@@ -144,6 +149,7 @@ class AuthCubit extends Cubit<AuthState> {
         navigateTo(context, const TransporterLayout());
         break;
     }
+    CacheHelper.saveData(key: 'userType', value: model.data!.user!.userType);
   }
 
   ButtonState registerButtonStates = ButtonState.idle;
@@ -392,5 +398,65 @@ class AuthCubit extends Cubit<AuthState> {
   void onCityChange(value) {
     selectedCity = value.toString();
     emit(AuthChangeState());
+  }
+
+  // String getToken() {
+  //   final userType = CacheHelper.getData(key: 'userType');
+  //   if (userType == null) throw 'User type is null';
+  //   String token = '';
+  //   switch (userType) {
+  //     case 'user':
+  //       token = Constants.userToken!;
+  //       break;
+  //     case 'vendor':
+  //       token = Constants.vendorToken!;
+  //       break;
+  //     case 'transporterToken':
+  //       token = Constants.transporterToken!;
+  //       break;
+  //     default:
+  //       throw 'Unknown token';
+  //   }
+  //   return token;
+  // }
+
+  Future<void> changePassword(
+      {required String oldPassword,
+      required String newPassword,
+      required String newPasswordConfirm}) async {
+    try {
+      emit(ChangePasswordLoadingState());
+
+      final map = await AuthServices.changePassword(
+        changePasswordRequestModel: ChangePasswordRequestModel(
+            newPassword: newPassword,
+            oldPassword: oldPassword,
+            newPasswordConfirm: newPasswordConfirm),
+        token: SharedMethods.getUserToken()!,
+      );
+      log(map.toString());
+      emit(ChangePasswordSuccessState());
+    } catch (e) {
+      emit(ChangePasswordErrorState(error: e.toString()));
+    }
+  }
+
+  Future<void> changeEmail({
+    required String password,
+    required String oldEmail,
+    required String newEmail,
+  }) async {
+    try {
+      emit(ChangeEmailLoadingState());
+
+      final map = await AuthServices.changeEmail(
+        changeEmailRequestModel: ChangeEmailRequestModel(
+            password: password, oldEmail: oldEmail, newEmail: newEmail),
+      );
+      log(map.toString());
+      emit(ChangeEmailSuccessState());
+    } catch (e) {
+      emit(ChangeEmailErrorState(error: e.toString()));
+    }
   }
 }
