@@ -8,12 +8,15 @@ class UserEndPoints {
   static const home = _path + 'home';
   static const vendors = _path + 'vendors';
   static const supplyRequests = _path + 'supplyRequests';
+  static const transportationRequests = _path + 'transportationRequests';
 
 //
   static const products = 'products';
 
   static const favorite = 'favourite';
-  static const transportationRequests = _path + 'transportationRequests';
+
+  static const resend = 'resend';
+  static const accept = 'accept';
 
   static String vendor(String vendorID) {
     return generatePathVariable(vendors, vendorID);
@@ -34,5 +37,19 @@ class UserEndPoints {
 
   static String getSupplyRequestInfo(String orderId) {
     return generatePathVariable(supplyRequests, orderId);
+  }
+
+  static String supplyRequestInfo(String orderId) {
+    return generatePathVariable(supplyRequests, orderId);
+  }
+
+  static String resendSupplyRequest(String orderId) {
+    final orderInfoPath = supplyRequestInfo(orderId);
+    return generatePathVariable(orderInfoPath, resend);
+  }
+
+  static String acceptSupplyRequest(String orderId) {
+    final orderInfoPath = supplyRequestInfo(orderId);
+    return generatePathVariable(orderInfoPath, accept);
   }
 }

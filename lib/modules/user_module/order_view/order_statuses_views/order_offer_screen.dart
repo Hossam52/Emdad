@@ -1,27 +1,24 @@
+import 'dart:developer';
+
+import 'package:emdad/models/enums/enums.dart';
 import 'package:emdad/models/enums/order_status.dart';
-import 'package:emdad/modules/user_module/cart_module/cart_screen.dart';
 import 'package:emdad/modules/user_module/checkout/checkout_screen.dart';
 import 'package:emdad/modules/user_module/order_view/order_cubit/order_cubit.dart';
-import 'package:emdad/modules/user_module/order_view/order_statuses_views/order_in_progress_screen.dart';
-import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/all_orders_list_view.dart';
-import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_out_of_products.dart';
-import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_total_overview_price.dart';
-import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_total_row_item.dart';
-import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_vendor_info.dart';
+import 'package:emdad/modules/user_module/order_view/order_cubit/order_states.dart';
+import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/edit_order_widget.dart';
+import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_user_preview.dart';
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_widget_wrapper.dart';
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/shipping_widget.dart';
-import 'package:emdad/modules/user_module/vendors_module/vendor_view/cart_cubit/cart_cubit.dart';
+import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/total_order_price_widget.dart';
 import 'package:emdad/shared/componants/components.dart';
-import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
+import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
-import 'package:emdad/shared/widgets/custom_icon_button.dart';
-import 'package:emdad/shared/widgets/default_home_title_build_item.dart';
+import 'package:emdad/shared/widgets/order_items_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OrderOfferScreen extends StatelessWidget {
   const OrderOfferScreen({
@@ -56,102 +53,112 @@ class OrderOfferScreen extends StatelessWidget {
           ],
         ),
         body: OrderWidgetWrapper(
-          child: Builder(
-            builder: (context) {
-              final order = OrderCubit.instance(context).order;
-
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    OrderVendorInfo(
-                      vendor: order.vendor,
-                    ),
-                    AllOrdersListView(
-                      vendorId: order.vendorId,
-                      trailing: CustomIconButton(
-                        width: 45.w,
-                        height: 45.h,
-                        icon: const Icon(MyIcons.edit, color: Colors.white),
-                        buttonColor: AppColors.secondaryColor,
-                        onPressed: () {
-                          navigateTo(
-                              context,
-                              BlocProvider.value(
-                                value: CartCubit.instance(context),
-                                child: CartScreen(),
-                              ));
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 36),
-                    const OrderOutOfProducts(),
-                    const SizedBox(height: 20),
-                    ShippingWidget(
-                        transportationHandler: order.transportationHandlerEnum,
-                        transportationRequest: order.transportationRequest),
-                    const SizedBox(height: 20),
-                    DefaultHomeTitleBuildItem(
-                      title: 'إجمالي',
-                      onPressed: () {},
-                      hasButton: false,
-                    ),
-                    OrderTotalOverviewPrice(children: [
-                      const OrderTotalRowItem(title: 'الضريبة', value: '١٢٪'),
-                      const SizedBox(height: 10),
-                      OrderTotalRowItem(
-                          title: 'السعر الصافي',
-                          value: order.totalOrderPrice.toInt().toString()),
-                      const SizedBox(height: 10),
-                      const OrderTotalRowItem(
-                          title: 'الشحن', value: '1150 ر.س'),
-                      const SizedBox(height: 10),
-                      const Divider(),
-                      OrderTotalRowItem(
-                          title: 'إجمالي',
-                          value: (order.totalOrderPrice +
-                                  order.totalOrderPrice * 0.12)
-                              .toString()),
-                    ]),
-                    const SizedBox(height: 10),
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: CustomButton(
-                        onPressed: () async {
-                          final acceptOrder =
-                              await showOrderConfirmationDialog(context);
-
-                          if (acceptOrder != null && acceptOrder) {
-                            await navigateTo(
-                              context,
-                              CheckoutScreen(
-                                onConfirmPressed: () {
-                                  Navigator.pop(context);
-
-                                  navigateTo(
-                                    context,
-                                    OrderInPorgressScreen(
-                                        orderId: orderId,
-                                        title: title,
-                                        status: status),
-                                  );
-                                },
-                              ),
-                            );
-                          }
-                        },
-                        text: 'إرسال طلب أمر شراء',
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        radius: 10,
-                      ),
-                    ),
-                    const SizedBox(height: 50),
-                  ],
-                ),
-              );
+          child: BlocListener<OrderCubit, OrderStates>(
+            listener: (context, state) async {
+              if (state is AcceptSupplyOfferSuccessState) {
+                Navigator.pop(context, true);
+              }
             },
+            child: Builder(
+              builder: (context) {
+                final order = OrderCubit.instance(context).order;
+
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      OrderUserPreview(
+                        order: order,
+                        displayedUser: order.vendor,
+                      ),
+                      OrderBlocBuilder(
+                        builder: (context, state) {
+                          final order = OrderCubit.instance(context).order;
+                          final items = order.requestItems;
+                          return OrderItemsListView(
+                            items: items,
+                            displayTotalAfterTaxes: true,
+                            trailing: EditOrderItemsWidget(
+                              order: order,
+                            ),
+                          );
+                        },
+                      ),
+                      // AllOrdersListView(
+                      //     vendorId: order.vendorId,
+                      //     trailing: EditOrderItemsWidget(
+                      //       order: order,
+                      //     )),
+                      const SizedBox(height: 36),
+                      OrderAdditionalItemsListView(order: order),
+                      const SizedBox(height: 20),
+                      ShippingWidget(
+                          transportationHandler:
+                              order.transportationHandlerEnum,
+                          transportationRequest: order.transportationRequest),
+                      const SizedBox(height: 20),
+                      TotalOrderPrice(
+                        order: order,
+                      ),
+                      const SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: CustomButton(
+                          onPressed: () async {
+                            if (!order.vendorProvidePriceOffer) {
+                              SharedMethods.showToast(
+                                  context, 'Vendor not provide price offer yet',
+                                  color: AppColors.errorColor,
+                                  textColor: Colors.white);
+                              return;
+                            }
+                            if (order.transportationHandlerEnum ==
+                                FacilityType.user) {
+                              final acceptOrder =
+                                  await showOrderConfirmationDialog(context);
+                              if (acceptOrder != null) {
+                                if (acceptOrder) {
+                                  navigateToInProgress(context);
+                                } else {
+                                  navigateToInProgress(context);
+                                }
+                              }
+                            } else {
+                              navigateToInProgress(context);
+                            }
+                          },
+                          text: 'إرسال طلب أمر شراء',
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          radius: 10,
+                        ),
+                      ),
+                      const SizedBox(height: 50),
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),
     );
+  }
+
+  void navigateToInProgress(BuildContext context) async {
+    final paymentSuccess = await navigateTo(
+      context,
+      CheckoutScreen(
+        onConfirmPressed: () {
+          // navigateTo(
+          //   context,
+          //   OrderInPorgressScreen(
+          //       orderId: orderId, title: title, status: status),
+          // );
+        },
+      ),
+    );
+    log(paymentSuccess.toString());
+    if (paymentSuccess != null && paymentSuccess) {
+      await OrderCubit.instance(context).acceptSupplyOffer();
+    }
   }
 }

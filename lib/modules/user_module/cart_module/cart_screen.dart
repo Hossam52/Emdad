@@ -1,31 +1,38 @@
+import 'package:emdad/models/products_and_categories/category_model.dart';
 import 'package:emdad/modules/transporter_module/screens/transporter_offers_view/transporter_offer_details_screen.dart';
 import 'package:emdad/modules/user_module/home_module/vendor_profile_cubit/vendor_profile_cubit.dart';
+import 'package:emdad/modules/user_module/home_module/vendor_profile_cubit/vendor_profile_states.dart';
 import 'package:emdad/modules/user_module/vendors_module/vendor_view/cart_cubit/cart_cubit.dart';
 import 'package:emdad/modules/user_module/vendors_module/vendor_view/cart_cubit/cart_states.dart';
+import 'package:emdad/modules/user_module/vendors_module/vendor_view/category_screen.dart';
 import 'package:emdad/modules/user_module/vendors_module/vendor_view/vendor_view_componants/vendor_info_build_item.dart';
+import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:emdad/shared/widgets/custom_chip.dart';
 import 'package:emdad/shared/widgets/default_home_title_build_item.dart';
+import 'package:emdad/shared/widgets/default_loader.dart';
 import 'package:emdad/shared/widgets/default_text_form_field.dart';
 import 'package:emdad/shared/widgets/empty_data.dart';
+import 'package:emdad/shared/widgets/ui_componants/no_data_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'cart_build_item.dart';
 
 class CartScreen extends StatelessWidget {
   CartScreen({
     Key? key,
+    required this.confirmCartButton,
   }) : super(key: key);
-
+  final Widget confirmCartButton;
   final TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    final vendor = VendorProfileCubit.instance(context).getVendorData;
     return Scaffold(
       appBar: AppBar(
         title:
@@ -38,70 +45,97 @@ class CartScreen extends StatelessWidget {
           statusBarIconBrightness: Brightness.light,
         ),
       ),
-      body: CartBlocConsumer(
-        listener: (context, state) async {
-          if (state is CreateRequestErrorState) {
-            SharedMethods.showToast(
-              context,
-              state.error,
-              color: AppColors.errorColor,
-              textColor: Colors.white,
+      body: VendorProfileBlocBuilder(
+        builder: (context, vendorProfileState) {
+          final vendorProfileCubit = VendorProfileCubit.instance(context);
+          if (vendorProfileState is GetVendorInfoLoadingState) {
+            return const DefaultLoader();
+          }
+          if (!vendorProfileCubit.isProfileLoaded) {
+            return NoDataWidget(
+              onPressed: () {
+                vendorProfileCubit.getVendorInfo();
+              },
+              text: 'Error when load vendor info try again',
             );
           }
-          if (state is CreateRequestSuccessState) {
-            await showDialog(
-                context: context,
-                builder: (_) => SuccessSendingOffer(onPressed: () {}));
-            Navigator.pop(context, true);
-          }
-        },
-        builder: (context, state) {
-          final cartCubit = CartCubit.instance(context);
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                VendorInfoBuildItem(
-                  name: vendor.name!,
-                  isCart: true,
-                  city: vendor.city,
-                  logoUrl: vendor.logoUrl,
-                  vendorType: vendor.allVendorTypeString,
-                  tailing: CustomButton(
-                    onPressed: () {},
-                    text: 'إضافه منتج',
-                  ),
+          final vendor = VendorProfileCubit.instance(context).getVendorData;
+          return CartBlocConsumer(
+            listener: (context, state) async {
+              if (state is CreateRequestErrorState) {
+                SharedMethods.showToast(
+                  context,
+                  state.error,
+                  color: AppColors.errorColor,
+                  textColor: Colors.white,
+                );
+              }
+              if (state is CreateRequestSuccessState) {
+                await showDialog(
+                    context: context,
+                    builder: (_) => SuccessSendingOffer(onPressed: () {}));
+                Navigator.pop(context, true);
+              }
+            },
+            builder: (context, state) {
+              final cartCubit = CartCubit.instance(context);
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    VendorInfoBuildItem(
+                      name: vendor.name!,
+                      isCart: true,
+                      city: vendor.city,
+                      logoUrl: vendor.logoUrl,
+                      vendorType: vendor.allVendorTypeString,
+                      tailing: CustomButton(
+                        onPressed: () {
+                          navigateTo(
+                            context,
+                            MultiBlocProvider(
+                              providers: [
+                                BlocProvider.value(
+                                  value: VendorProfileCubit.instance(context),
+                                ),
+                                BlocProvider.value(
+                                  value: CartCubit.instance(context),
+                                ),
+                              ],
+                              child: const CategoryScreen(
+                                title: 'All products',
+                              ),
+                            ),
+                          );
+                        },
+                        text: 'إضافه منتج',
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    _AddAdditionalItems(controller: controller),
+                    const _TransportationHandler(),
+                    _cartItems(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 20),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: confirmCartButton,
+                          ),
+                          const SizedBox(width: 19),
+                          Expanded(
+                              child: CustomButton(
+                            onPressed: () => Navigator.pop(context),
+                            text: 'إلغاء',
+                            backgroundColor: AppColors.errorColor,
+                          )),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 16),
-                _AddAdditionalItems(controller: controller),
-                const _TransportationHandler(),
-                _cartItems(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 20),
-                  child: Row(
-                    children: [
-                      Expanded(
-                          child: CustomButton(
-                        onPressed: !cartCubit.canOrderRequest
-                            ? null
-                            : () async {
-                                await cartCubit.createRequest();
-                              },
-                        text: 'تأكيد طلب عرض سعر',
-                        backgroundColor: AppColors.primaryColor,
-                      )),
-                      const SizedBox(width: 19),
-                      Expanded(
-                          child: CustomButton(
-                        onPressed: () => Navigator.pop(context),
-                        text: 'إلغاء',
-                        backgroundColor: AppColors.errorColor,
-                      )),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              );
+            },
           );
         },
       ),

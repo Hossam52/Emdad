@@ -1,6 +1,13 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:meta/meta.dart';
+
 import 'package:emdad/models/general_models/product_detailes.dart';
 import 'package:emdad/models/users/vendor/all_vendor_request_model.dart';
 import 'package:emdad/modules/settings/setting_screen.dart';
@@ -8,13 +15,6 @@ import 'package:emdad/modules/vendor_module/screens/vendor_offers_view/vendor_of
 import 'package:emdad/modules/vendor_module/screens/vendor_products_screen.dart';
 import 'package:emdad/modules/vendor_module/screens/vendor_purchase_order_view/vendor_purchase_orders_screen.dart';
 import 'package:emdad/shared/network/services/vendor/vendor_services.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
-
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 
 part 'vendor_state.dart';
 
@@ -28,6 +28,8 @@ class VendorCubit extends Cubit<VendorStates> {
   static VendorCubit instance(BuildContext context) =>
       BlocProvider.of<VendorCubit>(context);
   final vendorServices = VendorServices.instance;
+  final List<VendorBottomBarItem> bottomItems = []; //Will implement it
+
   File? productImage;
   List<XFile>? productOtherImages = [];
   ImagePicker get picker => _picker;
@@ -124,7 +126,7 @@ class VendorCubit extends Cubit<VendorStates> {
   ];
 
   List<Widget> screens = [
-    const VendorOffersScreen(),
+    VendorOffersScreen(),
     VendorProductsScreen(),
     const VendorPurchaseOrdersScreen(),
     const SettingsScreen(),
@@ -134,22 +136,13 @@ class VendorCubit extends Cubit<VendorStates> {
     currentPageIndex = index;
     emit(ChangeBottomNavBarState());
   }
+}
 
-  //APIS
-  AllVendorRequestsModel? allVendorRequests;
-  Future<void> getAllSupplyRequests() async {
-    try {
-      emit(GetAllSuplyRequestsLoadingState());
-      final map = await vendorServices.getAllSuplayRequests();
-      final allRequestModel = AllVendorRequestsModel.fromMap(map);
-      if (allRequestModel.status) {
-        allVendorRequests = allRequestModel;
-      } else {
-        throw allRequestModel.message;
-      }
-      emit(GetAllSuplyRequestsSuccessState());
-    } catch (e) {
-      emit(GetAllSuplyRequestsErrorState(error: e.toString()));
-    }
-  }
+class VendorBottomBarItem {
+  String title;
+  IconData icon;
+  VendorBottomBarItem({
+    required this.title,
+    required this.icon,
+  });
 }

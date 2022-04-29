@@ -1,13 +1,13 @@
 import 'dart:developer';
 
-import 'package:emdad/models/products_and_categories/product_model.dart';
-import 'package:emdad/models/request_models/add_additional_request_item_model.dart';
-import 'package:emdad/models/request_models/create_supply_request_model.dart';
-import 'package:emdad/models/supply_request/request_item.dart';
+import 'package:emdad/models/request_models/user/add_additional_request_item_model.dart';
+import 'package:emdad/models/request_models/user/create_supply_request_model.dart';
+import 'package:emdad/models/request_models/user/resend_supply_request_model.dart';
 import 'package:emdad/models/supply_request/supply_request_cart.dart';
 import 'package:emdad/shared/network/services/user/user_services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import '../../../../../models/request_models/user/resend_supply_request_model.dart';
 import './cart_states.dart';
 
 //Bloc builder and bloc consumer methods
@@ -16,7 +16,13 @@ typedef CartBlocConsumer = BlocConsumer<CartCubit, CartStates>;
 
 //
 class CartCubit extends Cubit<CartStates> {
-  CartCubit() : super(IntitalCartState());
+  CartCubit(
+      {List<String>? initialAdditioalItems,
+      List<ProductModelInCart>? intialCartItems})
+      : super(IntitalCartState()) {
+    _additionalItems = initialAdditioalItems ?? [];
+    _cartList = intialCartItems ?? [];
+  }
   static CartCubit instance(BuildContext context) =>
       BlocProvider.of<CartCubit>(context);
   final _services = UserServices.instance;
@@ -29,7 +35,7 @@ class CartCubit extends Cubit<CartStates> {
   }
 
 //Additional items handler
-  final List<String> _additionalItems = [];
+  List<String> _additionalItems = [];
   List<String> get additionalItems => _additionalItems;
   void addAdditionalItem(String item) {
     int index = additionalItems.indexOf(item);
@@ -52,7 +58,7 @@ class CartCubit extends Cubit<CartStates> {
   }
 
   //Cart list
-  final List<ProductModelInCart> _cartList = [];
+  List<ProductModelInCart> _cartList = [];
   List<ProductModelInCart> get cart => _cartList;
   //check if product found in list or not
   bool productInCart(String productId) {
@@ -124,6 +130,28 @@ class CartCubit extends Cubit<CartStates> {
     } catch (e) {
       log(e.toString());
       emit(CreateRequestErrorState(error: e.toString()));
+    }
+  }
+
+  Future<void> resendOrderRequest({required String supplyRequestId}) async {
+    try {
+      emit(ResendOrderRequestLoadingState());
+      final map = await _services.requestServices.resendSupplyRequestData(
+        supplyRequestId,
+        ResendSupplyRequestModel(
+          requestItems:
+              cart.map((product) => product.selectedProductUnit).toList(),
+          additionalItems: additionalItems
+              .map(
+                (item) => AddAdditionalItemRequestModel(description: item),
+              )
+              .toList(),
+        ),
+      );
+      log(map.toString());
+      emit(ResendOrderRequestSuccessState());
+    } catch (e) {
+      emit(ResendOrderRequestErrorState(error: e.toString()));
     }
   }
 }

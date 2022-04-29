@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:emdad/models/request_models/category_request_model.dart';
-import 'package:emdad/models/request_models/filter_vendors_request.dart';
+import 'package:emdad/models/request_models/user/category_request_model.dart';
+import 'package:emdad/models/request_models/user/filter_vendors_request.dart';
 import 'package:emdad/shared/componants/constants.dart';
 import 'package:emdad/shared/network/remote/dio_helper.dart';
 import 'package:emdad/shared/network/services/generate_path_variable.dart';

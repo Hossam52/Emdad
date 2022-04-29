@@ -7,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:emdad/models/general_models/settings_model.dart';
-import 'package:emdad/models/request_models/filter_vendors_request.dart';
 import 'package:emdad/modules/user_module/vendors_module/change_filters_cubit/change_filters_cubit.dart';
 import 'package:emdad/modules/user_module/vendors_module/change_filters_cubit/change_filters_states.dart';
 import 'package:emdad/modules/user_module/vendors_module/filter_vendor_cubit/filter_vendor_cubit.dart';

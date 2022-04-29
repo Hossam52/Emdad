@@ -2,16 +2,13 @@ import 'dart:developer';
 
 import 'package:emdad/models/enums/order_status.dart';
 import 'package:emdad/modules/user_module/order_view/order_cubit/order_cubit.dart';
-import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/all_orders_list_view.dart';
-import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_out_of_products.dart';
-import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_total_overview_price.dart';
-import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_total_row_item.dart';
-import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_vendor_info.dart';
+import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_user_preview.dart';
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_widget_wrapper.dart';
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/shipping_widget.dart';
+import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/total_order_price_widget.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/widgets/change_language_widget.dart';
-import 'package:emdad/shared/widgets/default_home_title_build_item.dart';
+import 'package:emdad/shared/widgets/order_items_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -56,30 +53,33 @@ class OrderCompletedScreen extends StatelessWidget {
               return SingleChildScrollView(
                 child: Column(
                   children: [
-                    OrderVendorInfo(vendor: order.vendor),
-                    AllOrdersListView(
-                      vendorId: order.vendorId,
+                    OrderUserPreview(
+                      order: order,
+                      displayedUser: order.vendor,
                     ),
+                    OrderBlocBuilder(
+                      builder: (context, state) {
+                        final order = OrderCubit.instance(context).order;
+                        final items = order.requestItems;
+                        return OrderItemsListView(
+                          items: items,
+                          displayTotalAfterTaxes: true,
+                        );
+                      },
+                    ),
+                    // AllOrdersListView(
+                    //   vendorId: order.vendorId,
+                    // ),
                     const SizedBox(height: 36),
-                    const OrderOutOfProducts(),
+                    OrderAdditionalItemsListView(order: order),
                     const SizedBox(height: 20),
                     ShippingWidget(
                         transportationHandler: order.transportationHandlerEnum,
                         transportationRequest: order.transportationRequest),
                     const SizedBox(height: 20),
-                    DefaultHomeTitleBuildItem(
-                      title: 'إجمالي',
-                      onPressed: () {},
-                      hasButton: false,
+                    TotalOrderPrice(
+                      order: order,
                     ),
-                    const OrderTotalOverviewPrice(children: [
-                      OrderTotalRowItem(title: 'الضريبة', value: '١٢٪'),
-                      SizedBox(height: 10),
-                      OrderTotalRowItem(title: 'الشحن', value: '1150 ر.س'),
-                      SizedBox(height: 10),
-                      OrderTotalRowItem(
-                          title: 'إجمالي', value: '٩٠٩٠ ريال سعودي'),
-                    ]),
                     const SizedBox(height: 50),
                   ],
                 ),

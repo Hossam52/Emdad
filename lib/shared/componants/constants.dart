@@ -7,4 +7,5 @@ class Constants {
   static String? userToken;
   static String? vendorToken;
   static String? transporterToken;
+  static const int paginationSize = 10;
 }

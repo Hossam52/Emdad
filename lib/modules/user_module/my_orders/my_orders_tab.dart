@@ -4,14 +4,16 @@ import 'package:emdad/models/supply_request/supply_request.dart';
 import 'package:emdad/modules/user_module/my_orders/my_orders_cubit/my_orders_cubit.dart';
 import 'package:emdad/modules/user_module/my_orders/my_orders_cubit/my_orders_states.dart';
 import 'package:emdad/modules/user_module/offers_module/offers_cubit/offers_cubit.dart';
+import 'package:emdad/shared/widgets/custom_refresh_widget.dart';
 import 'package:emdad/shared/widgets/empty_data.dart';
 import 'package:emdad/shared/widgets/load_more_data.dart';
 import 'package:flutter/material.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'orders_build_item.dart';
 
 class MyOrdersTab extends StatelessWidget {
-  const MyOrdersTab({
+  MyOrdersTab({
     Key? key,
     required this.status,
     required this.onTap,
@@ -25,34 +27,41 @@ class MyOrdersTab extends StatelessWidget {
   final List<SupplyRequest> orders;
   final bool visibleShowMore;
   final bool isLoadMoreData;
+
+  final _refreshController = RefreshController();
   @override
   Widget build(BuildContext context) {
     if (orders.isEmpty) return const EmptyData(emptyText: 'No orders found');
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          ListView.builder(
-            primary: false,
-            shrinkWrap: true,
-            itemCount: orders.length,
-            padding: const EdgeInsets.all(16),
-            itemBuilder: (context, index) => OrderBuildItem(
-              order: orders[index],
-              hasBadge: false,
-              onTap: () => onTap(
-                orders[index].id,
+    return CustomRefreshWidget(
+      onRefresh: () async {
+        await MyOrdersCubit.instance(context).getMyOrders();
+      },
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            ListView.builder(
+              primary: false,
+              shrinkWrap: true,
+              itemCount: orders.length,
+              padding: const EdgeInsets.all(16),
+              itemBuilder: (context, index) => OrderBuildItem(
+                order: orders[index],
+                hasBadge: false,
+                onTap: () => onTap(
+                  orders[index].id,
+                ),
               ),
             ),
-          ),
-          LoadMoreData(
-            visible: !MyOrdersCubit.instance(context).isLastPage,
-            isLoading: MyOrdersCubit.instance(context).state
-                is GetMoreMyOrdersLoadingState,
-            onLoadingMore: () {
-              MyOrdersCubit.instance(context).getMoreMyOrders();
-            },
-          ),
-        ],
+            LoadMoreData(
+              visible: !MyOrdersCubit.instance(context).isLastPage,
+              isLoading: MyOrdersCubit.instance(context).state
+                  is GetMoreMyOrdersLoadingState,
+              onLoadingMore: () {
+                MyOrdersCubit.instance(context).getMoreMyOrders();
+              },
+            ),
+          ],
+        ),
       ),
     );
 

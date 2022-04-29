@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:emdad/shared/componants/constants.dart';
 import 'package:emdad/shared/network/end_points.dart';
@@ -130,7 +132,7 @@ class DioHelper {
 
   static void _checkResponseValid(Response response) {
     final Map<String, dynamic> data = response.data;
-
+    log(data.toString());
     if (data.containsKey('status')) {
       if (!data['status']) {
         if (data.containsKey('message')) {

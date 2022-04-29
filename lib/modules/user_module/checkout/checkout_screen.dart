@@ -20,7 +20,7 @@ class CheckoutScreen extends StatelessWidget {
             ),
             CustomButton(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pop(context, true);
                 onConfirmPressed();
               },
               text: 'Pay',

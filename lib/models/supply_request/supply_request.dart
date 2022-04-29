@@ -30,7 +30,6 @@ class SupplyRequest {
   UserPreviewModel user;
   UserPreviewModel vendor;
   OrderTransportationRequestModel? transportationRequest;
-  double totalOrderPrice = 0;
   SupplyRequest(
       {required this.id,
       required this.userId,
@@ -75,16 +74,8 @@ class SupplyRequest {
     } else {
       throw 'unkown transportation handler';
     }
-    //To calculate total price for the order
-    for (var requestItem in requestItems) {
-      totalOrderPrice += requestItem.totalPrice!;
-    }
-    for (var additionalItem in additionalItems) {
-      totalOrderPrice += additionalItem.price;
-    }
-    totalOrderPrice += transportationPrice;
   }
-
+  bool get vendorProvidePriceOffer => totalOrderPrice != 0;
   bool get hasTransportation => transportationRequest != null;
   bool get userRequestTransport {
     return (transportationHandlerEnum == FacilityType.user &&
@@ -106,6 +97,18 @@ class SupplyRequest {
         transportationRequest == null);
   }
 
+  double get orderItemsPrice {
+    double netPrice = 0;
+    for (var element in requestItems) {
+      netPrice += element.totalPrice ?? 0;
+    }
+    for (var element in additionalItems) {
+      netPrice += element.price;
+    }
+    return netPrice;
+  }
+
+  double get totalOrderPrice => orderItemsPrice + transportationPrice;
   Map<String, dynamic> toMap() {
     return {
       'id': id,

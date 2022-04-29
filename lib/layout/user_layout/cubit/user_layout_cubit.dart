@@ -21,7 +21,7 @@ class UserLayoutCubit extends Cubit<UserLayoutState> {
   List<Widget> selectedScreens = [
     UserHomeScreen(),
     MyOrdersScreen(),
-    const OffersScreen(),
+    OffersScreen(),
     const SettingsScreen(),
   ];
 

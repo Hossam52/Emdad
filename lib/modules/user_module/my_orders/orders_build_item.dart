@@ -50,7 +50,8 @@ class OrderBuildItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      order.vendor.oraganizationName,
+                      order.id,
+                      // order.vendor.oraganizationName,
                       style: thirdTextStyle().copyWith(
                         fontWeight: FontWeight.w700,
                       ),
@@ -61,7 +62,10 @@ class OrderBuildItem extends StatelessWidget {
                     ),
                     if (hasBadge)
                       Chip(
-                        label: Text('لم يتم اضافة عرض',
+                        label: Text(
+                            order.vendorProvidePriceOffer
+                                ? order.totalOrderPrice.toString()
+                                : 'لم يتم اضافة عرض',
                             style: subTextStyle()
                                 .copyWith(color: AppColors.errorColor)),
                         backgroundColor:

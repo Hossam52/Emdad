@@ -1,23 +1,20 @@
 import 'dart:developer';
 
+import 'package:emdad/models/enums/enums.dart';
 import 'package:emdad/models/enums/order_status.dart';
 import 'package:emdad/models/supply_request/supply_request.dart';
 import 'package:emdad/modules/user_module/order_view/order_cubit/order_cubit.dart';
-import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/all_orders_list_view.dart';
-import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_out_of_products.dart';
-import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_total_overview_price.dart';
-import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_total_row_item.dart';
-import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_vendor_info.dart';
+import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_user_preview.dart';
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_widget_wrapper.dart';
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/shipping_widget.dart';
+import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/total_order_price_widget.dart';
 import 'package:emdad/modules/user_module/order_view/shipping/shipping_offers_screen.dart';
 import 'package:emdad/shared/componants/components.dart';
-import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
-import 'package:emdad/shared/widgets/default_home_title_build_item.dart';
 import 'package:emdad/shared/widgets/dialogs/request_transform_dialog.dart';
+import 'package:emdad/shared/widgets/order_items_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -63,14 +60,28 @@ class OrderNewScreen extends StatelessWidget {
             return SingleChildScrollView(
               child: Column(
                 children: [
-                  OrderVendorInfo(vendor: order.vendor),
-                  AllOrdersListView(
-                    vendorId: order.vendorId,
-                    trailing: transportationButton(context, order),
+                  OrderUserPreview(
+                    order: order,
+                    displayedUser: order.vendor,
                   ),
+                  OrderBlocBuilder(
+                    builder: (context, state) {
+                      final order = OrderCubit.instance(context).order;
+                      final items = order.requestItems;
+                      return OrderItemsListView(
+                        items: items,
+                        displayTotalAfterTaxes: true,
+                        trailing: transportationButton(context, order),
+                      );
+                    },
+                  ),
+                  // AllOrdersListView(
+                  //   vendorId: order.vendorId,
+                  //   trailing: transportationButton(context, order),
+                  // ),
                   const SizedBox(height: 36),
 
-                  const OrderOutOfProducts(),
+                  OrderAdditionalItemsListView(order: order),
                   const SizedBox(height: 20),
 
                   // const ShippingCardBuildItem(
@@ -85,19 +96,10 @@ class OrderNewScreen extends StatelessWidget {
                     transportationHandler: order.transportationHandlerEnum,
                   ),
                   const SizedBox(height: 20),
-                  DefaultHomeTitleBuildItem(
-                    title: 'إجمالي',
-                    onPressed: () {},
-                    hasButton: false,
+                  TotalOrderPrice(
+                    order: order,
                   ),
-                  const OrderTotalOverviewPrice(
-                    children: [
-                      OrderTotalRowItem(title: 'الضريبة', value: '١٢٪'),
-                      OrderTotalRowItem(
-                          title: 'إجمالي', value: '٩٠٩٠ ريال سعودي'),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
+
                   const SizedBox(height: 50),
                 ],
               ),
@@ -110,6 +112,9 @@ class OrderNewScreen extends StatelessWidget {
 
   Widget transportationButton(BuildContext context, SupplyRequest order) {
     if (order.transportationRequest != null) {
+      if (order.transportationHandlerEnum == FacilityType.vendor) {
+        return const SizedBox.shrink();
+      }
       return CustomButton(
         onPressed: () async {
           navigateTo(context, const ShippingOffersScreen());

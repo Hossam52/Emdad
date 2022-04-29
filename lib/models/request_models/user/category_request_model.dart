@@ -10,8 +10,10 @@ class CategoryRequestModel {
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {};
-    for (int i = 0; i < productType!.length; i++) {
-      map['productType[$i]'] = productType![i];
+    if (productType != null) {
+      for (int i = 0; i < productType!.length; i++) {
+        map['productType[$i]'] = productType![i];
+      }
     }
     map['paginationToken'] = paginationToken;
     return map;

@@ -22,7 +22,7 @@ class OrderItemBuild extends StatelessWidget {
   // final List<String> rows;
   final double radius;
 
-  final double? totalPriceAfterTaxes;
+  final String? totalPriceAfterTaxes;
   final List<TableItemData> items;
 
   @override

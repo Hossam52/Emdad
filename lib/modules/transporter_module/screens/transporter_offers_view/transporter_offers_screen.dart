@@ -17,7 +17,11 @@ class TransporterOffersScreen extends StatelessWidget {
       responsive: (context, deviceInfo) => SingleChildScrollView(
         child: Column(
           children: [
-            const TitleWithFilterBuildItem(title: 'عروض اسعار'),
+            TitleWithFilterBuildItem(
+              title: 'عروض اسعار',
+              changeSortType: (sortType) {},
+              hasSort: false,
+            ),
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -25,7 +29,8 @@ class TransporterOffersScreen extends StatelessWidget {
               itemCount: 5,
               itemBuilder: (context, index) => OrderBuildItem1(
                 title: 'الرحمة للمأكولات',
-                image: 'https://upload.wikimedia.org/wikipedia/sco/thumb/b/bf/KFC_logo.svg/1200px-KFC_logo.svg.png',
+                image:
+                    'https://upload.wikimedia.org/wikipedia/sco/thumb/b/bf/KFC_logo.svg/1200px-KFC_logo.svg.png',
                 hasBadge: true,
                 onTap: () {
                   navigateTo(context, TransporterOfferDetailsScreen());
@@ -38,7 +43,6 @@ class TransporterOffersScreen extends StatelessWidget {
     );
   }
 }
-
 
 class OrderBuildItem1 extends StatelessWidget {
   OrderBuildItem1({

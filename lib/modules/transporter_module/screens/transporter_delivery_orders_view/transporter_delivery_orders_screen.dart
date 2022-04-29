@@ -16,7 +16,11 @@ class TransporterDeliveryOrdersScreen extends StatelessWidget {
       responsive: (context, deviceInfo) => SingleChildScrollView(
         child: Column(
           children: [
-            const TitleWithFilterBuildItem(title: 'عروض اسعار'),
+            TitleWithFilterBuildItem(
+              title: 'عروض اسعار',
+              changeSortType: (sortType) {},
+              hasSort: false,
+            ),
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),

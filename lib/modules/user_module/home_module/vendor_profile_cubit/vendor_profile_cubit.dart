@@ -1,8 +1,9 @@
 import 'package:emdad/models/enums/enums.dart';
 import 'package:emdad/models/general_models/toggle_vendor_favorite.dart';
 import 'package:emdad/models/products_and_categories/category_model.dart';
+import 'package:emdad/models/products_and_categories/product_model.dart';
 import 'package:emdad/models/rating/rate_model.dart';
-import 'package:emdad/models/request_models/category_request_model.dart';
+import 'package:emdad/models/request_models/user/category_request_model.dart';
 import 'package:emdad/models/users/user/all_category_products_model.dart';
 import 'package:emdad/models/users/user/user_response_model.dart';
 import 'package:emdad/models/users/user/vendor_info.dart';
@@ -41,12 +42,6 @@ class VendorProfileCubit extends Cubit<VendorProfileStates> {
     return getCategories.indexWhere((element) => element.category == category);
   }
 
-  //To know if this category reaches to end or not
-  bool lastProductsPage(String category) {
-    final index = _getSpecificCategoryIndex(category);
-    return getCategories[index].lastProducts;
-  }
-
   //All rating count
   double get ratingCount => _vendor!.overAllRating;
   Future<void> getVendorInfo() async {
@@ -62,32 +57,58 @@ class VendorProfileCubit extends Cubit<VendorProfileStates> {
   }
 
 //To get products in specific category
-  Future<void> getCategoryProducts({required String category}) async {
-    final index = _getSpecificCategoryIndex(category);
+  AllCategoryProductsModel? _allCategoryProducts;
+  List<ProductModel> get allProducts => _allCategoryProducts?.products ?? [];
 
-    if (lastProductsPage(category)) return; //No load if reach to last page
+  //To know if this category reaches to end or not
+  bool get isLastProductPage {
+    return _allCategoryProducts?.isLastPage ?? false;
+  }
+
+  Future<void> getCategoryProducts({required String? category}) async {
+    if (isLastProductPage) return; //No load if reach to last page
     try {
       emit(GetCategoryProductsLoadingState());
       final map = await _services.userVendorServices.getProductsInCategory(
         vendorID: vendorId,
         categoryRequestModel: CategoryRequestModel(
-          productType: [category],
-          paginationToken: getCategories[index].products.last.id,
+          productType: category == null ? null : [category],
         ),
       );
-      final allProducts = AllCategoryProductsModel.fromMap(map);
-      _appendProducts(index, allProducts);
+      _allCategoryProducts = AllCategoryProductsModel.fromMap(map);
       emit(GetCategoryProductsSuccessState());
     } catch (e) {
       emit(GetCategoryProductsErrorState(error: e.toString()));
     }
   }
 
+  Future<void> getMoreCategoryProducts({required String? category}) async {
+    try {
+      emit(GetMoreCategoryProductsLoadingState());
+      final map = await _services.userVendorServices.getProductsInCategory(
+        vendorID: vendorId,
+        categoryRequestModel: CategoryRequestModel(
+          productType: category == null ? null : [category],
+          paginationToken: allProducts.isEmpty ? null : allProducts.last.id,
+        ),
+      );
+      final incomingProducts = AllCategoryProductsModel.fromMap(map);
+      _appendProducts(incomingProducts);
+      emit(GetMoreCategoryProductsSuccessState());
+    } catch (e) {
+      emit(GetMoreCategoryProductsErrorState(error: e.toString()));
+    }
+  }
+
   //For pagination use to add products to current list
-  void _appendProducts(int index, AllCategoryProductsModel allProducts) {
-    _vendor!.categories[index].changeLastProducts = allProducts.isLastPage;
-    _vendor!.categories[index]
-        .appendProducts(otherProducts: allProducts.products);
+  void _appendProducts(AllCategoryProductsModel allProducts) {
+    if (_allCategoryProducts == null) {
+      _allCategoryProducts = allProducts;
+      return;
+    }
+
+    _allCategoryProducts!.changeLastProducts = allProducts.isLastPage;
+    _allCategoryProducts!.appendProducts(otherProducts: allProducts.products);
   }
 
 //For toggeling favorite for this vendor

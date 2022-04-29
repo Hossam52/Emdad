@@ -10,6 +10,7 @@ import 'package:emdad/modules/user_module/vendors_module/vendors_list_screen.dar
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/responsive/device_information.dart';
 import 'package:emdad/shared/responsive/responsive_widget.dart';
+import 'package:emdad/shared/widgets/custom_refresh_widget.dart';
 import 'package:emdad/shared/widgets/default_cached_image.dart';
 import 'package:emdad/shared/widgets/default_home_title_build_item.dart';
 import 'package:emdad/shared/widgets/default_loader.dart';
@@ -40,14 +41,10 @@ class UserHomeScreen extends StatelessWidget {
           });
         }
 
-        return SmartRefresher(
-          onRefresh: () async {
-            await userHomeCubit.getHomeData();
-
-            _refreshController.loadComplete();
+        return CustomRefreshWidget(
+          onRefresh: () {
+            return userHomeCubit.getHomeData();
           },
-          header: const WaterDropHeader(),
-          controller: _refreshController,
           child: responsiveWidget(
             responsive: (_, deviceInfo) => UserHomeBlocBuilder(
               builder: (context, state) {

@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:emdad/models/request_models/create_transportation_request_model.dart';
+import 'package:emdad/models/request_models/user/create_transportation_request_model.dart';
 import 'package:emdad/models/supply_request/supply_request.dart';
 import 'package:emdad/models/users/user/supply_requests/order_request_model.dart';
 import 'package:emdad/shared/network/services/user/user_services.dart';
@@ -48,6 +48,18 @@ class OrderCubit extends Cubit<OrderStates> {
     } catch (e) {
       log(e.toString());
       emit(CreateTransportationRequestErrorState(error: e.toString()));
+    }
+  }
+
+  Future<void> acceptSupplyOffer() async {
+    try {
+      emit(AcceptSupplyOfferLoadingState());
+      final map = await _services.requestServices.acceptOffer(orderId);
+      log(map.toString());
+      emit(AcceptSupplyOfferSuccessState());
+    } catch (e) {
+      log(e.toString());
+      emit(AcceptSupplyOfferErrorState(error: e.toString()));
     }
   }
 }

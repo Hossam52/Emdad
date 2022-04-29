@@ -45,88 +45,80 @@ class MyOrdersScreen extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: SmartRefresher(
-            onRefresh: () async {
-              await MyOrdersCubit.instance(context).getMyOrders();
-              _refreshController.refreshCompleted();
+          child: MyOrdersBlocBuilder(
+            builder: (context, state) {
+              final myOrdersCubit = MyOrdersCubit.instance(context);
+              if (state is GetMyOrdersLoadingState) {
+                return const DefaultLoader();
+              }
+              if (state is GetMyOrdersErrorState) {
+                return NoDataWidget(
+                    onPressed: () {
+                      myOrdersCubit.getMyOrders();
+                    },
+                    text: 'Error ${state.error}');
+              }
+              if (myOrdersCubit.errorInMyOrders) {
+                return NoDataWidget(onPressed: () {
+                  myOrdersCubit.getMoreMyOrders();
+                });
+              }
+              return TabBarView(
+                children: [
+                  MyOrdersTab(
+                    status: OrderStatus.newOrder,
+                    orders: myOrdersCubit.awaitTransporationOrders,
+                    onTap: (orderId) {
+                      navigateTo(
+                          context,
+                          OrderNewScreen(
+                            orderId: orderId,
+                            title: 'منتظر النقل',
+                            status: OrderStatus.newOrder,
+                          ));
+                    },
+                  ),
+                  MyOrdersTab(
+                    status: OrderStatus.inProgress,
+                    orders: myOrdersCubit.preparingOrders,
+                    onTap: (orderId) {
+                      navigateTo(
+                          context,
+                          OrderInPorgressScreen(
+                            orderId: orderId,
+                            title: 'قيد التحميل',
+                            status: OrderStatus.inProgress,
+                          ));
+                    },
+                  ),
+                  MyOrdersTab(
+                    status: OrderStatus.inProgress,
+                    orders: myOrdersCubit.onWayOrders,
+                    onTap: (orderId) {
+                      navigateTo(
+                          context,
+                          OrderInPorgressScreen(
+                            title: 'قيد التوصيل',
+                            orderId: orderId,
+                            status: OrderStatus.inProgress,
+                          ));
+                    },
+                  ),
+                  MyOrdersTab(
+                      status: OrderStatus.completed,
+                      orders: myOrdersCubit.deliveredOrders,
+                      onTap: (orderId) {
+                        navigateTo(
+                            context,
+                            OrderCompletedScreen(
+                              orderId: orderId,
+                              title: 'طلب مكتمل',
+                              status: OrderStatus.completed,
+                            ));
+                      }),
+                ],
+              );
             },
-            header: const WaterDropHeader(),
-            controller: _refreshController,
-            child: MyOrdersBlocBuilder(
-              builder: (context, state) {
-                final myOrdersCubit = MyOrdersCubit.instance(context);
-                if (state is GetMyOrdersLoadingState) {
-                  return const DefaultLoader();
-                }
-                if (state is GetMyOrdersErrorState) {
-                  return NoDataWidget(
-                      onPressed: () {
-                        myOrdersCubit.getMyOrders();
-                      },
-                      text: 'Error ${state.error}');
-                }
-                if (myOrdersCubit.errorInMyOrders) {
-                  return NoDataWidget(onPressed: () {
-                    myOrdersCubit.getMoreMyOrders();
-                  });
-                }
-                return TabBarView(
-                  children: [
-                    MyOrdersTab(
-                      status: OrderStatus.newOrder,
-                      orders: myOrdersCubit.awaitTransporationOrders,
-                      onTap: (orderId) {
-                        navigateTo(
-                            context,
-                            OrderNewScreen(
-                              orderId: orderId,
-                              title: 'منتظر النقل',
-                              status: OrderStatus.newOrder,
-                            ));
-                      },
-                    ),
-                    MyOrdersTab(
-                      status: OrderStatus.inProgress,
-                      orders: myOrdersCubit.preparingOrders,
-                      onTap: (orderId) {
-                        navigateTo(
-                            context,
-                            OrderInPorgressScreen(
-                              orderId: orderId,
-                              title: 'قيد التحميل',
-                              status: OrderStatus.inProgress,
-                            ));
-                      },
-                    ),
-                    MyOrdersTab(
-                      status: OrderStatus.inProgress,
-                      orders: myOrdersCubit.onWayOrders,
-                      onTap: (orderId) {
-                        navigateTo(
-                            context,
-                            OrderInPorgressScreen(
-                              title: 'قيد التوصيل',
-                              orderId: orderId,
-                              status: OrderStatus.inProgress,
-                            ));
-                      },
-                    ),
-                    MyOrdersTab(
-                        status: OrderStatus.completed,
-                        orders: myOrdersCubit.deliveredOrders,
-                        onTap: (orderId) {
-                          navigateTo(
-                              context,
-                              OrderCompletedScreen(
-                                orderId: orderId,
-                                title: 'طلب مكتمل',
-                                status: OrderStatus.completed,
-                              ));
-                        }),
-                  ],
-                );
-              },
-            ),
           ),
         ),
       ],

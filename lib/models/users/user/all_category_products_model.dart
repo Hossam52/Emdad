@@ -36,4 +36,11 @@ class AllCategoryProductsModel {
 
   factory AllCategoryProductsModel.fromJson(String source) =>
       AllCategoryProductsModel.fromMap(json.decode(source));
+  void appendProducts({required List<ProductModel> otherProducts}) {
+    products.addAll(otherProducts);
+  }
+
+  set changeLastProducts(bool val) {
+    isLastPage = val;
+  }
 }

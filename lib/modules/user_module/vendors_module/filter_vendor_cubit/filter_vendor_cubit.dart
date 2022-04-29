@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:emdad/models/request_models/filter_vendors_request.dart';
+import 'package:emdad/models/request_models/user/filter_vendors_request.dart';
 import 'package:emdad/models/users/user/all_vendors_model.dart';
 import 'package:emdad/models/users/user/user_response_model.dart';
 import 'package:emdad/modules/user_module/vendors_module/filter_vendor_cubit/filter_vendor_states.dart';

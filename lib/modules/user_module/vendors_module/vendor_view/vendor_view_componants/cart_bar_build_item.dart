@@ -6,6 +6,7 @@ import 'package:emdad/modules/user_module/vendors_module/vendor_view/cart_cubit/
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -39,7 +40,17 @@ class CartBarBuildItem extends StatelessWidget {
                         value: VendorProfileCubit.instance(context),
                       ),
                     ],
-                    child: CartScreen(),
+                    child: CartScreen(
+                      confirmCartButton: CustomButton(
+                        onPressed: !cartCubit.canOrderRequest
+                            ? null
+                            : () async {
+                                await cartCubit.createRequest();
+                              },
+                        text: 'تأكيد طلب عرض سعر',
+                        backgroundColor: AppColors.primaryColor,
+                      ),
+                    ),
                   ),
                 );
                 if (confirmedOrder != null && confirmedOrder) {

@@ -1,5 +1,5 @@
 enum SnackBarStates { idle, success, warning, error }
-
+enum SortBy { none, name, date }
 enum VerifyOtpStep { phone, email }
 
 enum FacilityType { user, vendor, transport }

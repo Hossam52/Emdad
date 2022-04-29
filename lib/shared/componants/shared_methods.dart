@@ -119,6 +119,14 @@ class SharedMethods {
     return DateFormat(formattedString).format(date);
   }
 
+  static String getPrice(double? price) {
+    if (price == null || price == 0) {
+      return 'غير محدد';
+    } else {
+      return price.toString();
+    }
+  }
+
   static double getWidth(BuildContext context) =>
       MediaQuery.of(context).size.width;
   static double getHeight(BuildContext context) =>

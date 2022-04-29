@@ -29,3 +29,13 @@ class CreateRequestErrorState extends CartStates {
   final String error;
   CreateRequestErrorState({required this.error});
 }
+
+//ResendOrderRequest online fetch data
+class ResendOrderRequestLoadingState extends CartStates {}
+
+class ResendOrderRequestSuccessState extends CartStates {}
+
+class ResendOrderRequestErrorState extends CartStates {
+  final String error;
+  ResendOrderRequestErrorState({required this.error});
+}

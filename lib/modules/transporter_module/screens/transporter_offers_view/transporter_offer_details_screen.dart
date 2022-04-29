@@ -6,6 +6,7 @@ import 'package:emdad/shared/styles/font_styles.dart';
 import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:emdad/shared/widgets/custom_text.dart';
+import 'package:emdad/shared/widgets/dialogs/edit_price_dialogs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -179,11 +180,14 @@ class _TransporterOfferDetailsScreenState
               clipBehavior: Clip.antiAlias,
               child: InkWell(
                 onTap: () {
-                  showModalSheet(
+                  showModalBottomSheet(
                       context: context,
-                      title: 'تحديد سعر الطلب',
-                      isTransporter: false,
-                      isOutList: true);
+                      builder: (_) => const EditShippingPriceDialog());
+                  // showModalSheet(
+                  //     context: context,
+                  //     title: 'تحديد سعر الطلب',
+                  //     isTransporter: false,
+                  //     isOutList: true);
                 },
                 child: SizedBox(
                   height: 63.h,

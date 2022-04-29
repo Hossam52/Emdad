@@ -23,3 +23,13 @@ class CreateTransportationRequestErrorState extends OrderStates {
   final String error;
   CreateTransportationRequestErrorState({required this.error});
 }
+
+//AcceptSupplyOffer online fetch data
+class AcceptSupplyOfferLoadingState extends OrderStates {}
+
+class AcceptSupplyOfferSuccessState extends OrderStates {}
+
+class AcceptSupplyOfferErrorState extends OrderStates {
+  final String error;
+  AcceptSupplyOfferErrorState({required this.error});
+}

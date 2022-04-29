@@ -16,16 +16,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class ProductCardBuildItem extends StatelessWidget {
   const ProductCardBuildItem({
     Key? key,
-    required this.name,
-    required this.image,
     this.hasCart = true,
     this.isVendor = false,
     this.isList = false,
     this.product,
   }) : super(key: key);
 
-  final String name;
-  final String image;
   final bool hasCart;
   final bool isVendor;
   final bool isList;
@@ -100,7 +96,10 @@ class ProductCardBuildItem extends StatelessWidget {
                       ],
                     ),
                   ),
-                  _CartIcon(product: product!),
+                  BlocProvider.value(
+                    value: CartCubit.instance(context),
+                    child: _CartIcon(product: product!),
+                  ),
                 ],
               )
             else
