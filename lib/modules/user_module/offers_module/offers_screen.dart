@@ -10,6 +10,8 @@ import 'package:emdad/modules/user_module/order_view/order_statuses_views/order_
 import 'package:emdad/modules/user_module/order_view/order_view_screen.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/responsive/responsive_widget.dart';
+import 'package:emdad/shared/styles/app_colors.dart';
+import 'package:emdad/shared/styles/font_styles.dart';
 import 'package:emdad/shared/widgets/custom_refresh_widget.dart';
 import 'package:emdad/shared/widgets/default_loader.dart';
 import 'package:emdad/shared/widgets/load_more_data.dart';
@@ -50,6 +52,33 @@ class OffersScreen extends StatelessWidget {
                     changeSortType: offersCubit.changeSortType,
                     hasSort: offersCubit.notSort,
                   ),
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                              color: AppColors.primaryColor.withOpacity(0.2),
+                              blurRadius: 3)
+                        ]),
+                    margin: const EdgeInsets.all(16),
+                    child: DefaultTabController(
+                      length: 3,
+                      child: TabBar(
+                          onTap: (value) => offersCubit.changeTabIndex(value),
+                          indicator: ShapeDecoration(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              color: AppColors.secondaryColor),
+                          labelColor: Colors.white,
+                          labelStyle: subTextStyle()
+                              .copyWith(fontWeight: FontWeight.bold),
+                          unselectedLabelColor: Colors.black,
+                          tabs: offersCubit.tabItems
+                              .map((e) => Tab(text: e.title))
+                              .toList()),
+                    ),
+                  ),
                   ListView.builder(
                     reverse: true,
                     shrinkWrap: true,
@@ -79,7 +108,7 @@ class OffersScreen extends StatelessWidget {
                       isLoading: state is GetMoreRequestOffersLoadingState,
                       onLoadingMore: () {
                         offersCubit.getMoreRequestOffers();
-                      })
+                      }),
                 ],
               ),
             ),

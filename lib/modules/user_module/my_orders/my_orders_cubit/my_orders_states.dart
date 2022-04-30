@@ -3,6 +3,8 @@ abstract class MyOrdersStates {}
 
 class IntitalMyOrdersState extends MyOrdersStates {}
 
+class ChangeTabIndexState extends MyOrdersStates {}
+
 //
 //GetMyOrders online fetch data
 class GetMyOrdersLoadingState extends MyOrdersStates {}

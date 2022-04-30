@@ -4,6 +4,7 @@ import 'package:emdad/models/request_models/user/create_supply_request_model.dar
 import 'package:emdad/models/request_models/user/create_transportation_request_model.dart';
 import 'package:emdad/models/request_models/pagination_request_model.dart';
 import 'package:emdad/models/request_models/user/create_transportation_request_model.dart';
+import 'package:emdad/models/request_models/user/filter_supply_request_model.dart';
 import 'package:emdad/models/request_models/user/resend_supply_request_model.dart';
 import 'package:emdad/shared/componants/constants.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';
@@ -14,9 +15,12 @@ class SupplyRequestServices {
   SupplyRequestServices._();
   static SupplyRequestServices get instance => SupplyRequestServices._();
   Future<Map<String, dynamic>> getRequestOffers(
+      FilterSupplyRequestModel filterSupplyRequestModel,
       {PaginationRequestModel? pagination}) async {
+    final map = filterSupplyRequestModel.toMap();
+    map.addAll(pagination?.toMap() ?? {});
     final response = await DioHelper.getData(
-        query: pagination?.toMap(),
+        query: map,
         url: UserEndPoints.supplyRequests,
         token: Constants.userToken);
     return response.data;
@@ -44,11 +48,14 @@ class SupplyRequestServices {
   }
 
   Future<Map<String, dynamic>> getMyOrders(
+      FilterSupplyRequestModel filterSupplyRequestModel,
       {PaginationRequestModel? pagination}) async {
+    final Map<String, dynamic> map = filterSupplyRequestModel.toMap();
+    map.addAll(pagination?.toMap() ?? <String, dynamic>{});
     final response = await DioHelper.getData(
         url: UserEndPoints.supplyRequests,
         token: Constants.userToken,
-        query: pagination?.toMap());
+        query: map);
     return response.data;
   }
 

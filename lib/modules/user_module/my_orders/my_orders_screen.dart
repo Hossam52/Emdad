@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:emdad/models/enums/enums.dart';
 import 'package:emdad/models/enums/order_status.dart';
 import 'package:emdad/modules/user_module/my_orders/my_orders_cubit/my_orders_cubit.dart';
 import 'package:emdad/modules/user_module/my_orders/my_orders_cubit/my_orders_states.dart';
@@ -15,9 +18,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'my_orders_tab.dart';
 
 class MyOrdersScreen extends StatelessWidget {
-  MyOrdersScreen({Key? key}) : super(key: key);
-  final RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
+  const MyOrdersScreen({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -31,18 +32,20 @@ class MyOrdersScreen extends StatelessWidget {
               ),
             ),
           ),
-          child: const TabBar(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            isScrollable: true,
-            labelColor: AppColors.primaryColor,
-            indicatorColor: AppColors.primaryColor,
-            tabs: [
-              Tab(text: 'منتظر النقل'),
-              Tab(text: 'قيد التحميل'),
-              Tab(text: 'قيد التوصيل'),
-              Tab(text: 'عمليات ناجحة'),
-            ],
-          ),
+          child: TabBar(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              onTap: (int val) {
+                MyOrdersCubit.instance(context).changeSelectedTabIndex = val;
+              },
+              isScrollable: true,
+              labelColor: AppColors.primaryColor,
+              indicatorColor: AppColors.primaryColor,
+              tabs: MyOrdersCubit.instance(context)
+                  .details
+                  .map((e) => Tab(
+                        text: e.title,
+                      ))
+                  .toList()),
         ),
         Expanded(
           child: MyOrdersBlocBuilder(
@@ -54,20 +57,13 @@ class MyOrdersScreen extends StatelessWidget {
               if (state is GetMyOrdersErrorState) {
                 return NoDataWidget(
                     onPressed: () {
-                      myOrdersCubit.getMyOrders();
+                      myOrdersCubit.orderTab.getOrders();
                     },
                     text: 'Error ${state.error}');
-              }
-              if (myOrdersCubit.errorInMyOrders) {
-                return NoDataWidget(onPressed: () {
-                  myOrdersCubit.getMoreMyOrders();
-                });
               }
               return TabBarView(
                 children: [
                   MyOrdersTab(
-                    status: OrderStatus.newOrder,
-                    orders: myOrdersCubit.awaitTransporationOrders,
                     onTap: (orderId) {
                       navigateTo(
                           context,
@@ -79,8 +75,6 @@ class MyOrdersScreen extends StatelessWidget {
                     },
                   ),
                   MyOrdersTab(
-                    status: OrderStatus.inProgress,
-                    orders: myOrdersCubit.preparingOrders,
                     onTap: (orderId) {
                       navigateTo(
                           context,
@@ -92,8 +86,6 @@ class MyOrdersScreen extends StatelessWidget {
                     },
                   ),
                   MyOrdersTab(
-                    status: OrderStatus.inProgress,
-                    orders: myOrdersCubit.onWayOrders,
                     onTap: (orderId) {
                       navigateTo(
                           context,
@@ -104,18 +96,15 @@ class MyOrdersScreen extends StatelessWidget {
                           ));
                     },
                   ),
-                  MyOrdersTab(
-                      status: OrderStatus.completed,
-                      orders: myOrdersCubit.deliveredOrders,
-                      onTap: (orderId) {
-                        navigateTo(
-                            context,
-                            OrderCompletedScreen(
-                              orderId: orderId,
-                              title: 'طلب مكتمل',
-                              status: OrderStatus.completed,
-                            ));
-                      }),
+                  MyOrdersTab(onTap: (orderId) {
+                    navigateTo(
+                        context,
+                        OrderCompletedScreen(
+                          orderId: orderId,
+                          title: 'طلب مكتمل',
+                          status: OrderStatus.completed,
+                        ));
+                  }),
                 ],
               );
             },

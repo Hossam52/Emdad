@@ -9,6 +9,8 @@ class AllSupplyRequestsModel {
   List<SupplyRequest> supplyRequests;
 
   List<SupplyRequest> awaitTransportationRequests = [];
+  List<SupplyRequest> awaitingApproval = [];
+  List<SupplyRequest> awaitingQuotation = [];
   List<SupplyRequest> preparingRequests = [];
   List<SupplyRequest> onWayRequests = [];
   List<SupplyRequest> deliverdRequests = [];
@@ -25,6 +27,8 @@ class AllSupplyRequestsModel {
     _assignPreparing();
     _assignOnWay();
     _assignDeliverd();
+    _assignAwaitingQuotation();
+    _assignAwaitingApproval();
   }
 
   // For separate requests every to its own type
@@ -54,6 +58,20 @@ class AllSupplyRequestsModel {
     deliverdRequests = supplyRequests
         .where((request) =>
             request.requestStatusEnum == SupplyRequestStatus.delivered)
+        .toList();
+  }
+
+  void _assignAwaitingQuotation() {
+    awaitingQuotation = supplyRequests
+        .where((request) =>
+            request.requestStatusEnum == SupplyRequestStatus.awaitingQuotation)
+        .toList();
+  }
+
+  void _assignAwaitingApproval() {
+    awaitingApproval = supplyRequests
+        .where((request) =>
+            request.requestStatusEnum == SupplyRequestStatus.awaitingApproval)
         .toList();
   }
 

@@ -1,5 +1,6 @@
 import 'package:emdad/layout/user_layout/cubit/user_layout_cubit.dart';
 import 'package:emdad/layout/user_layout/layout_components/user_bottom_navigation_bar.dart';
+import 'package:emdad/models/enums/enums.dart';
 import 'package:emdad/modules/user_module/home_module/user_home_cubit/user_home_cubit.dart';
 import 'package:emdad/modules/user_module/my_orders/my_orders_cubit/my_orders_cubit.dart';
 import 'package:emdad/modules/user_module/offers_module/offers_cubit/offers_cubit.dart';
