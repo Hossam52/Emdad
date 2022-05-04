@@ -5,21 +5,21 @@ class IntitalFilterVendorState extends FilterVendorStates {}
 
 //
 //GetAllVendors online fetch data
-class GetAllVendorsLoadingState extends FilterVendorStates {}
+class GetVendorsLoadingState extends FilterVendorStates {}
 
-class GetAllVendorsSuccessState extends FilterVendorStates {}
+class GetVendorsSuccessState extends FilterVendorStates {}
 
-class GetAllVendorsErrorState extends FilterVendorStates {
+class GetVendorsErrorState extends FilterVendorStates {
   final String error;
-  GetAllVendorsErrorState({required this.error});
+  GetVendorsErrorState({required this.error});
 }
 
 //GetMoreAllVendors online fetch data
-class GetMoreAllVendorsLoadingState extends FilterVendorStates {}
+class GetMoreVendorsLoadingState extends FilterVendorStates {}
 
-class GetMoreAllVendorsSuccessState extends FilterVendorStates {}
+class GetMoreVendorsSuccessState extends FilterVendorStates {}
 
-class GetMoreAllVendorsErrorState extends FilterVendorStates {
+class GetMoreVendorsErrorState extends FilterVendorStates {
   final String error;
-  GetMoreAllVendorsErrorState({required this.error});
+  GetMoreVendorsErrorState({required this.error});
 }

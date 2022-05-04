@@ -58,8 +58,10 @@ class UserHomeScreen extends StatelessWidget {
                             context,
                             BlocProvider.value(
                               value: UserHomeCubit.instance(context),
-                              child:
-                                  VendorsListScreen(title: 'الموردون المفضلون'),
+                              child: VendorsListScreen(
+                                title: 'الموردون المفضلون',
+                                favoriteVendors: true,
+                              ),
                             ),
                           );
                         },

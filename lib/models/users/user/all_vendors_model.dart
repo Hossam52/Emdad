@@ -40,3 +40,19 @@ class AllVendorsModel {
 
   void set setLastPage(bool val) => isLastPage = val;
 }
+
+class FavoriteVendorsModel extends AllVendorsModel {
+  FavoriteVendorsModel(
+      {required bool status,
+      required String message,
+      required List<User> vendors})
+      : super(status: status, message: message, vendors: vendors);
+  factory FavoriteVendorsModel.fromMap(Map<String, dynamic> map) {
+    return FavoriteVendorsModel(
+      status: map['status'] ?? false,
+      message: map['message'] ?? '',
+      vendors: List<User>.from(
+          map['data']?['favouriteVendors']?.map((x) => User.fromMap(x))),
+    );
+  }
+}

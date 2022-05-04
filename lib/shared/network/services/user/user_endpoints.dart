@@ -22,6 +22,8 @@ class UserEndPoints {
     return generatePathVariable(vendors, vendorID);
   }
 
+  static String get getFavoriteVendors =>
+      generatePathVariable(vendors, favorite);
   static String vendorProducts(String vendorID) {
     return generatePathVariable(vendor(vendorID), products);
   }

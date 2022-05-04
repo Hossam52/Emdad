@@ -17,9 +17,11 @@ typedef FilterVendorBlocConsumer
 
 //
 class FilterVendorCubit extends Cubit<FilterVendorStates> {
-  FilterVendorCubit() : super(IntitalFilterVendorState());
+  FilterVendorCubit(this.favoriteVendors) : super(IntitalFilterVendorState());
   static FilterVendorCubit instance(BuildContext context) =>
       BlocProvider.of<FilterVendorCubit>(context);
+
+  final bool favoriteVendors;
   final _services = UserServices.instance;
 
   //To get all vendors data in filter
@@ -29,7 +31,7 @@ class FilterVendorCubit extends Cubit<FilterVendorStates> {
 
   //To know if it is last page or not
   bool get isLastVendorPgae {
-    if (state is GetAllVendorsLoadingState) {
+    if (state is GetVendorsLoadingState) {
       return true;
     }
     return (_allVendors?.isLastPage ?? false);
@@ -45,31 +47,75 @@ class FilterVendorCubit extends Cubit<FilterVendorStates> {
     _filters?.vendorType?.removeWhere((element) => element == vendorType);
   }
 
-  Future<void> getAllVendors() async {
-    try {
-      emit(GetAllVendorsLoadingState());
-      final map = await _services.userVendorServices
-          .allVendors(filterRequest: _filters);
-      _allVendors = AllVendorsModel.fromMap(map);
-      emit(GetAllVendorsSuccessState());
-    } catch (e) {
-      log(e.toString());
-      emit(GetAllVendorsErrorState(error: e.toString()));
+  Future<void> getVendors() async {
+    if (favoriteVendors) {
+      await _getFavoriteVendors();
+    } else {
+      await _getAllVendors();
     }
   }
 
-  Future<void> getMoreAllVendors() async {
-    if (_allVendors!.isLastPage) return;
+  Future<void> _getAllVendors() async {
     try {
-      emit(GetMoreAllVendorsLoadingState());
+      emit(GetVendorsLoadingState());
+      final map = await _services.userVendorServices
+          .allVendors(filterRequest: _filters);
+      _allVendors = AllVendorsModel.fromMap(map);
+      emit(GetVendorsSuccessState());
+    } catch (e) {
+      log(e.toString());
+      emit(GetVendorsErrorState(error: e.toString()));
+    }
+  }
+
+  Future<void> _getFavoriteVendors() async {
+    try {
+      emit(GetVendorsLoadingState());
+      final map = await _services.userVendorServices
+          .favoriteVendors(filterRequest: _filters);
+      _allVendors = FavoriteVendorsModel.fromMap(map);
+      emit(GetVendorsSuccessState());
+    } catch (e) {
+      log(e.toString());
+      emit(GetVendorsErrorState(error: e.toString()));
+    }
+  }
+
+  Future<void> getMoreVendors() async {
+    if (_allVendors!.isLastPage) return;
+    if (favoriteVendors) {
+      await _getMoreFavoriteVendors();
+    } else {
+      await _getMoreAllVendors();
+    }
+  }
+
+  Future<void> _getMoreAllVendors() async {
+    try {
+      emit(GetMoreVendorsLoadingState());
       final map = await _services.userVendorServices.allVendors(
           filterRequest: _filters?.copyWith(paginationToken: vendors.last.id) ??
               FilterVendorRequest(paginationToken: vendors.last.id));
       final vendorsModel = AllVendorsModel.fromMap(map);
       _appendAllVendors(vendorsModel);
-      emit(GetMoreAllVendorsSuccessState());
+      emit(GetMoreVendorsSuccessState());
     } catch (e) {
-      emit(GetMoreAllVendorsErrorState(error: e.toString()));
+      emit(GetMoreVendorsErrorState(error: e.toString()));
+    }
+  }
+
+  Future<void> _getMoreFavoriteVendors() async {
+    try {
+      emit(GetMoreVendorsLoadingState());
+      final map = await _services.userVendorServices.favoriteVendors(
+          filterRequest: _filters?.copyWith(paginationToken: vendors.last.id) ??
+              FilterVendorRequest(paginationToken: vendors.last.id));
+      final vendorsModel = FavoriteVendorsModel.fromMap(map);
+      _appendAllVendors(vendorsModel);
+      emit(GetMoreVendorsSuccessState());
+    } catch (e) {
+      emit(GetMoreVendorsErrorState(error: e.toString()));
+      rethrow;
     }
   }
 

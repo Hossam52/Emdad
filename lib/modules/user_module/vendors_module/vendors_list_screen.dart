@@ -26,9 +26,12 @@ import 'package:emdad/shared/widgets/ui_componants/no_data_widget.dart';
 import 'vendor_build_item.dart';
 
 class VendorsListScreen extends StatelessWidget {
-  VendorsListScreen({Key? key, required this.title}) : super(key: key);
+  VendorsListScreen(
+      {Key? key, required this.title, this.favoriteVendors = false})
+      : super(key: key);
 
   final String title;
+  final bool favoriteVendors;
   final TextEditingController searchController = TextEditingController();
 
   @override
@@ -36,7 +39,7 @@ class VendorsListScreen extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => FilterVendorCubit()..getAllVendors(),
+          create: (context) => FilterVendorCubit(favoriteVendors)..getVendors(),
         ),
         BlocProvider(
           create: (context) {
@@ -62,17 +65,17 @@ class VendorsListScreen extends StatelessWidget {
                 final filterVendorCubit = FilterVendorCubit.instance(context);
                 return Builder(
                   builder: (context) {
-                    if (state is GetAllVendorsLoadingState) {
+                    if (state is GetVendorsLoadingState) {
                       return const Center(child: DefaultLoader());
                     }
-                    if (state is GetAllVendorsErrorState) {
+                    if (state is GetVendorsErrorState) {
                       return NoDataWidget(onPressed: () {
-                        filterVendorCubit.getAllVendors();
+                        filterVendorCubit.getVendors();
                       });
                     }
                     if (filterVendorCubit.errorVendors) {
                       return NoDataWidget(onPressed: () {
-                        filterVendorCubit.getAllVendors();
+                        filterVendorCubit.getVendors();
                       });
                     }
                     final vendors = filterVendorCubit.vendors;
@@ -99,9 +102,9 @@ class VendorsListScreen extends StatelessWidget {
                   final filterVendorCubit = FilterVendorCubit.instance(context);
                   return LoadMoreData(
                     visible: !filterVendorCubit.isLastVendorPgae,
-                    isLoading: state is GetMoreAllVendorsLoadingState,
+                    isLoading: state is GetMoreVendorsLoadingState,
                     onLoadingMore: () {
-                      filterVendorCubit.getMoreAllVendors();
+                      filterVendorCubit.getMoreVendors();
                     },
                   );
                 },
@@ -133,7 +136,7 @@ class _SearchFieldState extends State<_SearchField> {
       city: changeFiltersCubit.selectedCity,
       vendorType: changeFiltersCubit.selectedVendorType?.toList(),
     );
-    FilterVendorCubit.instance(context).getAllVendors();
+    FilterVendorCubit.instance(context).getVendors();
   }
 
   @override
@@ -221,7 +224,7 @@ class _SearchFieldState extends State<_SearchField> {
             _VendorTypeChipList(onDelete: (item) {
               FilterVendorCubit.instance(context)
                   .removeVendorTypeFromFilters(item);
-              FilterVendorCubit.instance(context).getAllVendors();
+              FilterVendorCubit.instance(context).getVendors();
             }),
           ],
         );

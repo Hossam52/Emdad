@@ -52,4 +52,15 @@ class UserVendorServices {
     log(filterRequest?.toMap().toString() ?? '');
     return response.data;
   }
+
+  Future<Map<String, dynamic>> favoriteVendors(
+      {FilterVendorRequest? filterRequest}) async {
+    final response = await DioHelper.getData(
+      url: UserEndPoints.getFavoriteVendors,
+      token: Constants.userToken,
+      query: filterRequest?.toMap(),
+    );
+    log(filterRequest?.toMap().toString() ?? '');
+    return response.data;
+  }
 }
