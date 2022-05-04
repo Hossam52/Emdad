@@ -18,7 +18,13 @@ class ProductModel {
     required this.units,
     required this.isPriceShown,
     required this.images,
-  });
+  }) {
+    images = images
+        .map(
+            (e) => 'https://emdad-ecommerce.herokuapp.com/images/products/' + e)
+        .toList();
+//TODO: Remove the link above as it for test
+  }
 
   Map<String, dynamic> toMap() {
     return {

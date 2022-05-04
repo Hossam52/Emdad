@@ -3,6 +3,7 @@ import 'package:emdad/layout/vendor_layout/cubit/vendor_cubit.dart';
 import 'package:emdad/layout/widgets/profile_check_wrapper.dart';
 import 'package:emdad/modules/vendor_module/screens/vender_add_product_view/vendor_add_new_product_screen.dart';
 import 'package:emdad/modules/vendor_module/screens/vendor_offers_view/vendor_offers_cubit/vendor_offers_cubit.dart';
+import 'package:emdad/modules/vendor_module/vendor_cubits/products_cubit/vendor_product_cubit.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/cubit/app_cubit.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
@@ -39,8 +40,15 @@ class _VendorLayoutState extends State<VendorLayout> {
   @override
   Widget build(BuildContext context) {
     return ProfileCheckWrapper(
-      child: BlocProvider(
-        create: (context) => VendorOffersCubit()..getVendorOffers(),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => VendorOffersCubit()..getVendorOffers(),
+          ),
+          BlocProvider(
+            create: (context) => VendorProductsCubit(),
+          ),
+        ],
         child: VendorBlocConsumer(
           listener: (context, state) {},
           builder: (context, state) {

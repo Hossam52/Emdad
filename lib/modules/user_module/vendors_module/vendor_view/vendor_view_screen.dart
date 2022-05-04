@@ -5,6 +5,7 @@ import 'package:emdad/models/users/user/user_response_model.dart';
 import 'package:emdad/modules/user_module/home_module/vendor_profile_cubit/vendor_profile_cubit.dart';
 import 'package:emdad/modules/user_module/home_module/vendor_profile_cubit/vendor_profile_states.dart';
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_user_preview.dart';
+import 'package:emdad/modules/user_module/vendors_module/product_details/product_details_screen.dart';
 import 'package:emdad/modules/user_module/vendors_module/vendor_view/cart_cubit/cart_cubit.dart';
 import 'package:emdad/modules/user_module/vendors_module/vendor_view/vendor_reviews_screen.dart';
 import 'package:emdad/shared/componants/components.dart';
@@ -216,9 +217,16 @@ class _CategoryWithProducts extends StatelessWidget {
             primary: true,
             shrinkWrap: true,
             itemBuilder: (_, index) => ProductCardBuildItem(
-              hasCart: false,
-              // isList: true,
               product: products[index],
+              onProductTapped: () {
+                navigateTo(
+                    context,
+                    BlocProvider.value(
+                      value: CartCubit.instance(context),
+                      child: ProductDetailsScreen(
+                          productId: products[index].id, isVendor: false),
+                    ));
+              },
             ),
             itemCount: products.length,
           ),

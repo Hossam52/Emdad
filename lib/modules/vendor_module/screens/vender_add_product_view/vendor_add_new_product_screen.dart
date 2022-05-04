@@ -187,7 +187,12 @@ class _VendorAddNewProductScreenState extends State<VendorAddNewProductScreen> {
                                   ),
                                   context: context,
                                   builder: (BuildContext context) {
-                                    return const AddNewPriceDialog();
+                                    return AddNewPriceDialog(
+                                      onSave: (
+                                          {required minimumAmount,
+                                          required pricePerUnit,
+                                          required productUnit}) {},
+                                    );
                                   },
                                 );
                               },

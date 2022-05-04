@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:emdad/shared/componants/constants.dart';
 import 'package:emdad/shared/network/remote/dio_helper.dart';
+import 'package:emdad/shared/network/services/vendor/services/vendor_products_services.dart';
 import 'package:emdad/shared/network/services/vendor/services/vendor_supply_request_services.dart';
 import 'package:emdad/shared/network/services/vendor/vendor_endpoints.dart';
 
@@ -11,6 +12,7 @@ class VendorServices {
   static VendorServices get instance => VendorServices._();
   VendorSupplyRequestServices get supplyRequestServices =>
       VendorSupplyRequestServices.instance;
+  VendorProductsServices get productServices => VendorProductsServices.instance;
 
   Future<Map<String, dynamic>> getAllSuplayRequests() async {
     log(Constants.token.toString());

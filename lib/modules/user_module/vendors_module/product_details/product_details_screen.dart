@@ -36,16 +36,29 @@ class ProductDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ProductCubit(productId: productId!)..getProduct(),
+      create: (context) =>
+          ProductCubit(productId: productId!, isVendor: isVendor)..getProduct(),
       child: ProductBlocBuilder(
         builder: (context, state) {
           final productCubit = ProductCubit.instance(context);
           if (state is GetProductLoadingState) {
             return const DefaultLoader();
           }
-          if (state is GetProductErrorState || !productCubit.loadedProduct) {
-            return NoDataWidget(onPressed: () {}, text: 'No product');
+          if (state is GetProductErrorState) {
+            return NoDataWidget(
+                onPressed: () {
+                  productCubit.getProduct();
+                },
+                text: state.error);
           }
+          if (!productCubit.loadedProduct) {
+            return NoDataWidget(
+                onPressed: () {
+                  productCubit.getProduct();
+                },
+                text: 'No product');
+          }
+
           final product = productCubit.product;
           return responsiveWidget(
             responsive: (_, deviceInfo) => Scaffold(
@@ -83,13 +96,14 @@ class ProductDetailsScreen extends StatelessWidget {
                           foregroundColor: AppColors.thirdColor,
                           backgroundColor: Colors.white,
                           child: IconButton(
-                            icon: Icon(
-                                isVendor ? Icons.edit : Icons.favorite_border,
-                                size: 20),
+                            icon: Icon(isVendor ? Icons.edit : null, size: 20),
                             onPressed: () {
                               if (isVendor) {
                                 navigateTo(
-                                    context, const VendorEditProductScreen());
+                                    context,
+                                    VendorEditProductScreen(
+                                      product: product,
+                                    ));
                               }
                             },
                           ),
@@ -141,9 +155,7 @@ class ProductDetailsScreen extends StatelessWidget {
                                         title: unit.productUnit,
                                         value: unit.minimumAmountPerOrder
                                             .toString(),
-                                        price: product.isPriceShown
-                                            ? unit.pricePerUnit.toString()
-                                            : 'السعر مخفي'),
+                                        price: getPrice(product, unit)),
                                   )
                                   .toList()
                             ],
@@ -160,6 +172,15 @@ class ProductDetailsScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  String getPrice(ProductModel product, ProductUnit unit) {
+    final pricePerUnit = unit.pricePerUnit;
+    if (isVendor) {
+      return pricePerUnit.toString();
+    } else {
+      return product.isPriceShown ? unit.pricePerUnit.toString() : 'السعر مخفي';
+    }
   }
 }
 

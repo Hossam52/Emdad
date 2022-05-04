@@ -106,9 +106,7 @@ class VendorProfileCubit extends Cubit<VendorProfileStates> {
       _allCategoryProducts = allProducts;
       return;
     }
-
-    _allCategoryProducts!.changeLastProducts = allProducts.isLastPage;
-    _allCategoryProducts!.appendProducts(otherProducts: allProducts.products);
+    _allCategoryProducts!.appendProducts(incomingModel: allProducts);
   }
 
 //For toggeling favorite for this vendor
