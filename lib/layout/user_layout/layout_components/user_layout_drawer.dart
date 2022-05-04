@@ -1,6 +1,7 @@
 import 'package:emdad/layout/user_layout/layout_components/drawer_list_build_item.dart';
 import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';
+import 'package:emdad/shared/cubit/app_cubit.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
 import 'package:emdad/shared/widgets/default_cached_image.dart';
@@ -12,6 +13,7 @@ class UserDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = AppCubit.get(context).getUser!;
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -30,19 +32,19 @@ class UserDrawer extends StatelessWidget {
                         BoxDecoration(borderRadius: BorderRadius.circular(12)),
                     child: DefaultCachedNetworkImage(
                       width: 85.w,
+                      fit: BoxFit.cover,
                       height: 85.w,
-                      imageUrl:
-                          'https://userstock.io/data/wp-content/uploads/2020/06/jack-finnigan-rriAI0nhcbc.jpg',
+                      imageUrl: user.logoUrl!,
                     ),
                   ),
                   SizedBox(height: 8.h),
                   Text(
-                    'Aurélien Salomon',
+                    user.name!,
                     style: headersTextStyle()
                         .copyWith(fontSize: 24.sp, color: Colors.white),
                   ),
                   Text(
-                    '@aureliensalomon',
+                    user.organizationName!,
                     style: thirdTextStyle().copyWith(color: Colors.grey),
                   ),
                 ],

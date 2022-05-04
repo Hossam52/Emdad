@@ -1,8 +1,10 @@
 import 'dart:ui';
 import 'package:bloc/bloc.dart';
 import 'package:emdad/models/general_models/settings_model.dart';
+import 'package:emdad/models/users/user/user_response_model.dart';
 import 'package:emdad/shared/componants/constants.dart';
 import 'package:emdad/shared/network/local/cache_helper.dart';
+import 'package:emdad/shared/network/services/auth_services.dart';
 import 'package:emdad/shared/network/services/general/general_services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 part 'app_state.dart';
@@ -15,6 +17,9 @@ class AppCubit extends Cubit<AppState> {
   //Get app settings
   AllSettingsModel get settings =>
       _settingModel?.data ?? AllSettingsModel.empty();
+  UserResponseModel? _loggedInUser;
+  User? get getUser => _loggedInUser?.data?.user;
+  void removeCurrentUser() => _loggedInUser = null;
 
   Locale localeApp = Locale(Constants.lang ?? 'ar');
 
@@ -41,6 +46,17 @@ class AppCubit extends Cubit<AppState> {
       emit(GetSettingsSuccessState());
     } catch (e) {
       emit(GetSettingsErrorState(error: e.toString()));
+    }
+  }
+
+  Future<void> getUserProfile() async {
+    try {
+      emit(GetUserProfileLoadingState());
+      final map = await AuthServices.getProfile();
+      _loggedInUser = UserResponseModel.fromJson(map);
+      emit(GetUserProfileSuccessState());
+    } catch (e) {
+      emit(GetUserProfileErrorState(error: e.toString()));
     }
   }
 

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
+import 'package:emdad/shared/cubit/app_cubit.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
 import 'package:emdad/shared/widgets/custom_icon_button.dart';
@@ -11,6 +12,7 @@ class ProfileInfoBuildItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = AppCubit.get(context).getUser!;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 55),
@@ -37,9 +39,9 @@ class ProfileInfoBuildItem extends StatelessWidget {
                 color: AppColors.secondaryColor.withOpacity(0.7),
                 width: 4,
               ),
-              image: const DecorationImage(
+              image: DecorationImage(
                 image: CachedNetworkImageProvider(
-                  'https://mir-s3-cdn-cf.behance.net/project_modules/fs/c2f3a644232807.580c702a05425.jpg',
+                  user.logoUrl!,
                 ),
                 fit: BoxFit.cover,
               ),
@@ -52,12 +54,12 @@ class ProfileInfoBuildItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'عمرو التهامى',
+                      user.name!,
                       style: headersTextStyle()
                           .copyWith(color: AppColors.primaryColor),
                     ),
                     Text(
-                      'الرياض ,ىالمملكه العربيه السعوديه',
+                      user.country! + ' (هتتغير) ',
                       style: subTextStyle()
                           .copyWith(color: AppColors.primaryColor),
                     ),

@@ -186,25 +186,29 @@ class _AllVendors extends StatelessWidget {
       builder: (context, state) {
         final vendors = UserHomeCubit.instance(context).vendors;
         if (vendors.isEmpty) return const EmptyData(emptyText: 'No Vendors');
-        return GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: vendors.length,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 1 / 1.8,
-            crossAxisSpacing: 8,
-          ),
-          itemBuilder: (context, index) => HomeVendorBuildItem(
-            width: deviceInfo.screenwidth * 0.5,
-            user: vendors[index],
-            isFavorite: vendors[index].isFavourite!,
-            onTap: () {
-              _navigateToVendorViewScreen(context, vendors[index]);
-            },
-          ),
-        );
+        return LayoutBuilder(builder: (context, constraints) {
+          log(constraints.maxWidth.toString());
+          final maxWidth = constraints.maxWidth;
+          return GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: vendors.length,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: maxWidth >= 800 ? 3 : 2,
+              childAspectRatio: 1 / 1.8,
+              crossAxisSpacing: 8,
+            ),
+            itemBuilder: (context, index) => HomeVendorBuildItem(
+              width: deviceInfo.screenwidth * 0.5,
+              user: vendors[index],
+              isFavorite: vendors[index].isFavourite!,
+              onTap: () {
+                _navigateToVendorViewScreen(context, vendors[index]);
+              },
+            ),
+          );
+        });
       },
     );
   }

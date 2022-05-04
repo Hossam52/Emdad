@@ -79,4 +79,10 @@ class AuthServices {
     );
     return response.data;
   }
+
+  static Future<Map<String, dynamic>> getProfile() async {
+    final response = await DioHelper.getData(
+        url: EndPoints.getProfile, token: SharedMethods.getUserToken());
+    return response.data;
+  }
 }
