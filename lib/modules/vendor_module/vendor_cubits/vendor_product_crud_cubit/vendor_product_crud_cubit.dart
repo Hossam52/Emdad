@@ -4,7 +4,10 @@ import 'dart:io';
 import 'package:emdad/models/general_models/upload_image_model.dart';
 import 'package:emdad/models/products_and_categories/product_model.dart';
 import 'package:emdad/models/request_models/upload_images_request_model.dart';
+import 'package:emdad/models/request_models/vendor/add_product_request_model.dart';
+import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/network/services/general/general_services.dart';
+import 'package:emdad/shared/network/services/vendor/vendor_services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -27,14 +30,22 @@ class VendorProductCrudCubit extends Cubit<VendorProductCrudStates> {
 
     productNameController.text = _product.name;
     productDescriptionController.text = _product.description;
+    productTypeController.text = _product.productType;
   }
+  VendorProductCrudCubit.newProduct()
+      : _product = ProductModel.emptyModel(),
+        super(IntitalVendorProductCrudCubitState());
   static VendorProductCrudCubit instance(BuildContext context) =>
       BlocProvider.of<VendorProductCrudCubit>(context);
+
   final _generalServices = GeneralServices.instance;
+  final _vendorServices = VendorServices.instance;
 
   //For product controllers
   final productNameController = TextEditingController();
   final productDescriptionController = TextEditingController();
+  final productTypeController = TextEditingController();
+  final productNotesController = TextEditingController();
 
   //For image selection
   ImagePicker get picker => _picker;
@@ -59,6 +70,10 @@ class VendorProductCrudCubit extends Cubit<VendorProductCrudStates> {
       _mainProductImageFile; //null if the vendor not select main image from phone
   File get mainProductImageFile => _mainProductImageFile!;
   bool get hasPickedMainFile => _mainProductImageFile != null;
+  bool get noMainImage =>
+      hasPickedMainFile == false &&
+      _originalMainImage
+          .isEmpty; //To know if vendor not selected any image for main image
 
   final List<File> _productImagesFromFiles =
       []; //For all images picked from phone except the main image
@@ -127,6 +142,14 @@ class VendorProductCrudCubit extends Cubit<VendorProductCrudStates> {
     emit(RemoveImage());
   }
 
+  String? validateProductData(BuildContext context) {
+    //For validate all data for the product
+    if (noMainImage) return 'يجب اختيار الصورة الرئيسية ';
+    if (units.isEmpty) return 'يجب اضافة سعر واحد علي الاقل ';
+
+    return null;
+  }
+
   //For update product api
 
   Future<void> editProduct() async {
@@ -150,9 +173,38 @@ class VendorProductCrudCubit extends Cubit<VendorProductCrudStates> {
     }
   }
 
+  Future<void> addNewProduct() async {
+    try {
+      emit(AddProductLoadingState());
+      final uploadedFiles = await _uploadSelectedImagesToServer();
+      if (uploadedFiles.status) {
+        log(uploadedFiles.images.toString());
+        await _vendorServices.productServices.addProduct(
+          AddProductRequestModel(
+            name: productNameController.text,
+            description: productDescriptionController.text,
+            productType: productTypeController.text,
+            units: units,
+            isPriceShown: product.isPriceShown,
+            images: uploadedFiles.images,
+            notes: productNotesController.text,
+          ),
+        );
+      } else {
+        throw 'Exception';
+      }
+      emit(AddProductSuccessState());
+    } catch (e) {
+      emit(AddProductErrorState(error: e.toString()));
+    }
+  }
+
   Future<UploadImageModel> _uploadSelectedImagesToServer() async {
     final uploadedFiles = List<File>.from(_productImagesFromFiles);
-    if (uploadedFiles.isEmpty) return UploadImageModel.empty();
+    if (uploadedFiles.isEmpty && _mainProductImageFile == null) {
+      //That means vendor not upload main image or any other images
+      return UploadImageModel.empty();
+    }
     if (_mainProductImageFile != null) {
       uploadedFiles.insert(0,
           _mainProductImageFile!); //insert the preview image at the first to know it when come from api

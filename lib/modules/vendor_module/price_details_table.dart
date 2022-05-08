@@ -20,6 +20,12 @@ class PriceDetailsTable extends StatelessWidget {
           current is RemovePriceUnit || current is AddPriceUnit,
       builder: (context, state) {
         final priceUnits = VendorProductCrudCubit.instance(context).units;
+        if (priceUnits.isEmpty) {
+          return Text(
+            'لم يتم اضافة تفاصيل سعر بعد',
+            style: secondaryTextStyle(),
+          );
+        }
         return Container(
           decoration: BoxDecoration(
               border: Border.all(

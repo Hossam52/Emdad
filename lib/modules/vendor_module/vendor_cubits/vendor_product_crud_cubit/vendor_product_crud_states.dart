@@ -30,3 +30,13 @@ class EditProductErrorState extends VendorProductCrudStates {
   final String error;
   EditProductErrorState({required this.error});
 }
+
+//AddProduct online fetch data
+class AddProductLoadingState extends VendorProductCrudStates {}
+
+class AddProductSuccessState extends VendorProductCrudStates {}
+
+class AddProductErrorState extends VendorProductCrudStates {
+  final String error;
+  AddProductErrorState({required this.error});
+}

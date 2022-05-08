@@ -5,6 +5,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emdad/layout/vendor_layout/cubit/vendor_cubit.dart';
 import 'package:emdad/models/products_and_categories/product_model.dart';
 import 'package:emdad/modules/vendor_module/price_details_table.dart';
+import 'package:emdad/modules/vendor_module/screens/vender_add_product_view/widgets/all_product_images.dart';
+import 'package:emdad/modules/vendor_module/screens/vender_add_product_view/widgets/main_product_image.dart';
+import 'package:emdad/modules/vendor_module/screens/vender_add_product_view/widgets/product_details_widget.dart';
 import 'package:emdad/modules/vendor_module/vendor_cubits/vendor_product_crud_cubit/vendor_product_crud_cubit.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
@@ -43,7 +46,6 @@ class _VendorEditProductScreenState extends State<VendorEditProductScreen> {
             listener: (context, state) {},
             builder: (context, state) {
               final productCubit = VendorProductCrudCubit.instance(context);
-              final product = productCubit.product;
               return Scaffold(
                 backgroundColor: AppColors.scaffoldBackgroundColor,
                 appBar: _appBar(context),
@@ -59,9 +61,9 @@ class _VendorEditProductScreenState extends State<VendorEditProductScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const _MainImage(),
+                          const MainProductImage(),
                           SizedBox(height: 20.h),
-                          const _AllImages(),
+                          const AllProductImages(),
                         ],
                       ),
                     ),
@@ -81,86 +83,7 @@ class _VendorEditProductScreenState extends State<VendorEditProductScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Column(
-                              children: [
-                                CustomText(
-                                  text: 'اسم المنتج',
-                                  textStyle: secondaryTextStyle()
-                                      .copyWith(fontWeight: FontWeight.w700),
-                                ),
-                                SizedBox(height: 5.h),
-                                buildTextFormField(
-                                  controller:
-                                      productCubit.productNameController,
-                                  onChanged: (String? value) {},
-                                  onSubmitted: (String? value) {},
-                                ),
-                                SizedBox(height: 20.h),
-                                CustomText(
-                                  text: 'تفاصيل المنتج',
-                                  textStyle: secondaryTextStyle()
-                                      .copyWith(fontWeight: FontWeight.w700),
-                                ),
-                                SizedBox(height: 5.h),
-                                buildTextFormField(
-                                  controller:
-                                      productCubit.productDescriptionController,
-                                  onChanged: (String? value) {},
-                                  onSubmitted: (String? value) {},
-                                ),
-                                SizedBox(height: 20.h),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    CustomText(
-                                      text: 'تفاصيل السعر',
-                                      textStyle: secondaryTextStyle().copyWith(
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                    InkWell(
-                                      onTap: () {
-                                        showModalSheet(context);
-                                      },
-                                      child: Material(
-                                        elevation: 10,
-                                        borderRadius:
-                                            BorderRadius.circular(20.r),
-                                        child: Container(
-                                          decoration: const BoxDecoration(
-                                            color: Colors.white,
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: Icon(
-                                            Icons.add,
-                                            size: 35.r,
-                                            color: AppColors.primaryColor,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 20.h),
-                                const PriceDetailsTable(),
-                                SizedBox(height: 40.h),
-                                ListTile(
-                                  trailing: Checkbox(
-                                    value: product.isPriceShown,
-                                    onChanged: (bool? value) {
-                                      productCubit
-                                          .changePriceVisibility(value!);
-                                    },
-                                    activeColor: Colors.green,
-                                  ),
-                                  leading: CustomText(
-                                    text: 'اظهار السعر',
-                                    textStyle: thirdTextStyle().copyWith(
-                                        fontWeight: FontWeight.normal),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            ProductDetailsWidget(productCubit: productCubit),
                             Align(
                               child: CustomButton(
                                 width: 176.w,
@@ -214,264 +137,5 @@ class _VendorEditProductScreenState extends State<VendorEditProductScreen> {
         )
       ],
     );
-  }
-
-  showModalSheet(BuildContext context) {
-    showModalBottomSheet<void>(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(30.r),
-          topRight: Radius.circular(30.r),
-        ),
-      ),
-      isScrollControlled: true,
-      context: context,
-      builder: (BuildContext _context) {
-        return AddNewPriceDialog(
-          onSave: (
-              {required minimumAmount,
-              required pricePerUnit,
-              required productUnit}) {
-            VendorProductCrudCubit.instance(context).addPriceUnit(
-                productUnit: productUnit,
-                minimumAmount: minimumAmount,
-                pricePerUnit: pricePerUnit);
-          },
-        );
-      },
-    );
-  }
-
-  Widget buildTextFormField({
-    required TextEditingController? controller,
-    required Function(String)? onChanged,
-    required Function(String)? onSubmitted,
-  }) {
-    return CustomTextFormField(
-      validation: (val) {},
-      controller: controller,
-      contentPadding: const EdgeInsets.all(4),
-      onChange: onChanged,
-      onSubmit: onSubmitted,
-    );
-  }
-}
-
-class _ImageItem extends StatelessWidget {
-  const _ImageItem(
-      {Key? key,
-      required this.index,
-      required this.onDeleteImage,
-      required this.imageProvider})
-      : super(key: key);
-  final int index;
-  final VoidCallback onDeleteImage;
-  final ImageProvider imageProvider;
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      alignment: AlignmentDirectional.topEnd,
-      children: [
-        Container(
-          height: 100.h,
-          width: 90.w,
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.r),
-            color: Colors.grey.shade100,
-            image: DecorationImage(
-              image: imageProvider,
-              fit: BoxFit.fill,
-            ),
-          ),
-        ),
-        Container(
-          height: 35.h,
-          width: 35.w,
-          margin: EdgeInsets.all(10.r),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.r),
-            color: AppColors.primaryColor,
-          ),
-          child: Center(
-            child: IconButton(
-              onPressed: onDeleteImage,
-              icon: Icon(
-                Icons.clear,
-                color: Colors.white,
-                size: 20.r,
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _MainImage extends StatelessWidget {
-  const _MainImage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return VendorProductCrudCubitBlocBuilder(
-      builder: (context, state) {
-        final productCubit = VendorProductCrudCubit.instance(context);
-        return Column(
-          children: [
-            CustomText(
-              text: 'الصوره الرئيسية',
-              textStyle: thirdTextStyle().copyWith(fontWeight: FontWeight.w700),
-            ),
-            Stack(
-              alignment: AlignmentDirectional.topEnd,
-              children: [
-                Container(
-                  height: 161.h,
-                  width: 142.w,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.r),
-                    color: Colors.grey.shade100,
-                    image: DecorationImage(
-                      image: productCubit.hasPickedMainFile
-                          ? FileImage(productCubit.mainProductImageFile)
-                              as ImageProvider
-                          : CachedNetworkImageProvider(
-                              productCubit.originalMainImage,
-                            ),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 35.h,
-                  width: 35.w,
-                  margin: EdgeInsets.all(10.r),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.r),
-                    color: AppColors.primaryColor,
-                  ),
-                  child: Center(
-                    child: IconButton(
-                      onPressed: () {
-                        productCubit.pickMainImage();
-                      },
-                      icon: Icon(
-                        Icons.edit_outlined,
-                        color: Colors.white,
-                        size: 20.r,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            )
-          ],
-        );
-      },
-    );
-  }
-}
-
-class _AllImages extends StatelessWidget {
-  const _AllImages({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final productCubit = VendorProductCrudCubit.instance(context);
-    return VendorProductCrudCubitBlocBuilder(
-      builder: (context, state) {
-        return Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CustomText(
-                  text: 'صور اخري',
-                  textStyle:
-                      thirdTextStyle().copyWith(fontWeight: FontWeight.w700),
-                ),
-                Container(
-                  height: 35.h,
-                  width: 35.w,
-                  margin: EdgeInsets.all(10.r),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.r),
-                    color: AppColors.primaryColor,
-                  ),
-                  child: Center(
-                    child: IconButton(
-                      onPressed: () {
-                        productCubit.pickImages();
-                      },
-                      icon: Icon(
-                        Icons.library_add_outlined,
-                        color: Colors.white,
-                        size: 20.r,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            productCubit.isEmptyImages
-                ? SvgPicture.asset('assets/images/questions_amico.svg')
-                : SizedBox(
-                    height: 100.h,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        originalImagesListView(), //For online images that come with product
-                        addedFilesImagesListView(), //For images that selected from gallery
-                      ],
-                    ),
-                  )
-          ],
-        );
-      },
-    );
-  }
-
-  Widget originalImagesListView() {
-    return Builder(builder: (context) {
-      final productCubit = VendorProductCrudCubit.instance(context);
-      final originalImages = productCubit.originalProductImages;
-      return ListView.separated(
-        primary: false,
-        shrinkWrap: true,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) => _ImageItem(
-            index: index,
-            onDeleteImage: () {
-              productCubit.removeOriginalImage(index);
-            },
-            imageProvider: CachedNetworkImageProvider(originalImages[index])),
-        separatorBuilder: (context, index) => SizedBox(width: 10.w),
-        itemCount: originalImages.length,
-      );
-    });
-  }
-
-  Widget addedFilesImagesListView() {
-    return Builder(builder: (context) {
-      final productCubit = VendorProductCrudCubit.instance(context);
-      final imageFiles = productCubit.productImagesFromFiles;
-      return ListView.separated(
-        primary: false,
-        shrinkWrap: true,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) => _ImageItem(
-            index: index,
-            onDeleteImage: () {
-              productCubit.removeFileImage(index);
-            },
-            imageProvider: FileImage(imageFiles[index])),
-        separatorBuilder: (context, index) => SizedBox(width: 10.w),
-        itemCount: imageFiles.length,
-      );
-    });
   }
 }

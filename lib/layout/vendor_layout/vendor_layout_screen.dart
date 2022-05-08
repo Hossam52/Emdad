@@ -85,7 +85,12 @@ class _VendorLayoutState extends State<VendorLayout> {
               body: vendorCubit.screens[vendorCubit.currentPageIndex],
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
-                  navigateTo(context, const VendorAddNewProductScreen());
+                  navigateTo(
+                      context,
+                      BlocProvider.value(
+                        value: VendorProductsCubit.instance(context),
+                        child: const VendorAddNewProductScreen(),
+                      ));
                 },
                 child: Icon(
                   Icons.add,

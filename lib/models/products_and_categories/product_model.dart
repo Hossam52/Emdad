@@ -25,6 +25,15 @@ class ProductModel {
         .toList();
 //TODO: Remove the link above as it for test
   }
+  ProductModel.emptyModel()
+      : id = '',
+        name = '',
+        vendorId = '',
+        description = '',
+        productType = '',
+        units = [],
+        isPriceShown = true,
+        images = [];
 
   Map<String, dynamic> toMap() {
     return {
