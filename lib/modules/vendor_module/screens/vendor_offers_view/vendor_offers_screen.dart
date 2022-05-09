@@ -50,7 +50,10 @@ class VendorOffersScreen extends StatelessWidget {
                   padding: const EdgeInsets.all(16),
                   itemCount: offers.length,
                   itemBuilder: (context, index) => OrderBuildItem(
-                    order: offers[index],
+                    // order: orders[index],
+                    title: offers[index].id,
+                    date: offers[index].createdAt,
+                    image: offers[index].user.logoUrl,
                     hasBadge: false,
                     onTap: () async {
                       final refreshPage = await navigateTo(

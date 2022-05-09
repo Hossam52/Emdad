@@ -4,12 +4,14 @@ import 'package:emdad/models/enums/enums.dart';
 import 'package:emdad/models/enums/order_status.dart';
 import 'package:emdad/models/supply_request/supply_request.dart';
 import 'package:emdad/modules/user_module/order_view/order_cubit/order_cubit.dart';
+import 'package:emdad/modules/user_module/order_view/order_cubit/order_states.dart';
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_user_preview.dart';
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_widget_wrapper.dart';
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/shipping_widget.dart';
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/total_order_price_widget.dart';
 import 'package:emdad/modules/user_module/order_view/shipping/shipping_offers_screen.dart';
 import 'package:emdad/shared/componants/components.dart';
+import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
@@ -146,7 +148,27 @@ class OrderNewScreen extends StatelessWidget {
       context: context,
       builder: (_) => BlocProvider.value(
         value: OrderCubit.instance(context),
-        child: const RequestTransformDialog(),
+        child: OrderBlocConsumer(listener: (context, state) {
+          if (state is CreateTransportationRequestErrorState) {
+            SharedMethods.showToast(context, state.error,
+                color: AppColors.errorColor, textColor: Colors.white);
+            Navigator.pop(context);
+          }
+          if (state is CreateTransportationRequestSuccessState) {
+            Navigator.pop(context, true);
+          }
+        }, builder: (context, orderState) {
+          return RequestTransformDialog(
+            isLoading: orderState is CreateTransportationRequestLoadingState,
+            onCreateTransportRequest: (
+                {required String city, required String transportationMethod}) {
+              OrderCubit.instance(context).createTransportationRequest(
+                city: city,
+                transportationMethod: transportationMethod,
+              );
+            },
+          );
+        }),
       ),
     );
   }

@@ -4,6 +4,7 @@ import 'package:emdad/layout/widgets/profile_check_wrapper.dart';
 import 'package:emdad/modules/vendor_module/screens/vender_add_product_view/vendor_add_new_product_screen.dart';
 import 'package:emdad/modules/vendor_module/screens/vendor_offers_view/vendor_offers_cubit/vendor_offers_cubit.dart';
 import 'package:emdad/modules/vendor_module/vendor_cubits/products_cubit/vendor_product_cubit.dart';
+import 'package:emdad/modules/vendor_module/vendor_cubits/purchase_orders_cubit/purchase_orders_cubit.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/cubit/app_cubit.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
@@ -47,6 +48,9 @@ class _VendorLayoutState extends State<VendorLayout> {
           ),
           BlocProvider(
             create: (context) => VendorProductsCubit(),
+          ),
+          BlocProvider(
+            create: (context) => PurchaseOrdersCubit()..getPurchaseOrders(),
           ),
         ],
         child: VendorBlocConsumer(

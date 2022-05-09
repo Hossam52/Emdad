@@ -87,9 +87,15 @@ class SupplyRequest {
         transportationRequest == null);
   }
 
-  bool get vendorAddTransportationOffer {
+  bool get vendorHasRequestTransportation {
     return (transportationHandlerEnum == FacilityType.vendor &&
         transportationRequest != null);
+  }
+
+  bool get hasAcceptedTransportationOffer {
+    if (transportationRequest == null) return false;
+    if (transportationRequest!.transportationOffer == null) return false;
+    return true;
   }
 
   bool get vendorWaitTransportationOffer {

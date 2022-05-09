@@ -11,10 +11,14 @@ class OrderBuildItem extends StatelessWidget {
     Key? key,
     required this.hasBadge,
     required this.onTap,
-    required this.order,
     this.trailing,
+    required this.title,
+    required this.image,
+    required this.date,
   }) : super(key: key);
-  final SupplyRequest order;
+  final String title;
+  final String image;
+  final String date;
   final bool hasBadge;
   final Function() onTap;
   final Widget? trailing;
@@ -40,7 +44,7 @@ class OrderBuildItem extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 child: DefaultCachedNetworkImage(
-                  imageUrl: order.vendor.logoUrl, // image,
+                  imageUrl: image, //order.vendor.logoUrl,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -50,22 +54,26 @@ class OrderBuildItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      order.id,
+                      title,
+                      // order.id,
                       // order.vendor.oraganizationName,
                       style: thirdTextStyle().copyWith(
                         fontWeight: FontWeight.w700,
                       ),
                     ),
                     Text(
-                      SharedMethods.mappedDate(order.createdAt),
+                      SharedMethods.mappedDate(
+                        date, // order.createdAt,
+                      ),
                       style: subTextStyle(),
                     ),
                     if (hasBadge)
                       Chip(
                         label: Text(
-                            order.vendorProvidePriceOffer
-                                ? order.totalOrderPrice.toString()
-                                : 'لم يتم اضافة عرض',
+                            // order.vendorProvidePriceOffer
+                            //     ? order.totalOrderPrice.toString()
+                            //     :
+                            'لم يتم اضافة عرض',
                             style: subTextStyle()
                                 .copyWith(color: AppColors.errorColor)),
                         backgroundColor:

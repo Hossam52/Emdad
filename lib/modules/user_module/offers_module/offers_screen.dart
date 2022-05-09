@@ -87,7 +87,10 @@ class OffersScreen extends StatelessWidget {
                     itemCount: offers.length,
                     itemBuilder: (context, index) {
                       return OrderBuildItem(
-                        order: offers[index],
+                        // order: orders[index],
+                        title: offers[index].id,
+                        date: offers[index].createdAt,
+                        image: offers[index].vendor.logoUrl,
                         hasBadge: true,
                         onTap: () async {
                           final mustReloadData = await navigateTo(

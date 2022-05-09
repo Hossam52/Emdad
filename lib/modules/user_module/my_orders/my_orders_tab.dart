@@ -45,7 +45,11 @@ class MyOrdersTab extends StatelessWidget {
               itemCount: orders.length,
               padding: const EdgeInsets.all(16),
               itemBuilder: (context, index) => OrderBuildItem(
-                order: orders[index],
+                // order: orders[index],
+                title: orders[index].id,
+                date: orders[index].createdAt,
+                image: orders[index].vendor.logoUrl,
+
                 hasBadge: false,
                 onTap: () => onTap(
                   orders[index].id,

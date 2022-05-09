@@ -29,3 +29,13 @@ class QuoteOrderErrorState extends VendorOrderStates {
   final String error;
   QuoteOrderErrorState({required this.error});
 }
+
+//CreateVendorTransportationRequest online fetch data
+class CreateVendorTransportationRequestLoadingState extends VendorOrderStates {}
+
+class CreateVendorTransportationRequestSuccessState extends VendorOrderStates {}
+
+class CreateVendorTransportationRequestErrorState extends VendorOrderStates {
+  final String error;
+  CreateVendorTransportationRequestErrorState({required this.error});
+}

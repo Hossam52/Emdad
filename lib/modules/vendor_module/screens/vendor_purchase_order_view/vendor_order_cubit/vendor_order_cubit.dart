@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:emdad/models/enums/enums.dart';
+import 'package:emdad/models/request_models/user/create_transportation_request_model.dart';
 import 'package:emdad/models/request_models/vendor/add_offer_request_model.dart';
 import 'package:emdad/models/supply_request/supply_request.dart';
 import 'package:emdad/models/users/user/supply_requests/order_request_model.dart';
@@ -112,6 +113,24 @@ class VendorOrderCubit extends Cubit<VendorOrderStates> {
       emit(QuoteOrderErrorState(error: e.toString()));
     }
   }
+
+  Future<void> createVendorTransportationRequest(
+      {required String city, required String transportationMethod}) async {
+    try {
+      emit(CreateVendorTransportationRequestLoadingState());
+      final map = await _services.transportationServices.createTransportRequest(
+          CreateTransportationRequestModel(
+              supplyRequestId: orderId,
+              transportationMethod: transportationMethod,
+              city: city));
+      getOrder();
+      emit(CreateVendorTransportationRequestSuccessState());
+    } catch (e) {
+      emit(CreateVendorTransportationRequestErrorState(error: e.toString()));
+    }
+  }
+
+//End apis
 
   void editItemPrice({required String requestId, required double price}) {
     final requestIndex =

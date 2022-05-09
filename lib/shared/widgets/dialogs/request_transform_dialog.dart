@@ -16,8 +16,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RequestTransformDialog extends StatelessWidget {
-  const RequestTransformDialog({Key? key}) : super(key: key);
-
+  const RequestTransformDialog(
+      {Key? key,
+      required this.onCreateTransportRequest,
+      required this.isLoading})
+      : super(key: key);
+  final void Function(
+      {required String transportationMethod,
+      required String city}) onCreateTransportRequest;
+  final bool isLoading;
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -32,18 +39,8 @@ class RequestTransformDialog extends StatelessWidget {
           final filtersCubit = ChangeFiltersCubit.instance(context);
 
           return Dialog(
-            child: OrderBlocConsumer(
-              listener: (context, state) {
-                if (state is CreateTransportationRequestErrorState) {
-                  SharedMethods.showToast(context, state.error,
-                      color: AppColors.errorColor, textColor: Colors.white);
-                  Navigator.pop(context);
-                }
-                if (state is CreateTransportationRequestSuccessState) {
-                  Navigator.pop(context, true);
-                }
-              },
-              builder: (context, orderState) {
+            child: Builder(
+              builder: (context) {
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: SingleChildScrollView(
@@ -79,20 +76,23 @@ class RequestTransformDialog extends StatelessWidget {
                             label: 'مدينة شركة الشحن',
                             selected: filtersCubit.selectedCity),
                         SizedBox(height: 50.h),
-                        if (orderState
-                            is CreateTransportationRequestLoadingState)
+                        if (isLoading)
                           const DefaultLoader()
                         else
                           CustomButton(
                             onPressed: filtersCubit.selectedCity == null
                                 ? null
                                 : () {
-                                    OrderCubit.instance(context)
-                                        .createTransportationRequest(
-                                      city: filtersCubit.selectedCity!,
-                                      transportationMethod:
-                                          filtersCubit.selectedTransportation!,
-                                    );
+                                    onCreateTransportRequest(
+                                        city: filtersCubit.selectedCity!,
+                                        transportationMethod: filtersCubit
+                                            .selectedTransportation!);
+                                    // OrderCubit.instance(context)
+                                    //     .createTransportationRequest(
+                                    //   city: filtersCubit.selectedCity!,
+                                    //   transportationMethod:
+                                    //       filtersCubit.selectedTransportation!,
+                                    // );
                                   },
                             backgroundColor: AppColors.primaryColor,
                             text: 'إرسال طلب عرض سعر لشركة النقل',
