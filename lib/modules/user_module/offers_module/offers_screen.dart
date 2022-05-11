@@ -41,7 +41,11 @@ class OffersScreen extends StatelessWidget {
                 },
                 text: state.error);
           }
-          if (offersCubit.emptyOffers) return NoDataWidget(onPressed: () {});
+          if (offersCubit.emptyOffers) {
+            return NoDataWidget(onPressed: () {
+              offersCubit.getRequestOffers();
+            });
+          }
           final offers = offersCubit.offers;
           return responsiveWidget(
             responsive: (context, deviceInfo) => SingleChildScrollView(
@@ -80,7 +84,6 @@ class OffersScreen extends StatelessWidget {
                     ),
                   ),
                   ListView.builder(
-                    reverse: true,
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     padding: const EdgeInsets.all(16),

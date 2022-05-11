@@ -39,17 +39,16 @@ class OffersCubit extends Cubit<OffersStates> {
   List<SupplyRequest> get offers {
     _assignOrders();
     final offersRequests = tabItems[_selectedTab].orders!;
-    log(offersRequests.toString());
     // final offersRequests = _requestOffers!.supplyRequests;
-    if (_sortOffersBy == SortBy.none) {
-      return offersRequests;
-    } else if (_sortOffersBy == SortBy.name) {
-      return _sortByName(offersRequests);
-    } else if (_sortOffersBy == SortBy.date) {
-      return _sortByDate(offersRequests);
-    } else {
-      return offersRequests;
-    }
+    // if (_sortOffersBy == SortBy.none) {
+    //   return offersRequests;
+    // } else if (_sortOffersBy == SortBy.name) {
+    //   return _sortByName(offersRequests);
+    // } else if (_sortOffersBy == SortBy.date) {
+    //   return _sortByDate(offersRequests);
+    // } else {
+    // }
+    return offersRequests;
   }
 
   late List<OfferTabItem> tabItems;
@@ -115,6 +114,7 @@ class OffersCubit extends Cubit<OffersStates> {
     } catch (e) {
       log(e.toString());
       emit(GetRequestOffersErrorState(error: e.toString()));
+      rethrow;
     }
   }
 

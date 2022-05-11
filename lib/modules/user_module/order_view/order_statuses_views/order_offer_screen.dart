@@ -92,9 +92,8 @@ class OrderOfferScreen extends StatelessWidget {
                       OrderAdditionalItemsListView(order: order),
                       const SizedBox(height: 20),
                       ShippingWidget(
-                          transportationHandler:
-                              order.transportationHandlerEnum,
-                          transportationRequest: order.transportationRequest),
+                        order: order,
+                      ),
                       const SizedBox(height: 20),
                       TotalOrderPrice(
                         order: order,

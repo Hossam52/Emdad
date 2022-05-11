@@ -66,6 +66,28 @@ class ProductModel {
 
   factory ProductModel.fromJson(String source) =>
       ProductModel.fromMap(json.decode(source));
+
+  ProductModel copyWith({
+    String? id,
+    String? vendorId,
+    String? name,
+    String? description,
+    String? productType,
+    List<ProductUnit>? units,
+    bool? isPriceShown,
+    List<String>? images,
+  }) {
+    return ProductModel(
+      id: id ?? this.id,
+      vendorId: vendorId ?? this.vendorId,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      productType: productType ?? this.productType,
+      units: units ?? this.units,
+      isPriceShown: isPriceShown ?? this.isPriceShown,
+      images: images ?? this.images,
+    );
+  }
 }
 
 class ProductUnit {

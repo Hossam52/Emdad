@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'package:emdad/models/supply_request/supply_request.dart';
+import 'package:emdad/models/supply_request/supply_request_change_log_model.dart';
 import 'package:emdad/modules/user_module/order_view/order_tracking/tracking_list_tile.dart';
 import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
@@ -8,10 +12,11 @@ import 'tracking_line_dotes.dart';
 import 'tracking_step_build_item.dart';
 
 class OrderTrackingScreen extends StatelessWidget {
-  const OrderTrackingScreen({Key? key}) : super(key: key);
-
+  const OrderTrackingScreen({Key? key, required this.order}) : super(key: key);
+  final SupplyRequest order;
   @override
   Widget build(BuildContext context) {
+    final statusLog = order.statusChangeLog;
     return Scaffold(
       appBar: AppBar(
         title: const Text('حالة الطلب'),
@@ -33,16 +38,16 @@ class OrderTrackingScreen extends StatelessWidget {
                     BoxDecoration(border: Border.all(color: Colors.grey)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     TrackingListTile(
-                      name: 'الهدي لتوريدات الغذائية',
+                      name: order.user.oraganizationName,
                       type: TrackingType.source,
                     ),
-                    TrackingLineDotes(),
-                    TrackingLineDotes(height: 16),
-                    TrackingLineDotes(),
+                    const TrackingLineDotes(),
+                    const TrackingLineDotes(height: 16),
+                    const TrackingLineDotes(),
                     TrackingListTile(
-                      name: 'مطعم كنتاكي ',
+                      name: order.vendor.oraganizationName,
                       type: TrackingType.destination,
                     ),
                   ],
@@ -54,25 +59,38 @@ class OrderTrackingScreen extends StatelessWidget {
                 style: thirdTextStyle().copyWith(fontWeight: FontWeight.w700),
               ),
               TrackingStepBuildItem(
-                count: 6,
-                currentStep: 2,
-                icons: const [
-                  MyIcons.contact_request,
-                  MyIcons.accept,
-                  MyIcons.settings,
-                  MyIcons.shipping,
-                  MyIcons.shipping,
-                  Icons.check_circle_rounded,
+                items: [
+                  TrackingStatusItem(
+                    title: 'إرسال عرض سعر',
+                    dateString: statusLog?.awaitingQuotation,
+                    icon: MyIcons.contact_request,
+                  ),
+                  TrackingStatusItem(
+                    title: 'قبول الطلب',
+                    dateString: statusLog?.awaitingApproval,
+                    icon: MyIcons.accept,
+                  ),
+                  TrackingStatusItem(
+                    title: 'تجهيز الطلب',
+                    dateString: statusLog?.preparing,
+                    icon: MyIcons.settings,
+                  ),
+                  TrackingStatusItem(
+                    title: 'وصلت نقطة الالتقاط',
+                    dateString: statusLog?.awaitingTransportation,
+                    icon: MyIcons.shipping,
+                  ),
+                  TrackingStatusItem(
+                    title: 'وصلت نقطة التوصيل',
+                    dateString: statusLog?.onWay,
+                    icon: MyIcons.shipping,
+                  ),
+                  TrackingStatusItem(
+                    title: 'تأكيد انتهاء العملية',
+                    dateString: statusLog?.delivered,
+                    icon: Icons.check_circle_rounded,
+                  ),
                 ],
-                title: const [
-                  'إرسال عرض سعر',
-                  'قبول الطلب',
-                  'تجهيز الطلب',
-                  'وصلت نقطة الالتقاط',
-                  'وصلت نقطة التوصيل',
-                  'تأكيد انتهاء العملية',
-                ],
-                subtitle: List.generate(6, (index) => '2021-12-06'),
               ),
             ],
           ),

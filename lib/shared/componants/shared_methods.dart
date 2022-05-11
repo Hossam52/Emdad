@@ -119,6 +119,19 @@ class SharedMethods {
     return DateFormat(formattedString).format(date);
   }
 
+  static String mappedDateWithSeconds(String source) {
+    final date = DateTime.parse(source);
+    final now = DateTime.now();
+    String formattedString;
+    if (date.year == now.year) {
+      formattedString = 'MM-dd hh:mm';
+    } else {
+      formattedString = 'yyyy-MM-dd hh:mm';
+    }
+
+    return DateFormat(formattedString).format(date);
+  }
+
   static String getPrice(double? price) {
     if (price == null || price == 0) {
       return 'غير محدد';

@@ -1,4 +1,6 @@
+import 'package:emdad/models/products_and_categories/product_model.dart';
 import 'package:emdad/models/supply_request/supply_request.dart';
+import 'package:emdad/models/supply_request/supply_request_cart.dart';
 import 'package:emdad/modules/user_module/cart_module/cart_screen.dart';
 import 'package:emdad/modules/user_module/home_module/vendor_profile_cubit/vendor_profile_cubit.dart';
 import 'package:emdad/modules/user_module/vendors_module/vendor_view/cart_cubit/cart_cubit.dart';
@@ -34,6 +36,23 @@ class EditOrderItemsWidget extends StatelessWidget {
             providers: [
               BlocProvider(
                 create: (context) => CartCubit(
+                  intialCartItems: order.requestItems
+                      .map((e) => ProductModelInCart(
+                          product: ProductModel.emptyModel().copyWith(
+                            units: e.units,
+                            name: e.name,
+                          ),
+                          selectedProductUnit: SupplyRequestCartModel(
+                              units: e.units,
+                              name: e.name,
+                              productUnit: e.productUnit,
+                              quantity: e.quantity,
+                              unitPrice: e.units
+                                  .firstWhere((element) =>
+                                      element.productUnit == e.productUnit)
+                                  .pricePerUnit,
+                              id: 'e.units.firstWhere((element) => element.productUnit==e.productUnit)')))
+                      .toList(),
                   initialAdditioalItems:
                       order.additionalItems.map((e) => e.description).toList(),
                 ),
@@ -47,35 +66,38 @@ class EditOrderItemsWidget extends StatelessWidget {
             ],
             child: Builder(builder: (context) {
               return CartScreen(
+                  displayTransportationCheckBox: false,
                   confirmCartButton: CartBlocConsumer(
-                listener: (context, state) {
-                  if (state is ResendOrderRequestErrorState) {
-                    SharedMethods.showToast(context, state.error,
-                        color: AppColors.errorColor, textColor: Colors.white);
-                  }
-                  if (state is ResendOrderRequestSuccessState) {
-                    SharedMethods.showToast(context, 'تم اعادة الطلب بنجاح',
-                        color: AppColors.successColor, textColor: Colors.white);
-                    Navigator.pop(context, true);
-                  }
-                },
-                builder: (context, state) {
-                  final cartCubit = CartCubit.instance(context);
-                  if (state is ResendOrderRequestLoadingState) {
-                    return const DefaultLoader();
-                  }
-                  return CustomButton(
-                    onPressed: !cartCubit.canOrderRequest
-                        ? null
-                        : () async {
-                            await cartCubit.resendOrderRequest(
-                                supplyRequestId: order.id);
-                          },
-                    text: 'اعادة ارسال عرض سعر',
-                    backgroundColor: AppColors.primaryColor,
-                  );
-                },
-              ));
+                    listener: (context, state) {
+                      if (state is ResendOrderRequestErrorState) {
+                        SharedMethods.showToast(context, state.error,
+                            color: AppColors.errorColor,
+                            textColor: Colors.white);
+                      }
+                      if (state is ResendOrderRequestSuccessState) {
+                        SharedMethods.showToast(context, 'تم اعادة الطلب بنجاح',
+                            color: AppColors.successColor,
+                            textColor: Colors.white);
+                        Navigator.pop(context, true);
+                      }
+                    },
+                    builder: (context, state) {
+                      final cartCubit = CartCubit.instance(context);
+                      if (state is ResendOrderRequestLoadingState) {
+                        return const DefaultLoader();
+                      }
+                      return CustomButton(
+                        onPressed: !cartCubit.canOrderRequest
+                            ? null
+                            : () async {
+                                await cartCubit.resendOrderRequest(
+                                    supplyRequestId: order.id);
+                              },
+                        text: 'اعادة ارسال عرض سعر',
+                        backgroundColor: AppColors.primaryColor,
+                      );
+                    },
+                  ));
             }),
           ),
         );

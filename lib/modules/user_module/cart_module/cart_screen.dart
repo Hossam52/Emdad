@@ -27,8 +27,10 @@ class CartScreen extends StatelessWidget {
   CartScreen({
     Key? key,
     required this.confirmCartButton,
+    this.displayTransportationCheckBox = true,
   }) : super(key: key);
   final Widget confirmCartButton;
+  final bool displayTransportationCheckBox;
   final TextEditingController controller = TextEditingController();
 
   @override
@@ -112,7 +114,8 @@ class CartScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     _AddAdditionalItems(controller: controller),
-                    const _TransportationHandler(),
+                    if (displayTransportationCheckBox)
+                      const _TransportationHandler(),
                     _cartItems(),
                     Padding(
                       padding: const EdgeInsets.symmetric(

@@ -62,4 +62,19 @@ class OrderCubit extends Cubit<OrderStates> {
       emit(AcceptSupplyOfferErrorState(error: e.toString()));
     }
   }
+
+  Future<void> createTransportRequest(
+      {required String transportationMethod, required String city}) async {
+    try {
+      emit(CreateTransportRequestLoadingState());
+      await _services.userTransportServices.createTransportRequest(
+          CreateTransportationRequestModel(
+              supplyRequestId: orderId,
+              transportationMethod: transportationMethod,
+              city: city));
+      emit(CreateTransportRequestSuccessState());
+    } catch (e) {
+      emit(CreateTransportRequestErrorState(error: e.toString()));
+    }
+  }
 }

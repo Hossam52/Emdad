@@ -86,6 +86,7 @@ class _AddToPriceRequestDialogState extends State<AddToPriceRequestDialog> {
       product: widget.product,
       selectedProductUnit: SupplyRequestCartModel(
         name: widget.product.name,
+        units: widget.product.units,
         productUnit: selectedUnit.productUnit,
         quantity: quantity,
         unitPrice: selectedUnit.pricePerUnit,

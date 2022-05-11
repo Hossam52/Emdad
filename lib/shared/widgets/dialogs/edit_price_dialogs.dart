@@ -250,18 +250,20 @@ class EditShippingPriceDialog extends StatelessWidget {
     return _EditPriceContainer(
         minPrice: minPrice,
         title: 'تحديد سعر النقل',
-        beforePriceWidget: Row(
-          children: [
-            const Center(child: Text('أقل قيمة لتسعير النقل هي ')),
-            Text(
-              minPrice.toString(),
-              style: secondaryTextStyle().copyWith(
-                color: AppColors.primaryColor,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        )
+        beforePriceWidget: minPrice == 0
+            ? const SizedBox.shrink()
+            : Row(
+                children: [
+                  const Center(child: Text('أقل قيمة لتسعير النقل هي ')),
+                  Text(
+                    minPrice.toString(),
+                    style: secondaryTextStyle().copyWith(
+                      color: AppColors.primaryColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              )
         // afterPriceWidget: Align(
         //   child: CustomButtonWithIcon(
         //     height: 60.h,

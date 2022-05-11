@@ -39,7 +39,7 @@ class VendorOffersCubit extends Cubit<VendorOffersStates> {
   }
 
   FilterSupplyRequestModel get _getFilters => FilterSupplyRequestModel(
-      requestStatus: [SupplyRequestStatus.preparing.name]);
+      requestStatus: [SupplyRequestStatus.awaitingQuotation.name]);
 
   Future<void> getVendorOffers() async {
     try {

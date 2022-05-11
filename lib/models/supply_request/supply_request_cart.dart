@@ -8,19 +8,24 @@ class SupplyRequestCartModel {
   String productUnit;
   double unitPrice;
   int quantity;
+  List<ProductUnit> units;
   SupplyRequestCartModel({
     required this.id,
     required this.name,
     required this.productUnit,
     required this.unitPrice,
     required this.quantity,
+    required this.units,
   });
 
   Map<String, dynamic> toMap() {
     return {
+      // 'id': id,
       'name': name,
-      'productUnit': productUnit,
       'quantity': quantity,
+      'productUnit': productUnit,
+      // 'unitPrice': unitPrice,
+      'units': units.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -31,6 +36,8 @@ class SupplyRequestCartModel {
       productUnit: map['productUnit'] ?? '',
       unitPrice: map['unitPrice']?.toDouble() ?? 0.0,
       quantity: map['quantity']?.toInt() ?? 0,
+      units: List<ProductUnit>.from(
+          map['units']?.map((x) => ProductUnit.fromMap(x))),
     );
   }
 

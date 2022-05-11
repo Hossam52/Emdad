@@ -5,6 +5,7 @@ import 'package:emdad/models/general_models/facility_type_model.dart';
 import 'package:emdad/models/supply_request/additional_item.dart';
 import 'package:emdad/models/supply_request/order_transportation_request.dart';
 import 'package:emdad/models/supply_request/request_item.dart';
+import 'package:emdad/models/supply_request/supply_request_change_log_model.dart';
 import 'package:emdad/models/supply_request/user_preview.dart';
 import 'package:emdad/models/users/user/user_response_model.dart';
 
@@ -26,6 +27,7 @@ class SupplyRequest {
       transportationPrice; //only return when the transportation handler is vendor
   String generatedId;
   String paymentStatus;
+  SupplyRequestChangeLogsModel? statusChangeLog;
   String transportationRequestId;
   UserPreviewModel user;
   UserPreviewModel vendor;
@@ -44,6 +46,7 @@ class SupplyRequest {
       required this.transportationPrice,
       required this.generatedId,
       required this.paymentStatus,
+      required this.statusChangeLog,
       required this.transportationRequestId,
       required this.user,
       required this.vendor,
@@ -153,6 +156,9 @@ class SupplyRequest {
       iv: map['__v'] ?? '',
       transportationPrice: map['transportationPrice']?.toDouble() ?? 0.0,
       generatedId: map['generatedId'] ?? '',
+      statusChangeLog: map['statusChangeLog'] != null
+          ? SupplyRequestChangeLogsModel.fromMap(map['statusChangeLog'])
+          : null,
       paymentStatus: map['paymentStatus'] ?? '',
       transportationRequestId: map['transportationRequestId'] ?? '',
       user: UserPreviewModel.fromMap(map['user']),

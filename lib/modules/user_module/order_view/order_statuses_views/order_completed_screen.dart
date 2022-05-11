@@ -6,6 +6,7 @@ import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_widget_wrapper.dart';
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/shipping_widget.dart';
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/total_order_price_widget.dart';
+import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/tracking_widget.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/order_items_list_view.dart';
@@ -50,38 +51,41 @@ class OrderCompletedScreen extends StatelessWidget {
           child: Builder(
             builder: (context) {
               final order = OrderCubit.instance(context).order;
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    OrderUserPreview(
-                      order: order,
-                      displayedUser: order.vendor,
-                    ),
-                    OrderBlocBuilder(
-                      builder: (context, state) {
-                        final order = OrderCubit.instance(context).order;
-                        final items = order.requestItems;
-                        return OrderItemsListView(
-                          items: items,
-                          displayTotalAfterTaxes: true,
-                        );
-                      },
-                    ),
-                    // AllOrdersListView(
-                    //   vendorId: order.vendorId,
-                    // ),
-                    const SizedBox(height: 36),
-                    OrderAdditionalItemsListView(order: order),
-                    const SizedBox(height: 20),
-                    ShippingWidget(
-                        transportationHandler: order.transportationHandlerEnum,
-                        transportationRequest: order.transportationRequest),
-                    const SizedBox(height: 20),
-                    TotalOrderPrice(
-                      order: order,
-                    ),
-                    const SizedBox(height: 50),
-                  ],
+              return TrackingWidget(
+                order: order,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      OrderUserPreview(
+                        order: order,
+                        displayedUser: order.vendor,
+                      ),
+                      OrderBlocBuilder(
+                        builder: (context, state) {
+                          final order = OrderCubit.instance(context).order;
+                          final items = order.requestItems;
+                          return OrderItemsListView(
+                            items: items,
+                            displayTotalAfterTaxes: true,
+                          );
+                        },
+                      ),
+                      // AllOrdersListView(
+                      //   vendorId: order.vendorId,
+                      // ),
+                      const SizedBox(height: 36),
+                      OrderAdditionalItemsListView(order: order),
+                      const SizedBox(height: 20),
+                      ShippingWidget(
+                        order: order,
+                      ),
+                      const SizedBox(height: 20),
+                      TotalOrderPrice(
+                        order: order,
+                      ),
+                      const SizedBox(height: 50),
+                    ],
+                  ),
                 ),
               );
             },
