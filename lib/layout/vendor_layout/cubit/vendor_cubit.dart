@@ -1,15 +1,10 @@
 import 'dart:io';
 
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:meta/meta.dart';
 
 import 'package:emdad/models/general_models/product_detailes.dart';
-import 'package:emdad/models/users/vendor/all_vendor_request_model.dart';
 import 'package:emdad/modules/settings/setting_screen.dart';
 import 'package:emdad/modules/vendor_module/screens/vendor_offers_view/vendor_offers_screen.dart';
 import 'package:emdad/modules/vendor_module/screens/vendor_products_screen.dart';
