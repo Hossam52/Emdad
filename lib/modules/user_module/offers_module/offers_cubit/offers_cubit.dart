@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:emdad/models/enums/enums.dart';
 import 'package:emdad/models/request_models/pagination_request_model.dart';
-import 'package:emdad/models/request_models/user/filter_supply_request_model.dart';
+import 'package:emdad/models/request_models/filter_supply_request_model.dart';
 import 'package:emdad/models/supply_request/supply_request.dart';
 import 'package:emdad/models/users/user/supply_requests/all_supply_requests.dart';
 import 'package:emdad/modules/user_module/vendors_module/change_filters_cubit/change_filters_states.dart';

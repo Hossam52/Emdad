@@ -15,11 +15,13 @@ class OrderBuildItem extends StatelessWidget {
     required this.title,
     required this.image,
     required this.date,
+    this.badgeText,
   }) : super(key: key);
   final String title;
   final String image;
   final String date;
   final bool hasBadge;
+  final String? badgeText;
   final Function() onTap;
   final Widget? trailing;
   @override
@@ -68,20 +70,32 @@ class OrderBuildItem extends StatelessWidget {
                       style: subTextStyle(),
                     ),
                     if (hasBadge)
-                      Chip(
-                        label: Text(
-                            // order.vendorProvidePriceOffer
-                            //     ? order.totalOrderPrice.toString()
-                            //     :
-                            'لم يتم اضافة عرض',
-                            style: subTextStyle()
-                                .copyWith(color: AppColors.errorColor)),
-                        backgroundColor:
-                            AppColors.primaryColor.withOpacity(0.15),
-                        padding: EdgeInsets.zero,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                      ),
+                      if (badgeText != null)
+                        Chip(
+                          label: Text(badgeText!,
+                              style: subTextStyle()
+                                  .copyWith(color: AppColors.errorColor)),
+                          backgroundColor:
+                              AppColors.primaryColor.withOpacity(0.15),
+                          padding: EdgeInsets.zero,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        )
+                      else
+                        Chip(
+                          label: Text(
+                              // order.vendorProvidePriceOffer
+                              //     ? order.totalOrderPrice.toString()
+                              //     :
+                              'لم يتم اضافة عرض',
+                              style: subTextStyle()
+                                  .copyWith(color: AppColors.errorColor)),
+                          backgroundColor:
+                              AppColors.primaryColor.withOpacity(0.15),
+                          padding: EdgeInsets.zero,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
                     if (trailing != null) trailing!,
                   ],
                 ),

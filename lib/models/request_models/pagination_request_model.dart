@@ -4,7 +4,7 @@ import 'package:emdad/shared/componants/constants.dart';
 
 class PaginationRequestModel {
   String? paginationToken;
-  int limit;
+  int? limit;
   PaginationRequestModel({
     this.paginationToken,
     this.limit = Constants.paginationSize,
@@ -13,7 +13,7 @@ class PaginationRequestModel {
   Map<String, dynamic> toMap() {
     return {
       if (paginationToken != null) 'paginationToken': paginationToken,
-      'limit': limit,
+      'limit': limit == null || limit == 0 ? Constants.paginationSize : limit,
     };
   }
 

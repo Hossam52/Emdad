@@ -10,6 +10,8 @@ class EditAdditionalItemPriceState extends VendorOrderStates {}
 
 class EditShippingPriceState extends VendorOrderStates {}
 
+class ChangeVendorManageTransportationState extends VendorOrderStates {}
+
 //GetVendorOrder online fetch data
 class GetVendorOrderLoadingState extends VendorOrderStates {}
 

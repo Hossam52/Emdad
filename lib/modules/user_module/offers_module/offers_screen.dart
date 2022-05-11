@@ -92,6 +92,9 @@ class OffersScreen extends StatelessWidget {
                         date: offers[index].createdAt,
                         image: offers[index].vendor.logoUrl,
                         hasBadge: true,
+                        badgeText: offers[index].vendorProvidePriceOffer
+                            ? offers[index].totalOrderPrice.toString()
+                            : null,
                         onTap: () async {
                           final mustReloadData = await navigateTo(
                               context,

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:emdad/models/request_models/filter_supply_request_model.dart';
 import 'package:emdad/models/request_models/pagination_request_model.dart';
 import 'package:emdad/shared/componants/constants.dart';
 import 'package:emdad/shared/network/remote/dio_helper.dart';
@@ -19,12 +20,15 @@ class VendorServices {
       VendorTransportationServices.instance;
 
   Future<Map<String, dynamic>> getAllSuplayRequests(
-      {PaginationRequestModel? pagination}) async {
-    log(Constants.token.toString());
+      {FilterSupplyRequestModel? filterOrders,
+      PaginationRequestModel? pagination}) async {
+    final Map<String, dynamic> map = filterOrders?.toMap() ?? {};
+    map.addAll(pagination?.toMap() ?? {});
+    log(map.toString());
     final res = await DioHelper.getData(
         url: VendorEndpoints.allSupplyRequests,
         token: Constants.vendorToken,
-        query: pagination?.toMap());
+        query: map);
     return res.data;
   }
 }

@@ -4,7 +4,7 @@ import 'package:emdad/models/request_models/user/create_supply_request_model.dar
 import 'package:emdad/models/request_models/user/create_transportation_request_model.dart';
 import 'package:emdad/models/request_models/pagination_request_model.dart';
 import 'package:emdad/models/request_models/user/create_transportation_request_model.dart';
-import 'package:emdad/models/request_models/user/filter_supply_request_model.dart';
+import 'package:emdad/models/request_models/filter_supply_request_model.dart';
 import 'package:emdad/models/request_models/user/resend_supply_request_model.dart';
 import 'package:emdad/shared/componants/constants.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';

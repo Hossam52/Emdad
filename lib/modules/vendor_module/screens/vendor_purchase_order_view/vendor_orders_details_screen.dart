@@ -150,7 +150,10 @@ class VendorOrderDetailsScreen extends StatelessWidget {
                       if (isCompleted == false) {
                         final price = await _showEditPriceDialog<double?>(
                           context: context,
-                          widget: const EditShippingPriceDialog(),
+                          widget: EditShippingPriceDialog(
+                            minPrice: order.transportationRequest!
+                                .transportationOffer!.price,
+                          ),
                         );
                         if (price != null) {
                           VendorOrderCubit.instance(context)

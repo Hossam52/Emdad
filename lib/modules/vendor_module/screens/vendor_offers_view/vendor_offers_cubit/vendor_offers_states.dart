@@ -13,3 +13,13 @@ class GetVendorOffersErrorState extends VendorOffersStates {
   final String error;
   GetVendorOffersErrorState({required this.error});
 }
+
+//GetMoreVendorOffers online fetch data
+class GetMoreVendorOffersLoadingState extends VendorOffersStates {}
+
+class GetMoreVendorOffersSuccessState extends VendorOffersStates {}
+
+class GetMoreVendorOffersErrorState extends VendorOffersStates {
+  final String error;
+  GetMoreVendorOffersErrorState({required this.error});
+}

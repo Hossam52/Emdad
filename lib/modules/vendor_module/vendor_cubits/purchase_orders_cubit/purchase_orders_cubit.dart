@@ -1,3 +1,5 @@
+import 'package:emdad/models/enums/enums.dart';
+import 'package:emdad/models/request_models/filter_supply_request_model.dart';
 import 'package:emdad/models/request_models/pagination_request_model.dart';
 import 'package:emdad/models/supply_request/supply_request.dart';
 import 'package:emdad/models/users/user/supply_requests/all_supply_requests.dart';
@@ -20,14 +22,18 @@ class PurchaseOrdersCubit extends Cubit<PurchaseOrdersStates> {
   final _vendorServices = VendorServices.instance;
 
   AllSupplyRequestsModel? _ordersModel;
-  List<SupplyRequest> get orders => _ordersModel?.preparingRequests ?? [];
+  List<SupplyRequest> get orders => _ordersModel?.supplyRequests ?? [];
   bool get errorInOrders => _ordersModel == null;
   bool get isLastPage => _ordersModel?.isLastPage ?? true;
+
+  FilterSupplyRequestModel get _getFilters => FilterSupplyRequestModel(
+      requestStatus: [SupplyRequestStatus.preparing.name]);
 
   Future<void> getPurchaseOrders() async {
     try {
       emit(GetPurchaseOrdersLoadingState());
       final map = await _vendorServices.getAllSuplayRequests(
+          filterOrders: _getFilters,
           pagination: PaginationRequestModel(limit: orders.length));
       _ordersModel = AllSupplyRequestsModel.fromMap(map);
       emit(GetPurchaseOrdersSuccessState());
@@ -40,6 +46,7 @@ class PurchaseOrdersCubit extends Cubit<PurchaseOrdersStates> {
     try {
       emit(GetMorePurchaseOrdersLoadingState());
       final map = await _vendorServices.getAllSuplayRequests(
+          filterOrders: _getFilters,
           pagination: PaginationRequestModel(paginationToken: orders.last.id));
       final incomingOrders = AllSupplyRequestsModel.fromMap(map);
       _ordersModel!.appendObjectToCurrent(incomingOrders);

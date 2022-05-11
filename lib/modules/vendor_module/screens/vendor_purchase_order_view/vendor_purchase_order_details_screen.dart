@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:emdad/models/enums/enums.dart';
+import 'package:emdad/modules/user_module/checkout/checkout_screen.dart';
 import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders_widgets/order_user_preview.dart';
 import 'package:emdad/modules/vendor_module/screens/vendor_purchase_order_view/vendor_order_cubit/vendor_order_cubit.dart';
 import 'package:emdad/modules/vendor_module/screens/vendor_purchase_order_view/vendor_order_cubit/vendor_order_states.dart';
@@ -107,12 +108,16 @@ class VendorPurchaseOrderDetailsScreen extends StatelessWidget {
                                       FacilityType.user ||
                                   (order.vendorHasRequestTransportation &&
                                       order.hasAcceptedTransportationOffer)) {
-                                log((order.transportationRequest
-                                        ?.transportationOffer)
-                                    .toString());
+                                if (order.transportationHandlerEnum ==
+                                    FacilityType.vendor) {
+                                  //Vendor who will handle transport
+                                  final res = await navigateTo(context,
+                                      CheckoutScreen(onConfirmPressed: () {}));
+
+                                  print(res.toString());
+                                }
                                 log(order.transportationHandler);
                                 //Start delivery
-
                               } else {
                                 if (order.transportationRequest == null) {
                                   //Vendor not request any transportation yet
@@ -125,7 +130,8 @@ class VendorPurchaseOrderDetailsScreen extends StatelessWidget {
                                           .transportationOffer ==
                                       null) {
                                     SharedMethods.showToast(context,
-                                        'لم يتم قبول عرض التوصيل من قبل اي احد لهذا الطلب');
+                                        'لم يتم قبول عرض التوصيل من قبل اي احد لهذا الطلب',
+                                        textColor: Colors.white);
                                   }
                                 }
                               }

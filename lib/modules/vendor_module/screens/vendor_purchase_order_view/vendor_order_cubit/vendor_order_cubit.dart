@@ -24,6 +24,11 @@ class VendorOrderCubit extends Cubit<VendorOrderStates> {
   final _services = VendorServices.instance;
   final String orderId;
   OrderRequestModel? _orderModel;
+
+  bool _hasVendorManageTransport =
+      false; //For know if the vendor has his own transportation
+  bool get vendorManageTransport => _hasVendorManageTransport;
+
   bool get hasErrorOnOrder =>
       _orderModel == null; //To know if i don't load this order yet
 
@@ -72,6 +77,11 @@ class VendorOrderCubit extends Cubit<VendorOrderStates> {
     }
     return (order.transportationHandlerEnum == FacilityType.user ||
         order.transportationPrice != 0);
+  }
+
+  void changeVendorManageTransport() {
+    _hasVendorManageTransport = !_hasVendorManageTransport;
+    emit(ChangeVendorManageTransportationState());
   }
 
 //APIS
