@@ -92,19 +92,22 @@ class _AddTransportationRequest extends StatelessWidget {
         return _CardWidget(
           onEditPrice:
               vendorOrderCubit.vendorManageTransport ? onEditPrice : null,
-          prefixWidget: ListTile(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-            onTap: () {
-              vendorOrderCubit.changeVendorManageTransport();
-            },
-            title: Text('هل لديك توصيل خاص؟', style: thirdTextStyle()),
-            trailing: CustomCheckbox(
-              isChecked: vendorOrderCubit.vendorManageTransport,
-              onChange: vendorOrderCubit.changeVendorManageTransport,
-            ),
-          ),
+          prefixWidget: order.vendorProvidePriceOffer
+              ? null
+              : ListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+                  onTap: () {
+                    vendorOrderCubit.changeVendorManageTransport();
+                  },
+                  title: Text('هل لديك توصيل خاص؟', style: thirdTextStyle()),
+                  trailing: CustomCheckbox(
+                    isChecked: vendorOrderCubit.vendorManageTransport,
+                    onChange: vendorOrderCubit.changeVendorManageTransport,
+                  ),
+                ),
           child: Builder(builder: (context) {
-            if (vendorOrderCubit.vendorManageTransport) {
+            if (vendorOrderCubit.vendorManageTransport ||
+                order.vendorProvidePriceOffer) {
               return _VendorHandleTransport(
                   onEditPrice: onEditPrice, order: order);
             }

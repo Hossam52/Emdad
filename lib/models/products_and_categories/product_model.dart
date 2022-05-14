@@ -19,11 +19,11 @@ class ProductModel {
     required this.isPriceShown,
     required this.images,
   }) {
-    images = images
-        .map(
-            (e) => 'https://emdad-ecommerce.herokuapp.com/images/products/' + e)
-        .toList();
-//TODO: Remove the link above as it for test
+//     images = images
+//         .map(
+//             (e) => 'https://emdad-ecommerce.herokuapp.com/images/products/' + e)
+//         .toList();
+// //TODO: Remove the link above as it for test
   }
   ProductModel.emptyModel()
       : id = '',
@@ -91,14 +91,16 @@ class ProductModel {
 }
 
 class ProductUnit {
+  String id;
   String productUnit;
   double pricePerUnit;
   int minimumAmountPerOrder;
-  ProductUnit({
-    required this.productUnit,
-    required this.pricePerUnit,
-    required this.minimumAmountPerOrder,
-  });
+
+  ProductUnit(
+      {required this.productUnit,
+      required this.pricePerUnit,
+      required this.minimumAmountPerOrder,
+      required this.id});
 
   String get generateStringPerUnit {
     return pricePerUnit.toInt().toString() + ' / ' + productUnit;
@@ -109,15 +111,16 @@ class ProductUnit {
       'productUnit': productUnit,
       'pricePerUnit': pricePerUnit,
       'minimumAmountPerOrder': minimumAmountPerOrder,
+      'id': id,
     };
   }
 
   factory ProductUnit.fromMap(Map<String, dynamic> map) {
     return ProductUnit(
-      productUnit: map['productUnit'] ?? '',
-      pricePerUnit: map['pricePerUnit']?.toDouble() ?? 0.0,
-      minimumAmountPerOrder: map['minimumAmountPerOrder']?.toInt() ?? 0,
-    );
+        productUnit: map['productUnit'] ?? '',
+        pricePerUnit: map['pricePerUnit']?.toDouble() ?? 0.0,
+        minimumAmountPerOrder: map['minimumAmountPerOrder']?.toInt() ?? 0,
+        id: map['_id'] ?? '');
   }
 
   String toJson() => json.encode(toMap());

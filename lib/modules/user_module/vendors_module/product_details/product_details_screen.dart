@@ -35,141 +35,147 @@ class ProductDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          ProductCubit(productId: productId!, isVendor: isVendor)..getProduct(),
-      child: ProductBlocBuilder(
-        builder: (context, state) {
-          final productCubit = ProductCubit.instance(context);
-          if (state is GetProductLoadingState) {
-            return const DefaultLoader();
-          }
-          if (state is GetProductErrorState) {
-            return NoDataWidget(
-                onPressed: () {
-                  productCubit.getProduct();
-                },
-                text: state.error);
-          }
-          if (!productCubit.loadedProduct) {
-            return NoDataWidget(
-                onPressed: () {
-                  productCubit.getProduct();
-                },
-                text: 'No product');
-          }
+    return Material(
+      child: BlocProvider(
+        create: (context) =>
+            ProductCubit(productId: productId!, isVendor: isVendor)
+              ..getProduct(),
+        child: ProductBlocBuilder(
+          builder: (context, state) {
+            final productCubit = ProductCubit.instance(context);
+            if (state is GetProductLoadingState) {
+              return const DefaultLoader();
+            }
+            if (state is GetProductErrorState) {
+              return NoDataWidget(
+                  onPressed: () {
+                    productCubit.getProduct();
+                  },
+                  text: state.error);
+            }
+            if (!productCubit.loadedProduct) {
+              return NoDataWidget(
+                  onPressed: () {
+                    productCubit.getProduct();
+                  },
+                  text: 'No product');
+            }
 
-          final product = productCubit.product;
-          return responsiveWidget(
-            responsive: (_, deviceInfo) => Scaffold(
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerFloat,
-              floatingActionButton: isVendor
-                  ? null
-                  : _AddToPriceOffer(
-                      product: product,
-                    ),
-              body: CustomScrollView(
-                slivers: [
-                  SliverAppBar(
-                    flexibleSpace: FlexibleSpaceBar(
-                      background: _ProductImages(
-                          pageController: pageController, product: product),
-                    ),
-                    pinned: true,
-                    expandedHeight: 250.h,
-                    leading: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: CircleAvatar(
-                        foregroundColor: Colors.black,
-                        backgroundColor: Colors.white,
-                        child: IconButton(
-                          icon: const Icon(Icons.close, size: 20),
-                          onPressed: () => Navigator.pop(context),
-                        ),
+            final product = productCubit.product;
+            return responsiveWidget(
+              responsive: (_, deviceInfo) => Scaffold(
+                floatingActionButtonLocation:
+                    FloatingActionButtonLocation.centerFloat,
+                floatingActionButton: isVendor
+                    ? null
+                    : _AddToPriceOffer(
+                        product: product,
                       ),
-                    ),
-                    actions: [
-                      Padding(
+                body: CustomScrollView(
+                  slivers: [
+                    SliverAppBar(
+                      flexibleSpace: FlexibleSpaceBar(
+                        background: _ProductImages(
+                            pageController: pageController, product: product),
+                      ),
+                      pinned: true,
+                      expandedHeight: 250.h,
+                      leading: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: CircleAvatar(
-                          foregroundColor: AppColors.thirdColor,
+                          foregroundColor: Colors.black,
                           backgroundColor: Colors.white,
                           child: IconButton(
-                            icon: Icon(isVendor ? Icons.edit : null, size: 20),
-                            onPressed: () {
-                              if (isVendor) {
-                                navigateTo(
-                                    context,
-                                    VendorEditProductScreen(
-                                      product: product,
-                                    ));
-                              }
-                            },
+                            icon: const Icon(Icons.close, size: 20),
+                            onPressed: () => Navigator.pop(context),
                           ),
                         ),
                       ),
-                      const ChangeLangWidget(
-                        color: Colors.white,
+                      actions: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: CircleAvatar(
+                            foregroundColor: AppColors.thirdColor,
+                            backgroundColor: Colors.white,
+                            child: IconButton(
+                              icon:
+                                  Icon(isVendor ? Icons.edit : null, size: 20),
+                              onPressed: () {
+                                if (isVendor) {
+                                  navigateTo(
+                                      context,
+                                      VendorEditProductScreen(
+                                        product: product,
+                                      ));
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                        const ChangeLangWidget(
+                          color: Colors.white,
+                        ),
+                      ],
+                      systemOverlayStyle: const SystemUiOverlayStyle(
+                        statusBarColor: Colors.transparent,
+                        statusBarBrightness: Brightness.light,
+                        statusBarIconBrightness: Brightness.light,
                       ),
-                    ],
-                    systemOverlayStyle: const SystemUiOverlayStyle(
-                      statusBarColor: Colors.transparent,
-                      statusBarBrightness: Brightness.light,
-                      statusBarIconBrightness: Brightness.light,
                     ),
-                  ),
-                  SliverPadding(
-                    padding: const EdgeInsets.all(16),
-                    sliver: SliverList(
-                      delegate: SliverChildListDelegate(
-                        [
-                          Text(product.name, style: headersTextStyle()),
-                          const SizedBox(height: 5),
-                          Text(product.productType, // 'الرحمه للمواد الغذائية',
-                              style: thirdTextStyle()
-                                  .copyWith(color: AppColors.thirdColor)),
-                          const SizedBox(height: 20),
-                          ProductCustomTile(
-                            title: 'تفاصيل المنتج',
-                            children: [
-                              Text(
-                                product.description,
+                    SliverPadding(
+                      padding: const EdgeInsets.all(16),
+                      sliver: SliverList(
+                        delegate: SliverChildListDelegate(
+                          [
+                            Text(product.name, style: headersTextStyle()),
+                            const SizedBox(height: 5),
+                            Text(
+                                product
+                                    .productType, // 'الرحمه للمواد الغذائية',
                                 style: thirdTextStyle()
-                                    .copyWith(fontWeight: FontWeight.w400),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 20),
-                          ProductCustomTile(
-                            title: 'وحدات القياس',
-                            children: [
-                              const SizeBuildItem(
-                                title: 'وحدة القياس',
-                                value: 'الحد الادني',
-                                price: 'سعر الوحدة',
-                              ),
-                              ...product.units
-                                  .map(
-                                    (unit) => SizeBuildItem(
-                                        title: unit.productUnit,
-                                        value: unit.minimumAmountPerOrder
-                                            .toString(),
-                                        price: getPrice(product, unit)),
-                                  )
-                                  .toList()
-                            ],
-                          ),
-                          const SizedBox(height: 210),
-                        ],
+                                    .copyWith(color: AppColors.thirdColor)),
+                            const SizedBox(height: 20),
+                            ProductCustomTile(
+                              title: 'تفاصيل المنتج',
+                              children: [
+                                Text(
+                                  product.description,
+                                  style: thirdTextStyle()
+                                      .copyWith(fontWeight: FontWeight.w400),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 20),
+                            ProductCustomTile(
+                              title: 'وحدات القياس',
+                              children: [
+                                const SizeBuildItem(
+                                  title: 'وحدة القياس',
+                                  value: 'الحد الادني',
+                                  price: 'سعر الوحدة',
+                                ),
+                                ...product.units
+                                    .map(
+                                      (unit) => SizeBuildItem(
+                                          title: unit.productUnit,
+                                          value: unit.minimumAmountPerOrder
+                                              .toString(),
+                                          price: getPrice(product, unit)),
+                                    )
+                                    .toList()
+                              ],
+                            ),
+                            const SizedBox(height: 210),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

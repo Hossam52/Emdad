@@ -17,22 +17,31 @@ class DefaultCachedNetworkImage extends StatelessWidget {
   BoxFit? fit;
   @override
   Widget build(BuildContext context) {
-    return CachedNetworkImage(
-      imageUrl: imageUrl,
-      fit: fit,
-      errorWidget: (context, url, error) =>
-          const Center(child: Icon(Icons.error)),
-      placeholder: (context, url) => Shimmer.fromColors(
-        highlightColor: (Colors.grey[200])!,
-        baseColor: (Colors.grey[300])!,
-        child: Container(
-          width: double.infinity,
-          height: height,
-          color: Colors.grey[300],
+    return Container(
+      color: Colors.grey[200]!.withOpacity(0.4),
+      child: CachedNetworkImage(
+        imageUrl: imageUrl,
+        fit: fit,
+        errorWidget: (context, url, error) {
+          return Image.asset(
+            'assets/images/image_not_avilable.png',
+            width: double.infinity,
+            height: double.infinity,
+          );
+          return const Center(child: Icon(Icons.error));
+        },
+        placeholder: (context, url) => Shimmer.fromColors(
+          highlightColor: (Colors.grey[200])!,
+          baseColor: (Colors.grey[300])!,
+          child: Container(
+            width: double.infinity,
+            height: height,
+            color: Colors.grey[300],
+          ),
         ),
+        width: width,
+        height: height,
       ),
-      width: width,
-      height: height,
     );
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:emdad/models/products_and_categories/product_model.dart';
 import 'package:emdad/models/supply_request/supply_request.dart';
 import 'package:emdad/models/supply_request/supply_request_cart.dart';
@@ -30,6 +32,29 @@ class EditOrderItemsWidget extends StatelessWidget {
       icon: const Icon(MyIcons.edit, color: Colors.white),
       buttonColor: AppColors.secondaryColor,
       onPressed: () async {
+        // log(order.requestItems
+        //     .map((e) => ProductModelInCart(
+        //         product: ProductModel.emptyModel().copyWith(
+        //           units: e.units,
+        //           name: e.name,
+        //         ),
+        //         selectedProductUnit: SupplyRequestCartModel(
+        //             units: e.units,
+        //             name: e.name,
+        //             productUnit: e.productUnit,
+        //             quantity: e.quantity,
+        //             unitPrice: e.units.firstWhere(
+        //                 (element) => element.productUnit == e.productUnit,
+        //                 orElse: () {
+        //               return ProductUnit(
+        //                   productUnit: '',
+        //                   pricePerUnit: 0,
+        //                   minimumAmountPerOrder: 0);
+        //             }).pricePerUnit,
+        //             id: 'e.units.firstWhere((element) => element.productUnit==e.productUnit)')))
+        //     .toList()
+        //     .toString());
+        // return;
         final successResendOrder = await navigateTo(
           context,
           MultiBlocProvider(
@@ -39,18 +64,23 @@ class EditOrderItemsWidget extends StatelessWidget {
                   intialCartItems: order.requestItems
                       .map((e) => ProductModelInCart(
                           product: ProductModel.emptyModel().copyWith(
-                            units: e.units,
-                            name: e.name,
-                          ),
+                              units: e.units, name: e.name, images: ['']),
                           selectedProductUnit: SupplyRequestCartModel(
                               units: e.units,
                               name: e.name,
                               productUnit: e.productUnit,
                               quantity: e.quantity,
-                              unitPrice: e.units
-                                  .firstWhere((element) =>
-                                      element.productUnit == e.productUnit)
-                                  .pricePerUnit,
+                              unitPrice: e.units.firstWhere(
+                                  (element) =>
+                                      element.productUnit == e.productUnit,
+                                  orElse: () {
+                                return e.units.first;
+                                ProductUnit(
+                                    productUnit: '',
+                                    pricePerUnit: 0,
+                                    minimumAmountPerOrder: 0,
+                                    id: '');
+                              }).pricePerUnit,
                               id: 'e.units.firstWhere((element) => element.productUnit==e.productUnit)')))
                       .toList(),
                   initialAdditioalItems:

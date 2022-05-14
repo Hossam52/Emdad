@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:emdad/models/general_models/upload_image_model.dart';
 import 'package:emdad/models/products_and_categories/product_model.dart';
@@ -121,7 +122,8 @@ class VendorProductCrudCubit extends Cubit<VendorProductCrudStates> {
     _units.add(ProductUnit(
         productUnit: productUnit,
         pricePerUnit: pricePerUnit,
-        minimumAmountPerOrder: minimumAmount));
+        minimumAmountPerOrder: minimumAmount,
+        id: math.Random.secure().nextInt(1 << 20).toString()));
     emit(AddPriceUnit());
   }
 

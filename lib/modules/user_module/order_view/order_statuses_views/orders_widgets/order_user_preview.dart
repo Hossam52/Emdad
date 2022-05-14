@@ -53,7 +53,7 @@ class OrderUserPreview extends StatelessWidget {
           color: AppColors.secondaryColor,
           borderRadius: BorderRadius.circular(10),
         ),
-        child: const Icon(Icons.add, color: Colors.white),
+        child: const Icon(MyIcons.add_drive, color: Colors.white),
       );
     } else {
       return const SizedBox.shrink();

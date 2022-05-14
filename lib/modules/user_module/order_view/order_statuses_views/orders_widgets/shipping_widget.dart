@@ -51,12 +51,13 @@ class _Transportation extends StatelessWidget {
   final SupplyRequest order;
   @override
   Widget build(BuildContext context) {
+    if (order.transportationHandlerEnum == FacilityType.vendor) {
+      return _VendorHandleTransport(order: order);
+    }
     return _CardWidget(
       child: Builder(builder: (context) {
         log(order.transportationHandler);
-        if (order.transportationHandlerEnum == FacilityType.vendor) {
-          return _VendorHandleTransport(order: order);
-        }
+
         if (order.transportationRequest == null) {
           return _AddTransportationRequest(order: order);
         }
@@ -193,26 +194,55 @@ class _VendorHandleTransport extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!order.hasTransportation) {
-      return const Text('لم يتم طلب وسيلة نقل من المورد الي الان');
+      if (order.vendorProvidePriceOffer) {
+        return ShippingCardBuildItem(
+          name: 'سوف يقوم المورد بعملية النقل', // 'عربه نصف نقل',
+          info: 'سعر النقل ${order.transportationPrice}',
+
+          icon: const Icon(MyIcons.truck_thin, color: AppColors.primaryColor),
+          trailing: const SizedBox.shrink(),
+        );
+      }
+      return const ShippingCardBuildItem(
+        name: 'لم يتم طلب وسيلة نقل من المورد الي الان', // 'عربه نصف نقل',
+        info: '',
+
+        icon: Icon(MyIcons.truck_thin, color: AppColors.errorColor),
+        trailing: SizedBox.shrink(),
+        borderColor: AppColors.errorColor,
+      );
+      return const _CardWidget(
+          child: Text('لم يتم طلب وسيلة نقل من المورد الي الان'));
     }
 
     final transportationRequest = order.transportationRequest!;
     final transportOffer = transportationRequest.transportationOffer;
+
+    if (transportOffer != null) {
+      return ShippingCardBuildItem(
+        name: transportationRequest.transportationMethod, // 'عربه نصف نقل',
+        info: transportOffer.notes,
+
+        icon: const Icon(MyIcons.truck_thin, color: AppColors.primaryColor),
+        trailing: trailingWidget(transportOffer),
+      );
+    }
     return ShippingCardBuildItem(
       name: transportationRequest.transportationMethod, // 'عربه نصف نقل',
-      info: transportOffer != null ? transportOffer.notes : '',
+      info: 'لم يتم قبول عرض وسيلة النقل من المورد',
 
-      icon: const Icon(MyIcons.truck_thin, color: AppColors.primaryColor),
-      trailing: trailingWidget(transportOffer),
+      icon: const Icon(MyIcons.truck_thin, color: AppColors.errorColor),
+      trailing: const SizedBox.shrink(),
+      borderColor: AppColors.errorColor,
     );
   }
 
   Widget trailingWidget(TransportationOffer? transportationOffer) {
-    if (transportationOffer == null) {
-      return const Text('لم يتم قبول عرض وسيلة النقل من المورد');
-    }
+    // if (transportationOffer != null) {
+    //   return const Text('لم يتم قبول عرض وسيلة النقل من المورد');
+    // }
     return Text(
-      transportationOffer.price.toString(),
+      transportationOffer!.price.toString(),
       style: secondaryTextStyle().copyWith(fontWeight: FontWeight.w700),
     );
   }
