@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:emdad/models/enums/enums.dart';
 import 'package:emdad/models/general_models/facility_type_model.dart';
@@ -27,6 +28,7 @@ class SupplyRequest {
       transportationPrice; //only return when the transportation handler is vendor
   String generatedId;
   String paymentStatus;
+  late PaymentStatus paymentStatusEnum;
   SupplyRequestChangeLogsModel? statusChangeLog;
   String transportationRequestId;
   UserPreviewModel user;
@@ -77,6 +79,13 @@ class SupplyRequest {
     } else {
       throw 'unkown transportation handler';
     }
+
+    //For payment status
+    if (paymentStatus == PaymentStatus.paid.name) {
+      paymentStatusEnum = PaymentStatus.paid;
+    } else {
+      paymentStatusEnum = PaymentStatus.unpaid;
+    }
   }
   bool get vendorProvidePriceOffer => totalOrderPrice != 0;
   bool get hasTransportation => transportationRequest != null;
@@ -118,6 +127,9 @@ class SupplyRequest {
   }
 
   double get totalOrderPrice => orderItemsPrice + transportationPrice;
+
+  bool get isPayed => paymentStatusEnum == PaymentStatus.paid;
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,

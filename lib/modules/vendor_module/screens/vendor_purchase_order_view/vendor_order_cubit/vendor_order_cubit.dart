@@ -24,6 +24,7 @@ class VendorOrderCubit extends Cubit<VendorOrderStates> {
   final _services = VendorServices.instance;
   final String orderId;
   OrderRequestModel? _orderModel;
+  final TextEditingController estimationTime = TextEditingController();
 
   bool _hasVendorManageTransport =
       false; //For know if the vendor has his own transportation

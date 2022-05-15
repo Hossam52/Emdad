@@ -36,8 +36,7 @@ class VendorDeliveryWidget extends StatelessWidget {
         onEditPrice: onEditPrice,
       );
     } else if (order.transportationRequest!.transportationOffer == null) {
-      return _TransportationRequest(
-          transportationRequest: order.transportationRequest!);
+      return _TransportationRequest(onEditPrice: onEditPrice, order: order);
     } else {
       return _TransportationOffer(
         order: order,
@@ -169,15 +168,21 @@ class _AddTransportationRequest extends StatelessWidget {
 }
 
 class _TransportationRequest extends StatelessWidget {
-  const _TransportationRequest({Key? key, required this.transportationRequest})
+  const _TransportationRequest(
+      {Key? key, required this.order, this.onEditPrice})
       : super(key: key);
-  final OrderTransportationRequestModel transportationRequest;
+  final SupplyRequest order;
+  final VoidCallback? onEditPrice;
   @override
   Widget build(BuildContext context) {
+    final transportationRequest = order.transportationRequest!;
     return _CardWidget(
+      onEditPrice: onEditPrice,
       child: Column(
         children: [
-          _rowItem('وسيلة النقل', transportationRequest.transportationMethod),
+          _rowItem('وسيلة النقل المطلوبة',
+              transportationRequest.transportationMethod),
+          _CostForRequester(order: order),
           TextButton(
               onPressed: () {
                 navigateTo(
@@ -212,11 +217,24 @@ class _TransportationOffer extends StatelessWidget {
             order.transportationRequest!.transportationOffer!.price.toString(),
           ),
           const Divider(),
-          _rowItem('تكلفة الطلب للمستخدم',
-              SharedMethods.getPrice(order.transportationPrice)),
-          _rowItem('الضريبة', '12%'),
+          _CostForRequester(order: order),
         ],
       ),
+    );
+  }
+}
+
+class _CostForRequester extends StatelessWidget {
+  const _CostForRequester({Key? key, required this.order}) : super(key: key);
+  final SupplyRequest order;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        _rowItem('تكلفة الطلب للمستخدم',
+            SharedMethods.getPrice(order.transportationPrice)),
+        _rowItem('الضريبة', '12%'),
+      ],
     );
   }
 }

@@ -195,7 +195,9 @@ class LocationObject {
     required this.lat,
     required this.lng,
   });
-
+  factory LocationObject.empty() {
+    return LocationObject(lat: 0, lng: 0);
+  }
   Map<String, dynamic> toMap() {
     return {
       'lat': lat,

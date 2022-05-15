@@ -3,6 +3,8 @@ import 'package:emdad/layout/transporter_layout/cubit/transporter_state.dart';
 import 'package:emdad/layout/transporter_layout/transporter_bottom_navigation_bar.dart';
 import 'package:emdad/layout/user_layout/layout_components/user_layout_drawer.dart';
 import 'package:emdad/layout/widgets/profile_check_wrapper.dart';
+import 'package:emdad/modules/transporter_module/transporter_cubits/transporter_offers_cubit/transporter_offers_cubit.dart';
+import 'package:emdad/modules/transporter_module/transporter_cubits/transporter_purchase_orders_cubit/transporter_dlivery_orders_cubit.dart';
 import 'package:emdad/shared/componants/constants.dart';
 import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
 import 'package:emdad/shared/cubit/app_cubit.dart';
@@ -37,8 +39,19 @@ class _TransporterLayoutState extends State<TransporterLayout> {
   @override
   Widget build(BuildContext context) {
     return ProfileCheckWrapper(
-      child: BlocProvider(
-        create: (context) => TransporterCubit(),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => TransporterCubit(),
+          ),
+          BlocProvider(
+            create: (context) => TransporterOffersCubit()..getOffers(),
+          ),
+          BlocProvider(
+            create: (context) =>
+                TransporterDeliveryOrdersCubit()..getDeliveryOrders(),
+          ),
+        ],
         child: BlocConsumer<TransporterCubit, TransporterState>(
           listener: (context, state) {},
           builder: (context, state) {
@@ -66,7 +79,7 @@ class _TransporterLayoutState extends State<TransporterLayout> {
                   actions: [
                     IconButton(
                       icon: SvgPicture.asset(
-                          '${Constants.defaultIconUrl}/notification.svg'),
+                          '//${Constants.defaultIconUrl}/notification.svg'),
                       onPressed: () {},
                     ),
                     const ChangeLangWidget(),

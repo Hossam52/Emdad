@@ -4,6 +4,7 @@ enum VerifyOtpStep { phone, email }
 enum ImageType { products, users }
 
 enum FacilityType { user, vendor, transport }
+enum PaymentStatus { unpaid, paid }
 enum SupplyRequestStatus {
   //Handles inside  my orders
   awaitingQuotation,

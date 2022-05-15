@@ -50,6 +50,7 @@ dependencies:
   intl: ^0.17.0
   pull_to_refresh: ^2.0.0
   flutter_progress_hud: ^2.0.0
+  fluttertoast: ^8.0.9
 
 dev_dependencies:
   flutter_test:

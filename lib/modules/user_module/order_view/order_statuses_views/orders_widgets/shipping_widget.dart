@@ -4,6 +4,7 @@ import 'package:emdad/models/enums/enums.dart';
 import 'package:emdad/models/supply_request/order_transportation_request.dart';
 import 'package:emdad/models/supply_request/supply_request.dart';
 import 'package:emdad/modules/user_module/order_view/order_cubit/order_cubit.dart';
+import 'package:emdad/modules/user_module/order_view/order_cubit/order_states.dart';
 import 'package:emdad/modules/user_module/order_view/shipping/shipping_card_build_item.dart';
 import 'package:emdad/modules/user_module/order_view/shipping/shipping_offers_screen.dart';
 import 'package:emdad/shared/componants/components.dart';
@@ -15,6 +16,7 @@ import 'package:emdad/shared/widgets/default_home_title_build_item.dart';
 import 'package:emdad/shared/widgets/dialogs/request_transform_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ShippingWidget extends StatelessWidget {
   const ShippingWidget({Key? key, required this.order}) : super(key: key);
@@ -97,33 +99,57 @@ class _AddTransportationRequest extends StatelessWidget {
   final SupplyRequest order;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
+    if (!order.isPayed) {
+      return const Text('لا يمكنك طلب وسيلة نقل الان حتي يتم الدفع');
+    }
+    return OrderBlocConsumer(
+      listener: (context, state) {
+        if (state is CreateTransportRequestErrorState) {
+          Navigator.pop(context);
+
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(state.error)));
+        }
+      },
+      builder: (context, state) {
+        return Column(
           children: [
-            const Text('لم يتم طلب شركة نقل حتي الان'),
-            const Spacer(),
-            TextButton(
-                onPressed: () async {
-                  await showDialog<bool>(
-                      context: context,
-                      builder: (_) {
-                        return RequestTransformDialog(
-                          onCreateTransportRequest: (
-                              {required String city,
-                              required String transportationMethod}) {
-                            OrderCubit.instance(context).createTransportRequest(
-                                transportationMethod: transportationMethod,
-                                city: city);
-                          },
-                          isLoading: false,
-                        );
-                      });
-                },
-                child: const Text('طلب شركة نقل')),
+            Row(
+              children: [
+                const Text('لم يتم طلب شركة نقل حتي الان'),
+                const Spacer(),
+                TextButton(
+                    onPressed: () async {
+                      if (!order.isPayed) {
+                        SharedMethods.showToast(
+                            context, 'يجب الدفع قبل طلب شركة نقل',
+                            textColor: Colors.white,
+                            color: AppColors.errorColor);
+                        return;
+                      }
+                      await showDialog<bool>(
+                          context: context,
+                          builder: (_) {
+                            return RequestTransformDialog(
+                              onCreateTransportRequest: (
+                                  {required String city,
+                                  required String transportationMethod}) {
+                                OrderCubit.instance(context)
+                                    .createTransportRequest(
+                                        transportationMethod:
+                                            transportationMethod,
+                                        city: city);
+                              },
+                              isLoading: false,
+                            );
+                          });
+                    },
+                    child: const Text('طلب شركة نقل')),
+              ],
+            ),
           ],
-        ),
-      ],
+        );
+      },
     );
   }
 }
@@ -232,7 +258,7 @@ class _VendorHandleTransport extends StatelessWidget {
       info: 'لم يتم قبول عرض وسيلة النقل من المورد',
 
       icon: const Icon(MyIcons.truck_thin, color: AppColors.errorColor),
-      trailing: const SizedBox.shrink(),
+      trailing: Text(order.transportationPrice.toString()),
       borderColor: AppColors.errorColor,
     );
   }

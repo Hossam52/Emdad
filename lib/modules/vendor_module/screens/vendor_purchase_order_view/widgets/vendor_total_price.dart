@@ -26,37 +26,39 @@ class VendorTotalPrice extends StatelessWidget {
             margin: const EdgeInsets.all(16),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Column(
-                      children: [
-                        OrderTotalRowItem(
-                            title: 'السعر الصافي',
-                            value: !order.vendorProvidePriceOffer
-                                ? 'السعر لم يحدد بعد'
-                                : order.orderItemsPrice.toInt().toString()),
-                        const SizedBox(height: 10),
-                        if (order.transportationHandlerEnum ==
-                            FacilityType.vendor)
+              child: IntrinsicHeight(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
                           OrderTotalRowItem(
-                              title: 'الشحن',
-                              value: SharedMethods.getPrice(
-                                  order.transportationPrice)),
-                        const SizedBox(height: 10),
-                        const OrderTotalRowItem(title: 'الضريبة', value: '١٢٪'),
-                      ],
+                              title: 'السعر الصافي',
+                              value: !order.vendorProvidePriceOffer
+                                  ? 'السعر لم يحدد بعد'
+                                  : order.orderItemsPrice.toInt().toString()),
+                          const SizedBox(height: 10),
+                          if (order.transportationHandlerEnum ==
+                              FacilityType.vendor)
+                            OrderTotalRowItem(
+                                title: 'الشحن',
+                                value: SharedMethods.getPrice(
+                                    order.transportationPrice)),
+                          const SizedBox(height: 10),
+                          const OrderTotalRowItem(
+                              title: 'الضريبة', value: '١٢٪'),
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 10.w),
-                  Container(
-                    width: 103.w,
-                    height: 63.h,
-                    color: AppColors.textButtonColor,
-                    child: FittedBox(
+                    SizedBox(width: 10.w),
+                    Container(
+                      width: 103.w,
+                      // height: 63.h,
+                      color: AppColors.textButtonColor,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text('إجمالي',
                               style: subTextStyle().copyWith(
@@ -69,8 +71,8 @@ class VendorTotalPrice extends StatelessWidget {
                         ],
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             )),
       ],

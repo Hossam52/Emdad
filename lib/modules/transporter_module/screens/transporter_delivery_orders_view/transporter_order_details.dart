@@ -1,4 +1,6 @@
 import 'package:emdad/modules/transporter_module/screens/transporter_delivery_orders_view/transport_process_screen.dart';
+import 'package:emdad/modules/transporter_module/transporter_widgets/transporter_all_items.dart';
+import 'package:emdad/modules/transporter_module/transporter_widgets/transporter_price_overview.dart';
 import 'package:emdad/modules/user_module/order_view/order_item_build.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
@@ -71,38 +73,10 @@ class _TransporterOfferDetailsScreenState
                 ],
               ),
               SizedBox(height: 40.h),
-              CustomText(
-                text: 'قائمة الطلبات',
-                textStyle: thirdTextStyle(),
+              TransporterAllItemsWidget(
+                additionalItems: [],
+                items: [],
               ),
-              SizedBox(height: 20.h),
-
-              /// put list view here //
-
-              ListView.separated(
-                itemCount: 3,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                separatorBuilder: (context, index) =>
-                    const SizedBox(height: 15),
-                itemBuilder: (context, index) => const OrderItemBuild(
-                  items: [
-                    TableItemData(
-                      headerName: 'صنف',
-                      valueName: 'طمامطم',
-                    ),
-                    TableItemData(
-                      headerName: 'كمية',
-                      valueName: '3',
-                    ),
-                    TableItemData(
-                      headerName: 'وحدة',
-                      valueName: 'طن',
-                    )
-                  ],
-                ),
-              ),
-
               SizedBox(height: 20.h),
               Row(
                 children: [
@@ -154,85 +128,8 @@ class _TransporterOfferDetailsScreenState
                 ],
               ),
               SizedBox(height: 20.h),
-              Card(
-                elevation: 5,
-                shape: const RoundedRectangleBorder(),
-                clipBehavior: Clip.antiAlias,
-                child: SizedBox(
-                  height: 63.h,
-                  width: double.infinity,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10.w),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CustomText(
-                                text: 'تكلفة الطلب',
-                                textAlign: TextAlign.start,
-                                textStyle: subTextStyle()
-                                    .copyWith(color: AppColors.primaryColor),
-                              ),
-                              CustomText(
-                                text: 'الضريبة',
-                                textAlign: TextAlign.start,
-                                textStyle: subTextStyle()
-                                    .copyWith(color: AppColors.primaryColor),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CustomText(
-                            text: '٩٠٩٠ ريال سعودي',
-                            textAlign: TextAlign.start,
-                            textStyle: subTextStyle()
-                                .copyWith(fontWeight: FontWeight.normal),
-                          ),
-                          CustomText(
-                            text: '١٢٪',
-                            textAlign: TextAlign.start,
-                            textStyle: subTextStyle()
-                                .copyWith(fontWeight: FontWeight.normal),
-                          ),
-                        ],
-                      ),
-                      Expanded(
-                        child: Container(
-                          width: 78.w,
-                          color: AppColors.textButtonColor,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CustomText(
-                                text: 'إجمالي',
-                                textAlign: TextAlign.start,
-                                textStyle: subTextStyle()
-                                    .copyWith(color: Colors.white),
-                              ),
-                              CustomText(
-                                text: '٩٠٩٠ ريال سعودي',
-                                textAlign: TextAlign.start,
-                                textStyle: subTextStyle().copyWith(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              const TransporterPriceOverview(
+                price: 10,
               ),
               SizedBox(height: 40.h),
               Align(
