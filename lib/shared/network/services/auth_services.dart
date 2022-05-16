@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:emdad/models/request_models/change_email_request_model.dart';
 import 'package:emdad/models/request_models/change_password_request_model.dart';
+import 'package:emdad/models/request_models/update_profile_request_model.dart';
+import 'package:emdad/modules/auth_module/cubit/auth_cubit.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/network/end_points.dart';
 import 'package:emdad/shared/network/remote/dio_helper.dart';
@@ -77,6 +79,15 @@ class AuthServices {
       token: SharedMethods.getUserToken(),
       data: changeEmailRequestModel.toMap(),
     );
+    return response.data;
+  }
+
+  static Future<Map<String, dynamic>> updateProfile(
+      UpdateProfileRequestModel requestModel) async {
+    final response = await DioHelper.postData(
+        url: EndPoints.updateProfile,
+        token: SharedMethods.getUserToken(),
+        data: requestModel.toMap());
     return response.data;
   }
 

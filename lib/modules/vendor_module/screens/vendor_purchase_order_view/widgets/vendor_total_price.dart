@@ -39,8 +39,7 @@ class VendorTotalPrice extends StatelessWidget {
                                   ? 'السعر لم يحدد بعد'
                                   : order.orderItemsPrice.toInt().toString()),
                           const SizedBox(height: 10),
-                          if (order.transportationHandlerEnum ==
-                              FacilityType.vendor)
+                          if (order.isVendor)
                             OrderTotalRowItem(
                                 title: 'الشحن',
                                 value: SharedMethods.getPrice(

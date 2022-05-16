@@ -16,6 +16,7 @@ class OrderItemBuild extends StatelessWidget {
     this.radius = 10,
     // this.hasTotal = true,
     this.totalPriceAfterTaxes,
+    this.hasOverlayColor = false,
   }) : super(key: key);
 
   // final List<String> columns;
@@ -24,9 +25,11 @@ class OrderItemBuild extends StatelessWidget {
 
   final String? totalPriceAfterTaxes;
   final List<TableItemData> items;
+  final bool hasOverlayColor;
 
   @override
   Widget build(BuildContext context) {
+    final overlayColor = Colors.grey.withOpacity(0.4);
     return Card(
       clipBehavior: Clip.antiAliasWithSaveLayer,
       elevation: 3,
@@ -42,7 +45,10 @@ class OrderItemBuild extends StatelessWidget {
                 columns: items.map((e) => e.headerName).toList(),
                 rows: items.map((e) => e.valueName).toList(),
                 columnSpacing: 5.w,
-                headingRowColor: Colors.grey.withOpacity(0.2),
+                headingRowColor: hasOverlayColor
+                    ? overlayColor.withOpacity(0.6)
+                    : Colors.grey.withOpacity(0.2),
+                dataRowColor: hasOverlayColor ? overlayColor : null,
                 headingTextColor: AppColors.primaryColor,
                 dataTextColor: Colors.black,
               ),

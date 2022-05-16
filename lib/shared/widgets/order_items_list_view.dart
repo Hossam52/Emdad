@@ -39,6 +39,8 @@ class OrderItemsListView extends StatelessWidget {
             return GestureDetector(
               onTap: onItemPress == null ? null : () => onItemPress!(item),
               child: OrderItemBuild(
+                hasOverlayColor:
+                    item.totalPrice == null || item.totalPrice == 0,
                 totalPriceAfterTaxes: displayTotalAfterTaxes
                     ? SharedMethods.getPrice(item.totalPriceAfterTaxes)
                     : null,
@@ -101,6 +103,7 @@ class OrderAdditionalItemsListView extends StatelessWidget {
                 ? null
                 : () => onItemTap!(additionalItems[index]),
             child: OrderItemBuild(
+              hasOverlayColor: additionalItems[index].price == 0,
               items: [
                 TableItemData(
                   headerName: 'الوصف',

@@ -53,7 +53,7 @@ class _Transportation extends StatelessWidget {
   final SupplyRequest order;
   @override
   Widget build(BuildContext context) {
-    if (order.transportationHandlerEnum == FacilityType.vendor) {
+    if (order.isVendor) {
       return _VendorHandleTransport(order: order);
     }
     return _CardWidget(
@@ -165,7 +165,12 @@ class _TransportationRequest extends StatelessWidget {
         _rowItem('وسيلة النقل', transportationRequest.transportationMethod),
         TextButton(
             onPressed: () {
-              navigateTo(context, ShippingOffersScreen()
+              navigateTo(
+                  context,
+                  ShippingOffersScreen(
+                    orderCubit: OrderCubit.instance(context),
+                    transportationRequestId: transportationRequest.id,
+                  )
                   // VendorShippingOffersScreen(
                   //   orderCubit: VendorOrderCubit.instance(context),
                   //   transportationRequestId: transportationRequest.id,
@@ -237,8 +242,6 @@ class _VendorHandleTransport extends StatelessWidget {
         trailing: SizedBox.shrink(),
         borderColor: AppColors.errorColor,
       );
-      return const _CardWidget(
-          child: Text('لم يتم طلب وسيلة نقل من المورد الي الان'));
     }
 
     final transportationRequest = order.transportationRequest!;
@@ -255,11 +258,11 @@ class _VendorHandleTransport extends StatelessWidget {
     }
     return ShippingCardBuildItem(
       name: transportationRequest.transportationMethod, // 'عربه نصف نقل',
-      info: 'لم يتم قبول عرض وسيلة النقل من المورد',
+      // info: 'لم يتم قبول عرض وسيلة النقل من المورد',
+      info: 'تم طلب وسيلة نقل من قبل المورد',
 
-      icon: const Icon(MyIcons.truck_thin, color: AppColors.errorColor),
+      icon: const Icon(MyIcons.truck_thin),
       trailing: Text(order.transportationPrice.toString()),
-      borderColor: AppColors.errorColor,
     );
   }
 

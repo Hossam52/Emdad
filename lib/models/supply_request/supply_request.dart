@@ -90,8 +90,7 @@ class SupplyRequest {
   bool get vendorProvidePriceOffer => totalOrderPrice != 0;
   bool get hasTransportation => transportationRequest != null;
   bool get userRequestTransport {
-    return (transportationHandlerEnum == FacilityType.user &&
-        transportationRequest != null);
+    return (isUser && transportationRequest != null);
   }
 
   bool get userHasTransport {
@@ -100,8 +99,7 @@ class SupplyRequest {
   }
 
   bool get vendorHasRequestTransportation {
-    return (transportationHandlerEnum == FacilityType.vendor &&
-        transportationRequest != null);
+    return (isVendor && transportationRequest != null);
   }
 
   bool get hasAcceptedTransportationOffer {
@@ -129,6 +127,12 @@ class SupplyRequest {
   double get totalOrderPrice => orderItemsPrice + transportationPrice;
 
   bool get isPayed => paymentStatusEnum == PaymentStatus.paid;
+
+  bool get userCanSendPurchaseOrder =>
+      requestStatusEnum == SupplyRequestStatus.awaitingApproval;
+
+  bool get isUser => transportationHandlerEnum == FacilityType.user;
+  bool get isVendor => transportationHandlerEnum == FacilityType.vendor;
 
   Map<String, dynamic> toMap() {
     return {

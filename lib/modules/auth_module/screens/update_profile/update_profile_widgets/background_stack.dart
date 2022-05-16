@@ -8,25 +8,28 @@ class BackgroundStack extends StatelessWidget {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return Stack(
-      children: [
-        Positioned(
-            top: -height * 0.3 * 1.3,
-            right: 0,
-            left: 0,
-            child: buildCircle(height * 0.3, AppColors.secondaryColor)),
-        Positioned(
-            right: -height * 0.3 * 1.2,
-            top: 0,
-            bottom: 0,
-            child: buildCircle(
-                height * 0.3, AppColors.thirdColor.withOpacity(0.17))),
-        Container(
-          height: double.infinity,
-          width: double.infinity,
-          child: child,
-        ),
-      ],
+    return Container(
+      color: Colors.grey.withOpacity(0.1),
+      child: Stack(
+        children: [
+          Positioned(
+              top: -height * 0.3 * 1.3,
+              right: 0,
+              left: 0,
+              child: buildCircle(height * 0.3, AppColors.secondaryColor)),
+          Positioned(
+              right: -height * 0.3 * 1.2,
+              top: 0,
+              bottom: 0,
+              child: buildCircle(
+                  height * 0.3, AppColors.thirdColor.withOpacity(0.17))),
+          Container(
+            height: double.infinity,
+            width: double.infinity,
+            child: child,
+          ),
+        ],
+      ),
     );
   }
 

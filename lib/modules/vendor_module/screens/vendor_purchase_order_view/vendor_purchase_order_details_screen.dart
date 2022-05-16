@@ -104,12 +104,10 @@ class VendorPurchaseOrderDetailsScreen extends StatelessWidget {
                         ? const DefaultLoader()
                         : CustomButton(
                             onPressed: () async {
-                              if (order.transportationHandlerEnum ==
-                                      FacilityType.user ||
+                              if (order.isUser ||
                                   (order.vendorHasRequestTransportation &&
                                       order.hasAcceptedTransportationOffer)) {
-                                if (order.transportationHandlerEnum ==
-                                    FacilityType.vendor) {
+                                if (order.isVendor) {
                                   //Vendor who will handle transport
                                   final res = await navigateTo(context,
                                       CheckoutScreen(onConfirmPressed: () {}));

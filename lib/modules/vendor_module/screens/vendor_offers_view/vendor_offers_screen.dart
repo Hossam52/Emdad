@@ -10,6 +10,7 @@ import 'package:emdad/modules/vendor_module/screens/vendor_purchase_order_view/v
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/widgets/custom_refresh_widget.dart';
+import 'package:emdad/shared/widgets/empty_data.dart';
 import 'package:emdad/shared/widgets/load_more_data.dart';
 import 'package:emdad/shared/widgets/ui_componants/default_loader.dart';
 import 'package:emdad/shared/widgets/ui_componants/no_data_widget.dart';
@@ -47,31 +48,34 @@ class VendorOffersScreen extends StatelessWidget {
                   changeSortType: (sortType) {},
                   hasSort: false,
                 ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  padding: const EdgeInsets.all(16),
-                  itemCount: offers.length,
-                  itemBuilder: (context, index) => OrderBuildItem(
-                    // order: orders[index],
-                    title: offers[index].id,
-                    date: offers[index].createdAt,
-                    image: offers[index].user.logoUrl,
-                    hasBadge: false,
-                    onTap: () async {
-                      final refreshPage = await navigateTo(
-                          context,
-                          VendorOrderDetailsScreen(
-                            title: 'طلب عرض سعر',
-                            orderId: offers[index].id,
-                          ));
-                      log(refreshPage.toString());
-                      if (refreshPage != null && refreshPage) {
-                        vendorOffersCubit.getVendorOffers();
-                      }
-                    },
+                if (offers.isEmpty)
+                  const EmptyData(emptyText: 'لا يوجد طلبات')
+                else
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: const EdgeInsets.all(16),
+                    itemCount: offers.length,
+                    itemBuilder: (context, index) => OrderBuildItem(
+                      // order: orders[index],
+                      title: offers[index].id,
+                      date: offers[index].createdAt,
+                      image: offers[index].user.logoUrl,
+                      hasBadge: false,
+                      onTap: () async {
+                        final refreshPage = await navigateTo(
+                            context,
+                            VendorOrderDetailsScreen(
+                              title: 'طلب عرض سعر',
+                              orderId: offers[index].id,
+                            ));
+                        log(refreshPage.toString());
+                        if (refreshPage != null && refreshPage) {
+                          vendorOffersCubit.getVendorOffers();
+                        }
+                      },
+                    ),
                   ),
-                ),
                 Padding(
                   padding: EdgeInsets.only(bottom: 50.h),
                   child: LoadMoreData(

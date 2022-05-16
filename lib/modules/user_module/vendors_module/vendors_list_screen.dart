@@ -81,7 +81,7 @@ class VendorsListScreen extends StatelessWidget {
                     final vendors = filterVendorCubit.vendors;
                     if (vendors.isEmpty) {
                       return const EmptyData(
-                        emptyText: 'No Vendors',
+                        emptyText: 'No Vendors available',
                       );
                     }
 

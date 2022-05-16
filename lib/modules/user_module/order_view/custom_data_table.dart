@@ -16,8 +16,8 @@ class CustomDataTable extends StatelessWidget {
   final List<String> columns;
   final List<String> rows;
   final double columnSpacing;
-  final Color headingRowColor;
-  final Color dataRowColor;
+  final Color? headingRowColor;
+  final Color? dataRowColor;
   final Color headingTextColor;
   final Color dataTextColor;
 
@@ -29,8 +29,10 @@ class CustomDataTable extends StatelessWidget {
         DataRow(cells: rows.map((item) => DataCell(Text(item))).toList())
       ],
       columnSpacing: columnSpacing,
-      headingRowColor: MaterialStateProperty.all<Color>(headingRowColor),
-      dataRowColor: MaterialStateProperty.all<Color>(dataRowColor),
+      headingRowColor: MaterialStateProperty.all<Color>(
+          headingRowColor ?? Colors.grey.withOpacity(0.2)),
+      dataRowColor:
+          MaterialStateProperty.all<Color>(dataRowColor ?? Colors.white),
       headingTextStyle: subTextStyle().copyWith(color: headingTextColor),
       dataTextStyle: subTextStyle().copyWith(color: dataTextColor),
     );

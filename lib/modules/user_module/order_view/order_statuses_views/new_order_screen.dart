@@ -117,12 +117,17 @@ class OrderNewScreen extends StatelessWidget {
 
   Widget transportationButton(BuildContext context, SupplyRequest order) {
     if (order.transportationRequest != null) {
-      if (order.transportationHandlerEnum == FacilityType.vendor) {
+      if (order.isVendor) {
         return const SizedBox.shrink();
       }
       return CustomButton(
         onPressed: () async {
-          navigateTo(context, const ShippingOffersScreen());
+          navigateTo(
+              context,
+              ShippingOffersScreen(
+                orderCubit: OrderCubit.instance(context),
+                transportationRequestId: order.transportationRequestId,
+              ));
         },
         width: 125.w,
         text: 'عروض النقل',

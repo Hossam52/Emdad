@@ -66,7 +66,6 @@ class VendorProfileCubit extends Cubit<VendorProfileStates> {
   }
 
   Future<void> getCategoryProducts({required String? category}) async {
-    if (isLastProductPage) return; //No load if reach to last page
     try {
       emit(GetCategoryProductsLoadingState());
       final map = await _services.userVendorServices.getProductsInCategory(
@@ -83,6 +82,8 @@ class VendorProfileCubit extends Cubit<VendorProfileStates> {
   }
 
   Future<void> getMoreCategoryProducts({required String? category}) async {
+    if (isLastProductPage) return; //No load if reach to last page
+
     try {
       emit(GetMoreCategoryProductsLoadingState());
       final map = await _services.userVendorServices.getProductsInCategory(

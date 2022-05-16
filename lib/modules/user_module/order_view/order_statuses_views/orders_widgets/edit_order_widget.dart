@@ -70,17 +70,20 @@ class EditOrderItemsWidget extends StatelessWidget {
                               name: e.name,
                               productUnit: e.productUnit,
                               quantity: e.quantity,
-                              unitPrice: e.units.firstWhere(
-                                  (element) =>
-                                      element.productUnit == e.productUnit,
-                                  orElse: () {
-                                return e.units.first;
-                                ProductUnit(
-                                    productUnit: '',
-                                    pricePerUnit: 0,
-                                    minimumAmountPerOrder: 0,
-                                    id: '');
-                              }).pricePerUnit,
+                              unitPrice: e.units
+                                  .firstWhere(
+                                    (element) =>
+                                        element.productUnit == e.productUnit,
+                                    //     orElse: () {
+                                    //   return e.units.first;
+                                    //   ProductUnit(
+                                    //       productUnit: '',
+                                    //       pricePerUnit: 0,
+                                    //       minimumAmountPerOrder: 0,
+                                    //       id: '');
+                                    // }
+                                  )
+                                  .pricePerUnit,
                               id: 'e.units.firstWhere((element) => element.productUnit==e.productUnit)')))
                       .toList(),
                   initialAdditioalItems:

@@ -132,11 +132,7 @@ class _Ratings extends StatelessWidget {
         var ratings = VendorProfileCubit.instance(context).getRatings;
         ratings =
             ratings.take(ratings.length > 10 ? 10 : ratings.length).toList();
-        if (ratings.isEmpty) {
-          return const EmptyData(
-            emptyText: 'لا يوجد تعليقات علي هذا المورد',
-          );
-        }
+
         return Column(
           children: [
             Padding(
@@ -157,14 +153,23 @@ class _Ratings extends StatelessWidget {
             SizedBox(
               height: 180.h,
               width: double.infinity,
-              child: ListView.builder(
-                primary: true,
-                itemBuilder: (_, index) => ReviewBuildItem(
-                  rateModel: ratings[index],
-                ),
-                itemCount: ratings.length,
-                scrollDirection: Axis.horizontal,
-              ),
+              child: Builder(builder: (context) {
+                if (ratings.isEmpty) {
+                  return const EmptyData(
+                    emptyText: 'لا يوجد تعليقات علي هذا المورد',
+                    displayImage: false,
+                  );
+                } else {
+                  return ListView.builder(
+                    primary: true,
+                    itemBuilder: (_, index) => ReviewBuildItem(
+                      rateModel: ratings[index],
+                    ),
+                    itemCount: ratings.length,
+                    scrollDirection: Axis.horizontal,
+                  );
+                }
+              }),
             ),
           ],
         );

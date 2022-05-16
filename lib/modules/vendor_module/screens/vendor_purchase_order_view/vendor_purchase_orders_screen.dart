@@ -11,6 +11,7 @@ import 'package:emdad/modules/vendor_module/vendor_cubits/purchase_orders_cubit/
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/widgets/custom_refresh_widget.dart';
 import 'package:emdad/shared/widgets/default_loader.dart';
+import 'package:emdad/shared/widgets/empty_data.dart';
 import 'package:emdad/shared/widgets/load_more_data.dart';
 import 'package:emdad/shared/widgets/ui_componants/no_data_widget.dart';
 import 'package:flutter/material.dart';
@@ -47,27 +48,30 @@ class VendorPurchaseOrdersScreen extends StatelessWidget {
                 changeSortType: (sortType) {},
                 hasSort: false,
               ),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                primary: false,
-                padding: const EdgeInsets.all(16),
-                itemCount: orders.length,
-                itemBuilder: (context, index) => OrderBuildItem(
-                  // order: orders[index],
-                  title: orders[index].id,
-                  date: orders[index].createdAt,
-                  image: orders[index].user.logoUrl,
-                  hasBadge: false,
-                  onTap: () {
-                    navigateTo(
-                        context,
-                        VendorPurchaseOrderDetailsScreen(
-                          orderId: orders[index].id,
-                        ));
-                  },
+              if (orders.isEmpty)
+                const EmptyData(emptyText: 'لا يوجد اوامر شراء')
+              else
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  primary: false,
+                  padding: const EdgeInsets.all(16),
+                  itemCount: orders.length,
+                  itemBuilder: (context, index) => OrderBuildItem(
+                    // order: orders[index],
+                    title: orders[index].id,
+                    date: orders[index].createdAt,
+                    image: orders[index].user.logoUrl,
+                    hasBadge: false,
+                    onTap: () {
+                      navigateTo(
+                          context,
+                          VendorPurchaseOrderDetailsScreen(
+                            orderId: orders[index].id,
+                          ));
+                    },
+                  ),
                 ),
-              ),
               LoadMoreData(
                   isLoading: state is GetMorePurchaseOrdersLoadingState,
                   visible: !purchaseOrdersCubit.isLastPage,

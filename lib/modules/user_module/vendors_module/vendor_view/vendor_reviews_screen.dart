@@ -1,5 +1,6 @@
 import 'package:emdad/modules/user_module/home_module/vendor_profile_cubit/vendor_profile_cubit.dart';
 import 'package:emdad/modules/user_module/vendors_module/vendor_view/vendor_view_componants/review_build_item.dart';
+import 'package:emdad/shared/widgets/empty_data.dart';
 import 'package:flutter/material.dart';
 
 class VendorReviewsScreen extends StatelessWidget {
@@ -14,6 +15,12 @@ class VendorReviewsScreen extends StatelessWidget {
       body: VendorProfileBlocBuilder(
         builder: (context, state) {
           final ratings = VendorProfileCubit.instance(context).getRatings;
+          if (ratings.isEmpty) {
+            return const EmptyData(
+              emptyText: 'لا يوجد تعلقيات حتي الان',
+              displayImage: false,
+            );
+          }
           return ListView.separated(
             itemCount: ratings.length,
             padding: const EdgeInsets.all(16),

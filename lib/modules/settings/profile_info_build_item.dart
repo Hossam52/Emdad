@@ -1,9 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emdad/modules/auth_module/screens/update_profile/update_profile_data/update_profile_screen.dart';
+import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
 import 'package:emdad/shared/cubit/app_cubit.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
 import 'package:emdad/shared/widgets/custom_icon_button.dart';
+import 'package:emdad/shared/widgets/profile_picture.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -29,24 +32,7 @@ class ProfileInfoBuildItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            width: 145.r,
-            height: 145.r,
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: AppColors.secondaryColor.withOpacity(0.7),
-                width: 4,
-              ),
-              image: DecorationImage(
-                image: CachedNetworkImageProvider(
-                  user.logoUrl!,
-                ),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
+          MyProfilePicture(url: user.logoUrl!),
           Row(
             children: [
               Expanded(
@@ -69,6 +55,9 @@ class ProfileInfoBuildItem extends StatelessWidget {
               CustomIconButton(
                 width: 45.w,
                 height: 45.h,
+                onPressed: () {
+                  navigateTo(context, UpdateProfileScreen());
+                },
                 icon: const Icon(MyIcons.edit, color: Colors.white),
                 buttonColor: AppColors.secondaryColor,
               ),

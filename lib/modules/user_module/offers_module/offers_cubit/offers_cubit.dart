@@ -32,7 +32,8 @@ class OffersCubit extends Cubit<OffersStates> {
   final _services = UserServices.instance;
   AllSupplyRequestsModel? _requestOffers;
   bool get emptyOffers => _requestOffers == null;
-  bool get canLoadMoreOffers => !emptyOffers && !_requestOffers!.isLastPage;
+  bool get canLoadMoreOffers =>
+      !emptyOffers && !_requestOffers!.isLastPage && offers.isNotEmpty;
   SortBy _sortOffersBy = SortBy.none;
 
   //To get offers that has awaiting quotation

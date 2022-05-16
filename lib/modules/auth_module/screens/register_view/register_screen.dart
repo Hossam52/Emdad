@@ -185,7 +185,8 @@ class RegisterScreen extends StatelessWidget {
                         SizedBox(height: 10.h),
                         CheckboxFormField(
                           title: 'الشروط والأحكام',
-                          validator: (value) => SharedMethods.defaultCheckboxValidation(value),
+                          validator: (value) =>
+                              SharedMethods.defaultCheckboxValidation(value),
                           onSaved: (value) {
                             cubit.changePrivacyPolicyState(value!);
                           },

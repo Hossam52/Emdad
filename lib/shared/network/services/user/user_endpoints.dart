@@ -9,6 +9,7 @@ class UserEndPoints {
   static const vendors = _path + 'vendors';
   static const supplyRequests = _path + 'supplyRequests';
   static const transportationRequests = _path + 'transportationRequests';
+  static const offers = _path + 'transportationOffers';
 
 //
   static const products = 'products';
@@ -53,5 +54,15 @@ class UserEndPoints {
   static String acceptSupplyRequest(String orderId) {
     final orderInfoPath = supplyRequestInfo(orderId);
     return generatePathVariable(orderInfoPath, accept);
+  }
+
+  static String transportationOffers(String transportationId) {
+    final transportationPath =
+        generatePathVariable(transportationRequests, transportationId);
+    return generatePathVariable(transportationPath, 'transportationOffers');
+  }
+
+  static String acceptOffer(String offerId) {
+    return generatePathVariable(offers, offerId);
   }
 }

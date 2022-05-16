@@ -27,7 +27,7 @@ class VendorDeliveryWidget extends StatelessWidget {
   final VoidCallback? onEditPrice;
   @override
   Widget build(BuildContext context) {
-    if (order.transportationHandlerEnum == FacilityType.user) {
+    if (order.isUser) {
       return const SizedBox.shrink();
     }
     if (order.transportationRequest == null) {

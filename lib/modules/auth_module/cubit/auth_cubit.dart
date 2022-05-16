@@ -9,6 +9,7 @@ import 'package:emdad/models/enums/enums.dart';
 import 'package:emdad/models/general_models/settings_model.dart';
 import 'package:emdad/models/request_models/change_email_request_model.dart';
 import 'package:emdad/models/request_models/change_password_request_model.dart';
+import 'package:emdad/models/request_models/update_profile_request_model.dart';
 import 'package:emdad/models/users/auth/user_register_data_model.dart';
 import 'package:emdad/models/users/user/user_response_model.dart';
 import 'package:emdad/models/users/user/user_response_model.dart' as userModel;
@@ -17,6 +18,7 @@ import 'package:emdad/modules/auth_module/screens/phone_confirm_view/phone_confi
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/constants.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';
+import 'package:emdad/shared/cubit/app_cubit.dart';
 import 'package:emdad/shared/network/local/cache_helper.dart';
 import 'package:emdad/shared/network/services/auth_services.dart';
 import 'package:flutter/material.dart';
@@ -457,6 +459,27 @@ class AuthCubit extends Cubit<AuthState> {
       emit(ChangeEmailSuccessState());
     } catch (e) {
       emit(ChangeEmailErrorState(error: e.toString()));
+    }
+  }
+
+  Future<void> updateProfile(
+      {required BuildContext context,
+      required String organization,
+      required String commericalRegister,
+      required String country,
+      required String city}) async {
+    try {
+      emit(UpdateProfileLoadingState());
+      final map = await AuthServices.updateProfile(UpdateProfileRequestModel(
+          oraganizationName: organization,
+          commercialRegister: commericalRegister,
+          city: city,
+          country: country));
+      final user = UserResponseModel.fromJson(map);
+      AppCubit.get(context).setUser = user;
+      emit(UpdateProfileSuccessState());
+    } catch (e) {
+      emit(UpdateProfileErrorState(error: e.toString()));
     }
   }
 }

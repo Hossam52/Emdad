@@ -74,3 +74,13 @@ class ChangeEmailErrorState extends AuthState {
   final String error;
   ChangeEmailErrorState({required this.error});
 }
+
+//UpdateProfile online fetch data
+class UpdateProfileLoadingState extends AuthState {}
+
+class UpdateProfileSuccessState extends AuthState {}
+
+class UpdateProfileErrorState extends AuthState {
+  final String error;
+  UpdateProfileErrorState({required this.error});
+}

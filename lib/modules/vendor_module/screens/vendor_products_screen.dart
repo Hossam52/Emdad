@@ -7,6 +7,7 @@ import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/widgets/default_loader.dart';
 import 'package:emdad/shared/widgets/default_search_field.dart';
+import 'package:emdad/shared/widgets/empty_data.dart';
 import 'package:emdad/shared/widgets/load_more_data.dart';
 import 'package:emdad/shared/widgets/ui_componants/no_data_widget.dart';
 import 'package:flutter/material.dart';
@@ -64,6 +65,9 @@ class _VendorProductsScreenState extends State<VendorProductsScreen> {
                     });
                   }
                   final products = vendorProductsCubit.products;
+                  if (products.isEmpty) {
+                    return const EmptyData(emptyText: 'لا يوجد منتجات');
+                  }
                   return GridView.builder(
                     itemCount: products.length,
                     shrinkWrap: true,

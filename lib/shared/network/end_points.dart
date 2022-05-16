@@ -18,4 +18,6 @@ class EndPoints {
   static const String changeEmail = 'profile/email';
 
   static const String getProfile = 'profile';
+
+  static const String updateProfile = 'profile/edit';
 }

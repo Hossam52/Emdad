@@ -77,9 +77,11 @@ class OrderOfferScreen extends StatelessWidget {
                           return OrderItemsListView(
                             items: items,
                             displayTotalAfterTaxes: true,
-                            trailing: EditOrderItemsWidget(
-                              order: order,
-                            ),
+                            trailing: !order.userCanSendPurchaseOrder
+                                ? null
+                                : EditOrderItemsWidget(
+                                    order: order,
+                                  ),
                           );
                         },
                       ),
@@ -99,36 +101,49 @@ class OrderOfferScreen extends StatelessWidget {
                         order: order,
                       ),
                       const SizedBox(height: 10),
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: CustomButton(
-                          onPressed: () async {
-                            if (!order.vendorProvidePriceOffer) {
-                              SharedMethods.showToast(
-                                  context, 'Vendor not provide price offer yet',
-                                  color: AppColors.errorColor,
-                                  textColor: Colors.white);
-                              return;
-                            }
-                            if (order.transportationHandlerEnum ==
-                                FacilityType.user) {
-                              final acceptOrder =
-                                  await showOrderConfirmationDialog(context);
-                              if (acceptOrder != null) {
-                                if (acceptOrder) {
-                                  navigateToInProgress(context);
-                                } else {
-                                  navigateToInProgress(context);
-                                }
-                              }
-                            } else {
-                              navigateToInProgress(context);
-                            }
-                          },
-                          text: 'إرسال طلب أمر شراء',
-                          width: MediaQuery.of(context).size.width * 0.6,
-                          radius: 10,
-                        ),
+                      OrderBlocBuilder(
+                        builder: (context, state) {
+                          return Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: state is AcceptSupplyOfferLoadingState
+                                ? const CircularProgressIndicator()
+                                : CustomButton(
+                                    onPressed: () async {
+                                      if (!order.userCanSendPurchaseOrder) {
+                                        SharedMethods.showToast(context,
+                                            'Vendor not provide price offer yet',
+                                            color: AppColors.errorColor,
+                                            textColor: Colors.white);
+                                        return;
+                                      }
+                                      if (order.isUser) {
+                                        final hasMyOwnTransport =
+                                            await showOrderConfirmationDialog(
+                                                context);
+                                        log(hasMyOwnTransport.toString());
+
+                                        final successPay = await pay(context);
+
+                                        if (successPay != null && successPay) {
+                                          acceptSupplyRequest(context);
+                                          log('Success');
+                                        } else {
+                                          SharedMethods.showToast(context,
+                                              'لم تتم عملية الدفع بنجاح برجاء المحاولة مجددا',
+                                              textColor: Colors.white,
+                                              color: AppColors.errorColor);
+                                        }
+                                      } else {
+                                        acceptSupplyRequest(context);
+                                      }
+                                    },
+                                    text: 'إرسال طلب أمر شراء',
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.6,
+                                    radius: 10,
+                                  ),
+                          );
+                        },
                       ),
                       const SizedBox(height: 50),
                     ],
@@ -142,8 +157,8 @@ class OrderOfferScreen extends StatelessWidget {
     );
   }
 
-  void navigateToInProgress(BuildContext context) async {
-    final paymentSuccess = await navigateTo(
+  Future<bool?> pay(BuildContext context) async {
+    final paymentSuccess = await navigateTo<bool?>(
       context,
       CheckoutScreen(
         onConfirmPressed: () {
@@ -156,8 +171,10 @@ class OrderOfferScreen extends StatelessWidget {
       ),
     );
     log(paymentSuccess.toString());
-    if (paymentSuccess != null && paymentSuccess) {
-      await OrderCubit.instance(context).acceptSupplyOffer();
-    }
+    return paymentSuccess;
+  }
+
+  void acceptSupplyRequest(BuildContext context) async {
+    await OrderCubit.instance(context).acceptSupplyOffer();
   }
 }

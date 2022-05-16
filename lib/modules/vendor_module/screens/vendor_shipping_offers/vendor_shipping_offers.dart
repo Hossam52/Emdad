@@ -14,6 +14,7 @@ import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/default_loader.dart';
+import 'package:emdad/shared/widgets/empty_data.dart';
 import 'package:emdad/shared/widgets/ui_componants/no_data_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -64,9 +65,9 @@ class VendorShippingOffersScreen extends StatelessWidget {
             }
             final offers = offersCubit.offers;
             if (offersCubit.errorInOffers || offers.isEmpty) {
-              return NoDataWidget(onPressed: () {
-                offersCubit.getVendorTransportationOffers();
-              });
+              return const EmptyData(
+                emptyText: 'لا يوجد عروض توصيل حتي الان',
+              );
             }
             return SingleChildScrollView(
               child: Column(

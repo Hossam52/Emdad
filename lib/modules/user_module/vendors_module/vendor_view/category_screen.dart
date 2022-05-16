@@ -6,12 +6,14 @@ import 'package:emdad/modules/user_module/home_module/vendor_profile_cubit/vendo
 import 'package:emdad/modules/user_module/home_module/vendor_profile_cubit/vendor_profile_states.dart';
 import 'package:emdad/modules/user_module/vendors_module/product_details/product_details_screen.dart';
 import 'package:emdad/modules/user_module/vendors_module/vendor_view/cart_cubit/cart_cubit.dart';
+import 'package:emdad/modules/user_module/vendors_module/vendor_view/cart_cubit/cart_states.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/network/services/user/user_services.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/widgets/default_loader.dart';
 import 'package:emdad/shared/widgets/default_search_field.dart';
 import 'package:emdad/shared/widgets/dialogs/add_to_price_request_dialog.dart';
+import 'package:emdad/shared/widgets/empty_data.dart';
 import 'package:emdad/shared/widgets/load_more_data.dart';
 import 'package:emdad/shared/widgets/ui_componants/no_data_widget.dart';
 import 'package:flutter/material.dart';
@@ -50,6 +52,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   final TextEditingController searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    log('Hello');
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title, style: const TextStyle(color: Colors.white)),
@@ -76,6 +79,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
             });
           }
           final products = vendorProfileCubit.allProducts;
+          if (products.isEmpty) {
+            return const EmptyData(emptyText: 'لا يوجد منتجات');
+          }
           log(products.length.toString());
           return SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
@@ -98,19 +104,29 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     childAspectRatio: 1 / 2,
                     crossAxisSpacing: 8,
                   ),
-                  itemBuilder: (context, index) => ProductCardBuildItem(
-                    product: products[index],
-                    trailing: _CartIcon(
-                      product: products[index],
-                    ),
-                    onProductTapped: () {
-                      navigateTo(
-                          context,
-                          BlocProvider.value(
-                            value: CartCubit.instance(context),
-                            child: ProductDetailsScreen(
-                                productId: products[index].id, isVendor: false),
-                          ));
+                  itemBuilder: (context, index) => CartBlocBuilder(
+                    buildWhen: (previous, current) =>
+                        current is EditAndAddToCartState,
+                    builder: (context, state) {
+                      final cartCubit = CartCubit.instance(context);
+                      return ProductCardBuildItem(
+                        product: products[index],
+                        selectedCard:
+                            cartCubit.productInCart(products[index].id),
+                        trailing: _CartIcon(
+                          product: products[index],
+                        ),
+                        onProductTapped: () {
+                          navigateTo(
+                              context,
+                              BlocProvider.value(
+                                value: cartCubit,
+                                child: ProductDetailsScreen(
+                                    productId: products[index].id,
+                                    isVendor: false),
+                              ));
+                        },
+                      );
                     },
                   ),
                 ),

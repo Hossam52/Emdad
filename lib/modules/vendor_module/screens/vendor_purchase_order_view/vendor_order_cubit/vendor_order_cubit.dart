@@ -72,12 +72,10 @@ class VendorOrderCubit extends Cubit<VendorOrderStates> {
   }
 
   bool get priceTransportation {
-    if (order.transportationHandlerEnum == FacilityType.vendor &&
-        order.transportationPrice == 0) {
+    if (order.isVendor && order.transportationPrice == 0) {
       throw 'You not provide shipping price yet';
     }
-    return (order.transportationHandlerEnum == FacilityType.user ||
-        order.transportationPrice != 0);
+    return (order.isUser || order.transportationPrice != 0);
   }
 
   void changeVendorManageTransport() {

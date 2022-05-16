@@ -21,13 +21,9 @@ class TransporterOrderItemPreview extends StatelessWidget {
     final user = order.supplyRequest.user;
     final vendor = order.supplyRequest.vendor;
     final from =
-        order.supplyRequest.transportationHandlerEnum == FacilityType.user
-            ? user.detailAddress
-            : vendor.detailAddress;
+        order.supplyRequest.isUser ? user.detailAddress : vendor.detailAddress;
     final to =
-        order.supplyRequest.transportationHandlerEnum == FacilityType.user
-            ? vendor.detailAddress
-            : user.detailAddress;
+        order.supplyRequest.isUser ? vendor.detailAddress : user.detailAddress;
     return OrderBuildItem(
       hasBadge: false,
       onTap: onTap,

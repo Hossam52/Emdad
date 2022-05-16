@@ -14,6 +14,7 @@ import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
 import 'package:emdad/shared/widgets/custom_refresh_widget.dart';
 import 'package:emdad/shared/widgets/default_loader.dart';
+import 'package:emdad/shared/widgets/empty_data.dart';
 import 'package:emdad/shared/widgets/load_more_data.dart';
 import 'package:emdad/shared/widgets/ui_componants/no_data_widget.dart';
 import 'package:flutter/material.dart';
@@ -83,35 +84,38 @@ class OffersScreen extends StatelessWidget {
                               .toList()),
                     ),
                   ),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    padding: const EdgeInsets.all(16),
-                    itemCount: offers.length,
-                    itemBuilder: (context, index) {
-                      return OrderBuildItem(
-                        // order: orders[index],
-                        title: offers[index].id,
-                        date: offers[index].createdAt,
-                        image: offers[index].vendor.logoUrl,
-                        hasBadge: true,
-                        badgeText: offers[index].vendorProvidePriceOffer
-                            ? offers[index].totalOrderPrice.toString()
-                            : null,
-                        onTap: () async {
-                          final mustReloadData = await navigateTo(
-                              context,
-                              OrderOfferScreen(
-                                  orderId: offersCubit.offers[index].id,
-                                  title: 'عرض سعر جديد',
-                                  status: OrderStatus.offer));
-                          if (mustReloadData != null && mustReloadData) {
-                            offersCubit.getRequestOffers();
-                          }
-                        },
-                      );
-                    },
-                  ),
+                  if (offers.isEmpty)
+                    const EmptyData(emptyText: 'لا يوجد طلبات هنا')
+                  else
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      padding: const EdgeInsets.all(16),
+                      itemCount: offers.length,
+                      itemBuilder: (context, index) {
+                        return OrderBuildItem(
+                          // order: orders[index],
+                          title: offers[index].id,
+                          date: offers[index].createdAt,
+                          image: offers[index].vendor.logoUrl,
+                          hasBadge: true,
+                          badgeText: offers[index].vendorProvidePriceOffer
+                              ? offers[index].totalOrderPrice.toString()
+                              : null,
+                          onTap: () async {
+                            final mustReloadData = await navigateTo(
+                                context,
+                                OrderOfferScreen(
+                                    orderId: offersCubit.offers[index].id,
+                                    title: 'عرض سعر جديد',
+                                    status: OrderStatus.offer));
+                            if (mustReloadData != null && mustReloadData) {
+                              offersCubit.getRequestOffers();
+                            }
+                          },
+                        );
+                      },
+                    ),
                   LoadMoreData(
                       visible: offersCubit.canLoadMoreOffers,
                       isLoading: state is GetMoreRequestOffersLoadingState,
