@@ -10,6 +10,7 @@ import 'package:emdad/modules/user_module/vendors_module/vendors_list_screen.dar
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/responsive/device_information.dart';
 import 'package:emdad/shared/responsive/responsive_widget.dart';
+import 'package:emdad/shared/styles/font_styles.dart';
 import 'package:emdad/shared/widgets/custom_refresh_widget.dart';
 import 'package:emdad/shared/widgets/default_cached_image.dart';
 import 'package:emdad/shared/widgets/default_home_title_build_item.dart';
@@ -51,39 +52,10 @@ class UserHomeScreen extends StatelessWidget {
                 return SingleChildScrollView(
                   child: Column(
                     children: [
-                      DefaultHomeTitleBuildItem(
-                        title: 'الموردون المفضلون',
-                        onPressed: () {
-                          navigateTo(
-                            context,
-                            BlocProvider.value(
-                              value: UserHomeCubit.instance(context),
-                              child: VendorsListScreen(
-                                title: 'الموردون المفضلون',
-                                favoriteVendors: true,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 5),
                       const _FavoriteVendors(),
                       SizedBox(height: 15.h),
                       const _FeaturedVendors(),
                       SizedBox(height: 8.h),
-                      DefaultHomeTitleBuildItem(
-                        title: 'جميع الموردين',
-                        onPressed: () {
-                          navigateTo(
-                              context,
-                              BlocProvider.value(
-                                value: UserHomeCubit.instance(context),
-                                child:
-                                    VendorsListScreen(title: 'جميع الموردين'),
-                              ));
-                        },
-                      ),
-                      const SizedBox(height: 5),
                       _AllVendors(deviceInfo: deviceInfo),
                     ],
                   ),
@@ -106,27 +78,46 @@ class _FavoriteVendors extends StatelessWidget {
       builder: (context, state) {
         final favoriteVendors = UserHomeCubit.instance(context).favoriteVendors;
         if (favoriteVendors.isEmpty) {
-          return const EmptyData(
-            emptyText: 'No Favorite vendors upt till now',
-          );
+          return const SizedBox.shrink();
         }
-        return SizedBox(
-          height: 265.h,
-          child: ListView.separated(
-            itemCount: favoriteVendors.length,
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            scrollDirection: Axis.horizontal,
-            physics: const BouncingScrollPhysics(),
-            separatorBuilder: (context, index) => SizedBox(width: 12.w),
-            itemBuilder: (context, index) => HomeVendorBuildItem(
-              user: favoriteVendors[index],
-              width: 100.w,
-              isFavorite: false,
-              onTap: () {
-                _navigateToVendorViewScreen(context, favoriteVendors[index]);
+        return Column(
+          children: [
+            DefaultHomeTitleBuildItem(
+              title: 'الموردون المفضلون',
+              onPressed: () {
+                navigateTo(
+                  context,
+                  BlocProvider.value(
+                    value: UserHomeCubit.instance(context),
+                    child: VendorsListScreen(
+                      title: 'الموردون المفضلون',
+                      favoriteVendors: true,
+                    ),
+                  ),
+                );
               },
             ),
-          ),
+            const SizedBox(height: 5),
+            SizedBox(
+              height: 265.h,
+              child: ListView.separated(
+                itemCount: favoriteVendors.length,
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                scrollDirection: Axis.horizontal,
+                physics: const BouncingScrollPhysics(),
+                separatorBuilder: (context, index) => SizedBox(width: 12.w),
+                itemBuilder: (context, index) => HomeVendorBuildItem(
+                  user: favoriteVendors[index],
+                  width: 100.w,
+                  isFavorite: false,
+                  onTap: () {
+                    _navigateToVendorViewScreen(
+                        context, favoriteVendors[index]);
+                  },
+                ),
+              ),
+            ),
+          ],
         );
       },
     );
@@ -150,26 +141,55 @@ class _FeaturedVendors extends StatelessWidget {
               autoPlay: true,
               pauseAutoPlayOnTouch: true,
               enableInfiniteScroll: false,
-              viewportFraction: 0.9,
+              viewportFraction: 0.7,
               height: 180.h,
             ),
-            itemBuilder: (context, index, int pageViewIndex) => GestureDetector(
-              onTap: () {
-                _navigateToVendorViewScreen(context, featuredVendors[index]);
-              },
-              child: Container(
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                margin: const EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
+            itemBuilder: (context, index, int pageViewIndex) {
+              final vendor = featuredVendors[index];
+              return GestureDetector(
+                onTap: () {
+                  _navigateToVendorViewScreen(context, vendor);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Stack(
+                    alignment: AlignmentDirectional.bottomStart,
+                    children: [
+                      Container(
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: DefaultCachedNetworkImage(
+                          imageUrl: vendor.logoUrl!,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              vendor.name!,
+                              style: thirdTextStyle()
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              vendor.allVendorTypeString,
+                              style: thirdTextStyle()
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-                child: DefaultCachedNetworkImage(
-                  imageUrl: featuredVendors[index].logoUrl!,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                ),
-              ),
-            ),
+              );
+            },
           ),
         );
       },
@@ -186,29 +206,45 @@ class _AllVendors extends StatelessWidget {
       builder: (context, state) {
         final vendors = UserHomeCubit.instance(context).vendors;
         if (vendors.isEmpty) return const EmptyData(emptyText: 'No Vendors');
-        return LayoutBuilder(builder: (context, constraints) {
-          log(constraints.maxWidth.toString());
-          final maxWidth = constraints.maxWidth;
-          return GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: vendors.length,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: maxWidth >= 800 ? 3 : 2,
-              childAspectRatio: 1 / 1.8,
-              crossAxisSpacing: 8,
-            ),
-            itemBuilder: (context, index) => HomeVendorBuildItem(
-              width: deviceInfo.screenwidth * 0.5,
-              user: vendors[index],
-              isFavorite: vendors[index].isFavourite!,
-              onTap: () {
-                _navigateToVendorViewScreen(context, vendors[index]);
+        return Column(
+          children: [
+            DefaultHomeTitleBuildItem(
+              title: 'جميع الموردين',
+              onPressed: () {
+                navigateTo(
+                    context,
+                    BlocProvider.value(
+                      value: UserHomeCubit.instance(context),
+                      child: VendorsListScreen(title: 'جميع الموردين'),
+                    ));
               },
             ),
-          );
-        });
+            const SizedBox(height: 5),
+            LayoutBuilder(builder: (context, constraints) {
+              log(constraints.maxWidth.toString());
+              final maxWidth = constraints.maxWidth;
+              return GridView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: vendors.length,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: maxWidth >= 800 ? 4 : 3,
+                  childAspectRatio: 1 / 1.8,
+                  crossAxisSpacing: 8,
+                ),
+                itemBuilder: (context, index) => HomeVendorBuildItem(
+                  width: deviceInfo.screenwidth * 0.5,
+                  user: vendors[index],
+                  isFavorite: vendors[index].isFavourite!,
+                  onTap: () {
+                    _navigateToVendorViewScreen(context, vendors[index]);
+                  },
+                ),
+              );
+            }),
+          ],
+        );
       },
     );
   }

@@ -10,6 +10,7 @@ import 'package:emdad/modules/user_module/vendors_module/vendor_view/cart_cubit/
 import 'package:emdad/modules/user_module/vendors_module/vendor_view/vendor_reviews_screen.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
+import 'package:emdad/shared/styles/font_styles.dart';
 import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/default_home_title_build_item.dart';
 import 'package:emdad/shared/widgets/default_loader.dart';
@@ -95,17 +96,24 @@ class VendorViewScreen extends StatelessWidget {
                       Builder(builder: (context) {
                         return Column(
                           children: [
-                            const _Ratings(),
                             const SizedBox(height: 20),
-                            ListView.builder(
+                            if (categories.isNotEmpty)
+                              Text(
+                                'المنتجات المتاحة لهذا المورد',
+                                style: thirdTextStyle()
+                                    .copyWith(fontWeight: FontWeight.w700),
+                              ),
+                            ListView.separated(
                               shrinkWrap: true,
                               primary: false,
+                              separatorBuilder: (_, index) => const Divider(),
                               itemBuilder: (_, index) => _CategoryWithProducts(
                                 categoryModel: categories[index],
                               ),
                               itemCount: categories.length,
                             ),
                             const SizedBox(height: 60),
+                            const _Ratings(),
                           ],
                         );
                       }),
@@ -191,7 +199,18 @@ class _CategoryWithProducts extends StatelessWidget {
     return Column(
       children: [
         ListTile(
-          title: Text(categoryModel.category),
+          title: RichText(
+            text: TextSpan(
+                text: 'التصنيف' ' : ',
+                style: secondaryTextStyle()
+                    .copyWith(color: Colors.black, fontWeight: FontWeight.w700),
+                children: [
+                  TextSpan(
+                    text: categoryModel.category,
+                    style: thirdTextStyle().copyWith(color: Colors.black),
+                  ),
+                ]),
+          ),
           trailing: const Icon(Icons.arrow_forward_ios,
               size: 14, color: Colors.black),
           onTap: () {
@@ -214,7 +233,7 @@ class _CategoryWithProducts extends StatelessWidget {
           },
         ),
         SizedBox(
-          height: 250.h,
+          height: 200.h,
           width: double.infinity,
           child: Builder(builder: (context) {
             if (products.isEmpty) {
@@ -223,12 +242,13 @@ class _CategoryWithProducts extends StatelessWidget {
                 displayImage: false,
               );
             }
-            return ListView.builder(
+            return ListView.separated(
               scrollDirection: Axis.horizontal,
               physics: const BouncingScrollPhysics(),
               padding: const EdgeInsets.symmetric(horizontal: 16),
               primary: true,
               shrinkWrap: true,
+              separatorBuilder: (_, index) => SizedBox(width: 10.w),
               itemBuilder: (_, index) => ProductCardBuildItem(
                 product: products[index],
                 onProductTapped: () {

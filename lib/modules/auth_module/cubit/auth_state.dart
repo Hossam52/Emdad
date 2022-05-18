@@ -84,3 +84,12 @@ class UpdateProfileErrorState extends AuthState {
   final String error;
   UpdateProfileErrorState({required this.error});
 }
+
+class PickPersonalImageSuccessState extends AuthState {}
+
+class PickPersonalImageErrorState extends AuthState {
+  final String error;
+  PickPersonalImageErrorState({
+    required this.error,
+  });
+}

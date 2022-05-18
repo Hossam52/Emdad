@@ -19,7 +19,11 @@ class AppCubit extends Cubit<AppState> {
       _settingModel?.data ?? AllSettingsModel.empty();
   UserResponseModel? _loggedInUser;
   User? get getUser => _loggedInUser?.data?.user;
-  set setUser(UserResponseModel user) => _loggedInUser = user;
+  set setUser(UserResponseModel user) {
+    _loggedInUser = user;
+    emit(ChangeUserData());
+  }
+
   void removeCurrentUser() => _loggedInUser = null;
 
   Locale localeApp = Locale(Constants.lang ?? 'ar');

@@ -38,7 +38,7 @@ class UploadUserImageRequestModel extends UploadImagesRequestModel {
     String fileName = logo.path.split('/').last;
     final multiplePart =
         await MultipartFile.fromFile(logo.path, filename: fileName);
-    formData.files.addAll([MapEntry('images', multiplePart)]);
+    formData.files.addAll([MapEntry('logo', multiplePart)]);
 
     return formData;
   }

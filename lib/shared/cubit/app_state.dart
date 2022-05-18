@@ -6,6 +6,8 @@ class AppInitial extends AppState {}
 
 class ChangeLanguageState extends AppState {}
 
+class ChangeUserData extends AppState {}
+
 //GetSettings online fetch data
 class GetSettingsLoadingState extends AppState {}
 

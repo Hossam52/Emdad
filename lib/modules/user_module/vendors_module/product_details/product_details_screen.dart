@@ -58,7 +58,7 @@ class ProductDetailsScreen extends StatelessWidget {
                   onPressed: () {
                     productCubit.getProduct();
                   },
-                  text: 'No product');
+                  text: 'No product try again');
             }
 
             final product = productCubit.product;
@@ -149,20 +149,39 @@ class ProductDetailsScreen extends StatelessWidget {
                             ProductCustomTile(
                               title: 'وحدات القياس',
                               children: [
-                                const SizeBuildItem(
-                                  title: 'وحدة القياس',
-                                  value: 'الحد الادني',
-                                  price: 'سعر الوحدة',
+                                Container(
+                                  color: Colors.grey.shade900.withOpacity(0.5),
+                                  child: const SizeBuildItem(
+                                    title: 'وحدة القياس',
+                                    value: 'الحد الادني',
+                                    price: 'سعر الوحدة',
+                                  ),
                                 ),
-                                ...product.units
-                                    .map(
-                                      (unit) => SizeBuildItem(
-                                          title: unit.productUnit,
-                                          value: unit.minimumAmountPerOrder
-                                              .toString(),
-                                          price: getPrice(product, unit)),
-                                    )
-                                    .toList()
+                                for (int i = 0; i < product.units.length; i++)
+                                  Container(
+                                    color: AppColors.primaryColor
+                                        .withOpacity(i.isEven ? 0.2 : 0.4),
+                                    child: SizeBuildItem(
+                                        title: product.units[i].productUnit,
+                                        value: product
+                                            .units[i].minimumAmountPerOrder
+                                            .toString(),
+                                        price: getPrice(
+                                            product, product.units[i])),
+                                  ),
+                                // ...product.units
+                                //     .map(
+                                //       (unit) => Container(
+                                //         color: AppColors.primaryColor
+                                //             .withOpacity(2.isEven ? 0.2 : 0.4),
+                                //         child: SizeBuildItem(
+                                //             title: unit.productUnit,
+                                //             value: unit.minimumAmountPerOrder
+                                //                 .toString(),
+                                //             price: getPrice(product, unit)),
+                                //       ),
+                                //     )
+                                //     .toList()
                               ],
                             ),
                             const SizedBox(height: 210),

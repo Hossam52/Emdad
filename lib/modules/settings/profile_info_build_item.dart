@@ -8,6 +8,7 @@ import 'package:emdad/shared/styles/font_styles.dart';
 import 'package:emdad/shared/widgets/custom_icon_button.dart';
 import 'package:emdad/shared/widgets/profile_picture.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProfileInfoBuildItem extends StatelessWidget {
@@ -15,56 +16,61 @@ class ProfileInfoBuildItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = AppCubit.get(context).getUser!;
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 55),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.bottomCenter,
-          end: Alignment.topCenter,
-          colors: [
-            AppColors.secondaryColor.withOpacity(0.18),
-            AppColors.secondaryColor.withOpacity(0.09),
-          ],
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          MyProfilePicture(url: user.logoUrl!),
-          Row(
+    return BlocBuilder<AppCubit, AppState>(
+      buildWhen: (previous, current) => current is ChangeUserData,
+      builder: (context, state) {
+        final user = AppCubit.get(context).getUser!;
+        return Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 55),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+              colors: [
+                AppColors.secondaryColor.withOpacity(0.18),
+                AppColors.secondaryColor.withOpacity(0.09),
+              ],
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      user.name!,
-                      style: headersTextStyle()
-                          .copyWith(color: AppColors.primaryColor),
+              MyProfilePicture(url: user.logoUrl!),
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          user.name!,
+                          style: headersTextStyle()
+                              .copyWith(color: AppColors.primaryColor),
+                        ),
+                        Text(
+                          user.country! + ' (هتتغير) ',
+                          style: subTextStyle()
+                              .copyWith(color: AppColors.primaryColor),
+                        ),
+                      ],
                     ),
-                    Text(
-                      user.country! + ' (هتتغير) ',
-                      style: subTextStyle()
-                          .copyWith(color: AppColors.primaryColor),
-                    ),
-                  ],
-                ),
-              ),
-              CustomIconButton(
-                width: 45.w,
-                height: 45.h,
-                onPressed: () {
-                  navigateTo(context, UpdateProfileScreen());
-                },
-                icon: const Icon(MyIcons.edit, color: Colors.white),
-                buttonColor: AppColors.secondaryColor,
+                  ),
+                  CustomIconButton(
+                    width: 45.w,
+                    height: 45.h,
+                    onPressed: () {
+                      navigateTo(context, UpdateProfileScreen());
+                    },
+                    icon: const Icon(MyIcons.edit, color: Colors.white),
+                    buttonColor: AppColors.secondaryColor,
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

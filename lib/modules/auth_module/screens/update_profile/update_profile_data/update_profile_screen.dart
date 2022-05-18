@@ -170,23 +170,33 @@ class _ProfilePicture extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = AppCubit.get(context).getUser!;
-    return Stack(
-      alignment: AlignmentDirectional.bottomStart,
-      children: [
-        Container(
-            margin: EdgeInsets.all(8.h),
-            child: MyProfilePicture(url: user.logoUrl!)),
-        CircleAvatar(
-            backgroundColor: AppColors.secondaryColor,
-            child: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.edit,
-                color: Colors.white,
-              ),
-            ))
-      ],
-    );
+    return BlocConsumer<AuthCubit, AuthState>(listener: (context, state) {
+      if (state is PickPersonalImageErrorState) {
+        SharedMethods.showToast(context, state.error,
+            color: AppColors.errorColor, textColor: Colors.white);
+      }
+    }, builder: (context, state) {
+      final authCubit = AuthCubit.get(context);
+      return Stack(
+        alignment: AlignmentDirectional.bottomStart,
+        children: [
+          authCubit.hasPickedPersonalImage
+              ? ProfilePictureFromFile(file: authCubit.selectedImageFile!)
+              : MyProfilePicture(url: user.logoUrl!),
+          CircleAvatar(
+              backgroundColor: AppColors.secondaryColor,
+              child: IconButton(
+                onPressed: () {
+                  AuthCubit.get(context).changePicture();
+                },
+                icon: const Icon(
+                  Icons.edit,
+                  color: Colors.white,
+                ),
+              ))
+        ],
+      );
+    });
   }
 }
 

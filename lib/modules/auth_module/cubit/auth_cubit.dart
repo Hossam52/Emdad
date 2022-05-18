@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
@@ -7,9 +8,11 @@ import 'package:emdad/layout/user_layout/user_layout.dart';
 import 'package:emdad/layout/vendor_layout/vendor_layout_screen.dart';
 import 'package:emdad/models/enums/enums.dart';
 import 'package:emdad/models/general_models/settings_model.dart';
+import 'package:emdad/models/general_models/upload_image_model.dart';
 import 'package:emdad/models/request_models/change_email_request_model.dart';
 import 'package:emdad/models/request_models/change_password_request_model.dart';
 import 'package:emdad/models/request_models/update_profile_request_model.dart';
+import 'package:emdad/models/request_models/upload_images_request_model.dart';
 import 'package:emdad/models/users/auth/user_register_data_model.dart';
 import 'package:emdad/models/users/user/user_response_model.dart';
 import 'package:emdad/models/users/user/user_response_model.dart' as userModel;
@@ -21,8 +24,10 @@ import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/cubit/app_cubit.dart';
 import 'package:emdad/shared/network/local/cache_helper.dart';
 import 'package:emdad/shared/network/services/auth_services.dart';
+import 'package:emdad/shared/network/services/general/general_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 import 'package:open_location_picker/open_location_picker.dart';
 import 'package:progress_state_button/progress_button.dart';
@@ -462,6 +467,23 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  //For picked personal file image
+  File? selectedImageFile;
+  Future<void> changePicture() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? pickedFile =
+        await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      selectedImageFile = File(pickedFile.path);
+      emit(PickPersonalImageSuccessState());
+    } else {
+      print('No image selected. ');
+      emit(PickPersonalImageErrorState(error: 'No image selected'));
+    }
+  }
+
+  bool get hasPickedPersonalImage => selectedImageFile != null;
   Future<void> updateProfile(
       {required BuildContext context,
       required String organization,
@@ -469,17 +491,46 @@ class AuthCubit extends Cubit<AuthState> {
       required String country,
       required String city}) async {
     try {
+      Map<String, dynamic> map = {};
       emit(UpdateProfileLoadingState());
-      final map = await AuthServices.updateProfile(UpdateProfileRequestModel(
-          oraganizationName: organization,
-          commercialRegister: commericalRegister,
-          city: city,
-          country: country));
+      if (hasPickedPersonalImage) {
+        final uploadedFiles = await _uploadSelectedImagesToServer();
+        if (uploadedFiles.status == false) {
+          throw 'Error happened when upload image';
+        }
+        map = await AuthServices.updateProfile(UpdateProfileRequestModel(
+            logo: uploadedFiles.logo,
+            oraganizationName: organization,
+            commercialRegister: commericalRegister,
+            city: city,
+            country: country));
+      } else {
+        map = await AuthServices.updateProfile(UpdateProfileRequestModel(
+            oraganizationName: organization,
+            commercialRegister: commericalRegister,
+            city: city,
+            country: country));
+      }
       final user = UserResponseModel.fromJson(map);
       AppCubit.get(context).setUser = user;
       emit(UpdateProfileSuccessState());
     } catch (e) {
       emit(UpdateProfileErrorState(error: e.toString()));
     }
+  }
+
+  Future<UploadPersonalImageModel> _uploadSelectedImagesToServer() async {
+    log('First');
+    if (selectedImageFile == null) {
+      log('second');
+      //That means user not upload main image or any other images
+      return UploadPersonalImageModel.empty();
+    }
+    log('third');
+    final map = await GeneralServices.instance
+        .uploadImages(UploadUserImageRequestModel(selectedImageFile!));
+    log('forth');
+    final allImages = UploadPersonalImageModel.fromMap(map);
+    return allImages;
   }
 }

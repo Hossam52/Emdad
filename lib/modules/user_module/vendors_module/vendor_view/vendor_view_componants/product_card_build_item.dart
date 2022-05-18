@@ -35,20 +35,20 @@ class ProductCardBuildItem extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            gradient: !selectedCard
-                ? null
-                : LinearGradient(
-                    colors: [
-                        AppColors.primaryColor,
-                        AppColors.primaryColor.withOpacity(0.5),
-                        AppColors.primaryColor.withOpacity(0.45),
-                        AppColors.primaryColor.withOpacity(0.4),
-                        AppColors.primaryColor.withOpacity(0.1),
-                        AppColors.primaryColor.withOpacity(0.0),
-                        AppColors.primaryColor.withOpacity(0.0),
-                      ],
-                    begin: AlignmentDirectional.topCenter,
-                    end: AlignmentDirectional.bottomCenter),
+            // gradient: !selectedCard
+            //     ? null
+            //     : LinearGradient(
+            //         colors: [
+            //             AppColors.primaryColor,
+            //             AppColors.primaryColor.withOpacity(0.5),
+            //             AppColors.primaryColor.withOpacity(0.45),
+            //             AppColors.primaryColor.withOpacity(0.4),
+            //             AppColors.primaryColor.withOpacity(0.1),
+            //             AppColors.primaryColor.withOpacity(0.0),
+            //             AppColors.primaryColor.withOpacity(0.0),
+            //           ],
+            //         begin: AlignmentDirectional.topCenter,
+            //         end: AlignmentDirectional.bottomCenter),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -80,12 +80,15 @@ class ProductCardBuildItem extends StatelessWidget {
               //     ),
               //   ],
               // ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Container(
-                    child: Column(
+              Container(
+                color: selectedCard
+                    ? AppColors.successColor.withOpacity(0.3)
+                    : null,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
@@ -102,9 +105,9 @@ class ProductCardBuildItem extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ),
-                  if (trailing != null) trailing!,
-                ],
+                    if (trailing != null) trailing!,
+                  ],
+                ),
               )
             ],
           ),

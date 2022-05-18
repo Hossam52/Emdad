@@ -28,70 +28,88 @@ class HomeVendorBuildItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Stack(
-              children: [
-                Container(
-                  width: width,
-                  height: width,
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: DefaultCachedNetworkImage(
-                    imageUrl: user.logoUrl!,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                if (isFavorite)
+            Expanded(
+              child: Stack(
+                children: [
                   Container(
-                    margin: const EdgeInsets.all(8),
-                    child: CircleAvatar(
-                      backgroundColor: Colors.white,
-                      radius: 15.r,
-                      child: IconButton(
-                        color: Colors.red,
-                        iconSize: 20,
-                        icon: const Icon(Icons.favorite),
-                        padding: EdgeInsets.zero,
-                        onPressed: () {},
+                    width: width,
+                    height: width,
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: DefaultCachedNetworkImage(
+                      imageUrl: user.logoUrl!,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  if (isFavorite)
+                    Container(
+                      margin: const EdgeInsets.all(8),
+                      child: CircleAvatar(
+                        backgroundColor: Colors.white,
+                        radius: 15.r,
+                        child: IconButton(
+                          color: Colors.red,
+                          iconSize: 20,
+                          icon: const Icon(Icons.favorite),
+                          padding: EdgeInsets.zero,
+                          onPressed: () {},
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            // SizedBox(height: 12.h),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      user.name!,
+                      style: subTextStyle().copyWith(
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
-              ],
-            ),
-            SizedBox(height: 12.h),
-            Text(
-              user.name!,
-              style: subTextStyle().copyWith(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            Text(
-              user.firstVendorType,
-              style: subTextStyle().copyWith(
-                color: Colors.black54,
-              ),
-            ),
-            Text(
-              user.city!,
-              style: subTextStyle().copyWith(
-                color: Colors.black54,
-              ),
-            ),
-            Row(
-              children: [
-                Text(
-                  '4.9',
-                  style: subTextStyle().copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.thirdColor,
+                  Expanded(
+                    child: Text(
+                      user.allVendorTypeString,
+                      style: subTextStyle().copyWith(
+                        color: Colors.black54,
+                      ),
+                    ),
                   ),
-                ),
-                const Icon(
-                  Icons.star_rounded,
-                  color: AppColors.thirdColor,
-                ),
-              ],
+                  Expanded(
+                    child: Text(
+                      user.city!,
+                      style: subTextStyle().copyWith(
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    child: Row(
+                      children: [
+                        Text(
+                          '4.9',
+                          style: subTextStyle().copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.thirdColor,
+                          ),
+                        ),
+                        Icon(
+                          Icons.star_rounded,
+                          size: 20.r,
+                          color: AppColors.thirdColor,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             )
           ],
         ),
