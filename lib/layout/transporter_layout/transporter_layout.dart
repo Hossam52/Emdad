@@ -3,7 +3,6 @@ import 'package:emdad/layout/transporter_layout/cubit/transporter_cubit.dart';
 import 'package:emdad/layout/transporter_layout/cubit/transporter_state.dart';
 import 'package:emdad/layout/transporter_layout/transporter_bottom_navigation_bar.dart';
 import 'package:emdad/layout/user_layout/layout_components/drawer_list_build_item.dart';
-import 'package:emdad/layout/user_layout/layout_components/user_layout_drawer.dart';
 import 'package:emdad/layout/widgets/profile_check_wrapper.dart';
 import 'package:emdad/modules/transporter_module/transporter_cubits/transporter_offers_cubit/transporter_offers_cubit.dart';
 import 'package:emdad/modules/transporter_module/transporter_cubits/transporter_purchase_orders_cubit/transporter_dlivery_orders_cubit.dart';

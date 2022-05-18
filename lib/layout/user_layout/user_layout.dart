@@ -16,8 +16,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'layout_components/user_layout_drawer.dart';
-
 class UserLayout extends StatefulWidget {
   const UserLayout({Key? key}) : super(key: key);
 

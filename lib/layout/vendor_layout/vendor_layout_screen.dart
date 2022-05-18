@@ -1,6 +1,5 @@
 import 'package:emdad/layout/custom_drawer.dart';
 import 'package:emdad/layout/user_layout/layout_components/drawer_list_build_item.dart';
-import 'package:emdad/layout/user_layout/layout_components/user_layout_drawer.dart';
 import 'package:emdad/layout/vendor_layout/cubit/vendor_cubit.dart';
 import 'package:emdad/layout/widgets/profile_check_wrapper.dart';
 import 'package:emdad/modules/vendor_module/screens/vender_add_product_view/vendor_add_new_product_screen.dart';
