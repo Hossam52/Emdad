@@ -1,4 +1,5 @@
 import 'package:emdad/layout/transporter_layout/transporter_layout.dart';
+import 'package:emdad/models/transportations/transportation_supply_requests/transporter_supply_request.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
@@ -10,15 +11,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TransportProcessScreen extends StatefulWidget {
-  const TransportProcessScreen({Key? key}) : super(key: key);
-
+  const TransportProcessScreen({Key? key, required this.order})
+      : super(key: key);
+  final TransporterSupplyRequest order;
   @override
   State<TransportProcessScreen> createState() => _TransportProcessScreenState();
 }
 
-int initialProcessValue = 0;
-
 class _TransportProcessScreenState extends State<TransportProcessScreen> {
+  int initialProcessValue = 0;
   @override
   void initState() {
     super.initState();
@@ -27,6 +28,10 @@ class _TransportProcessScreenState extends State<TransportProcessScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final supplyRequest = widget.order.supplyRequest;
+    final user = supplyRequest.user;
+    final vendor = supplyRequest.vendor;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.primaryColor,
@@ -56,114 +61,40 @@ class _TransportProcessScreenState extends State<TransportProcessScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(height: 40.h),
-            const CustomTransporterOrderListTile(
-              clientImageUrl:
-                  'https://tse1.mm.bing.net/th?id=OIP.L3uZEm5nXG-UtEGXNL8tFQHaFj&pid=Api&P=0&w=244&h=183',
-              clientName: 'محمد احمد',
-              clientCompanyName: 'زاد',
-              address: 'العنوان',
+            CustomTransporterOrderListTile(
+              clientImageUrl: user.logoUrl,
+              clientName: user.name,
+              clientCompanyName: user.oraganizationName,
+              address: user.detailAddress,
             ),
             SizedBox(height: 40.h),
-            Container(
-              child: initialProcessValue != 1 &&
-                      initialProcessValue != 2 &&
-                      initialProcessValue != 3
-                  ? CustomButton(
-                      width: 280.w,
-                      text: 'تم الوصول الي مكان الالتقاط',
-                      textStyle: thirdTextStyle().copyWith(
-                          color: Colors.white, fontWeight: FontWeight.w500),
-                      onPressed: () {
-                        setState(() {
-                          initialProcessValue++;
-                          print(initialProcessValue);
-                        });
-                      },
-                    )
-                  : Stack(
-                      alignment: Alignment.centerLeft,
-                      children: [
-                        CustomButton(
-                          width: 280.w,
-                          text: 'تم الوصول الي موقع الإلتقاط',
-                          textStyle: thirdTextStyle().copyWith(
-                              color: Colors.white, fontWeight: FontWeight.w500),
-                          onPressed: () {},
-                          backgroundColor:
-                              AppColors.textButtonColor.withOpacity(0.5),
-                        ),
-                        Container(
-                          width: 40.w,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4.r),
-                            color: const Color(0xff1CAF17),
-                          ),
-                          child: Center(
-                            child: IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.check,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+            _DeliveryButton(
+              title: 'تم الوصول ل مكان الاتقاطس',
+              onPressed: () {
+                setState(() {
+                  initialProcessValue++;
+                  print(initialProcessValue);
+                });
+              },
+              displayWithSuccess: initialProcessValue <= 0,
             ),
             SizedBox(height: 30.h),
-            const CustomTransporterOrderListTile(
-              clientImageUrl:
-                  'https://tse1.mm.bing.net/th?id=OIP.L3uZEm5nXG-UtEGXNL8tFQHaFj&pid=Api&P=0&w=244&h=183',
-              clientName: 'محمد احمد',
-              clientCompanyName: 'زاد',
-              address: 'العنوان',
+            CustomTransporterOrderListTile(
+              clientImageUrl: vendor.logoUrl,
+              clientName: vendor.name,
+              clientCompanyName: vendor.oraganizationName,
+              address: vendor.detailAddress,
             ),
             SizedBox(height: 30.h),
-            Container(
-              child: initialProcessValue != 2 && initialProcessValue != 3
-                  ? CustomButton(
-                      width: 280.w,
-                      text: 'تم الوصول الي موقع التوصيل',
-                      textStyle: thirdTextStyle().copyWith(
-                          color: Colors.white, fontWeight: FontWeight.w500),
-                      onPressed: () {
-                        setState(() {
-                          initialProcessValue++;
-                          print(initialProcessValue);
-                        });
-                      },
-                    )
-                  : Stack(
-                      alignment: Alignment.centerLeft,
-                      children: [
-                        CustomButton(
-                          width: 280.w,
-                          text: 'تم الوصول الي موقع التوصيل',
-                          textStyle: thirdTextStyle().copyWith(
-                              color: Colors.white, fontWeight: FontWeight.w500),
-                          onPressed: () {},
-                          backgroundColor:
-                              AppColors.textButtonColor.withOpacity(0.5),
-                        ),
-                        Container(
-                          width: 40.w,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4.r),
-                            color: const Color(0xff1CAF17),
-                          ),
-                          child: Center(
-                            child: IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.check,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+            _DeliveryButton(
+              title: 'تم الوصول الي موقع التوصيل',
+              displayWithSuccess: initialProcessValue <= 1,
+              onPressed: () {
+                setState(() {
+                  initialProcessValue++;
+                  print(initialProcessValue);
+                });
+              },
             ),
             SizedBox(height: 50.h),
             CustomButton(
@@ -174,35 +105,10 @@ class _TransportProcessScreenState extends State<TransportProcessScreen> {
                   .copyWith(color: Colors.white, fontWeight: FontWeight.w500),
               onPressed: () {
                 showDialog(
-                    context: context,
-                    builder: (ctx) => AlertDialog(
-                          title: CustomText(
-                            text: 'تم الانتهاء من التوصيل بنجاح',
-                            textStyle: thirdTextStyle()
-                                .copyWith(fontWeight: FontWeight.w500),
-                          ),
-                          content: CircleAvatar(
-                            radius: 40.r,
-                            backgroundColor: const Color(0xff39AA2D),
-                            child: const Icon(Icons.check, color: Colors.white),
-                          ),
-                          actions: <Widget>[
-                            CustomButton(
-                              width: 215.w,
-                              text: 'إغلاق',
-                              backgroundColor: Colors.red,
-                              textStyle: thirdTextStyle().copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500),
-                              onPressed: () {
-                                Navigator.of(ctx).pop(true);
-                                navigateToAndFinish(
-                                    context, const TransporterLayout());
-                              },
-                            ),
-                          ],
-                          actionsAlignment: MainAxisAlignment.center,
-                        ));
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (ctx) => const _Dialog(),
+                );
               },
             ),
           ],
@@ -210,36 +116,93 @@ class _TransportProcessScreenState extends State<TransportProcessScreen> {
       ),
     );
   }
+}
 
-  Widget buildClickedButton() {
-    return Stack(
-      alignment: Alignment.centerLeft,
-      children: [
-        CustomButton(
-          width: 280.w,
-          text: 'تم الوصول الي موقع التوصيل',
-          textStyle: thirdTextStyle()
-              .copyWith(color: Colors.white, fontWeight: FontWeight.w500),
-          onPressed: () {},
-          backgroundColor: AppColors.textButtonColor.withOpacity(0.5),
-        ),
-        Container(
-          width: 40.w,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4.r),
-            color: const Color(0xff1CAF17),
-          ),
-          child: Center(
-            child: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.check,
-                color: Colors.white,
-              ),
+class _DeliveryButton extends StatelessWidget {
+  const _DeliveryButton(
+      {Key? key,
+      required this.title,
+      this.onPressed,
+      required this.displayWithSuccess})
+      : super(key: key);
+  final String title;
+  final VoidCallback? onPressed;
+  final bool displayWithSuccess;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: displayWithSuccess
+          ? CustomButton(
+              width: 280.w,
+              text: title,
+              textStyle: thirdTextStyle()
+                  .copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+              onPressed: onPressed)
+          : Stack(
+              alignment: Alignment.centerLeft,
+              children: [
+                CustomButton(
+                  width: 280.w,
+                  text: title,
+                  textStyle: thirdTextStyle().copyWith(
+                      color: Colors.white, fontWeight: FontWeight.w500),
+                  onPressed: () {},
+                  backgroundColor: AppColors.textButtonColor.withOpacity(0.5),
+                ),
+                Container(
+                  width: 40.w,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4.r),
+                    color: const Color(0xff1CAF17),
+                  ),
+                  child: Center(
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.check,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                )
+              ],
             ),
+    );
+  }
+}
+
+class _Dialog extends StatelessWidget {
+  const _Dialog({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: AlertDialog(
+        title: CustomText(
+          text: 'تم الانتهاء من التوصيل بنجاح',
+          textStyle: thirdTextStyle().copyWith(fontWeight: FontWeight.w500),
+        ),
+        content: CircleAvatar(
+          radius: 40.r,
+          backgroundColor: const Color(0xff39AA2D),
+          child: const Icon(Icons.check, color: Colors.white),
+        ),
+        actions: <Widget>[
+          CustomButton(
+            width: 215.w,
+            text: 'إغلاق',
+            backgroundColor: Colors.red,
+            textStyle: thirdTextStyle()
+                .copyWith(color: Colors.white, fontWeight: FontWeight.w500),
+            onPressed: () {
+              Navigator.of(context).pop(true);
+              navigateToAndFinish(context, const TransporterLayout());
+            },
           ),
-        )
-      ],
+        ],
+        actionsAlignment: MainAxisAlignment.center,
+      ),
     );
   }
 }

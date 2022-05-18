@@ -1,4 +1,8 @@
+import 'package:dotted_line/dotted_line.dart';
+import 'package:emdad/models/transportations/transportation_supply_requests/transporter_supply_request.dart';
 import 'package:emdad/modules/transporter_module/screens/transporter_delivery_orders_view/transport_process_screen.dart';
+import 'package:emdad/modules/transporter_module/transporter_cubits/transporter_order_details_cubit/transporter_order_details_cubit.dart';
+import 'package:emdad/modules/transporter_module/transporter_cubits/transporter_order_details_cubit/transporter_order_details_states.dart';
 import 'package:emdad/modules/transporter_module/transporter_widgets/transporter_all_items.dart';
 import 'package:emdad/modules/transporter_module/transporter_widgets/transporter_price_overview.dart';
 import 'package:emdad/modules/user_module/order_view/order_item_build.dart';
@@ -9,19 +13,16 @@ import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/custom_buton_with_icon.dart';
 import 'package:emdad/shared/widgets/custom_text.dart';
 import 'package:emdad/shared/widgets/custom_transporter_order_list_tile.dart';
+import 'package:emdad/shared/widgets/ui_componants/default_loader.dart';
+import 'package:emdad/shared/widgets/ui_componants/no_data_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class TransporterOrderDetailsScreen extends StatefulWidget {
-  const TransporterOrderDetailsScreen({Key? key}) : super(key: key);
-
-  @override
-  State<TransporterOrderDetailsScreen> createState() =>
-      _TransporterOfferDetailsScreenState();
-}
-
-class _TransporterOfferDetailsScreenState
-    extends State<TransporterOrderDetailsScreen> {
+class TransporterOrderDetailsScreen extends StatelessWidget {
+  const TransporterOrderDetailsScreen({Key? key, required this.transportId})
+      : super(key: key);
+  final String transportId;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +40,7 @@ class _TransporterOfferDetailsScreenState
           icon: const Icon(Icons.arrow_back, color: Colors.white),
         ),
         title: CustomText(
-          text: 'تتفاصيل الطلب',
+          text: 'تفاصيل الطلب',
           textStyle: primaryTextStyle().copyWith(
             color: Colors.white,
             fontWeight: FontWeight.w700,
@@ -47,108 +48,124 @@ class _TransporterOfferDetailsScreenState
         ),
         actions: const [ChangeLangWidget(color: Colors.white)],
       ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                children: [
-                  const CustomTransporterOrderListTile(
-                    clientImageUrl:
-                        'https://image.freepik.com/free-photo/medium-shot-happy-man-smiling_23-2148221808.jpg',
-                    clientName: 'محمد احمد',
-                    clientCompanyName: 'زاد',
-                    address: 'العنوان',
-                  ),
-                  SizedBox(height: 30.h),
-                  const CustomTransporterOrderListTile(
-                    clientImageUrl:
-                        'https://image.freepik.com/free-photo/medium-shot-happy-man-smiling_23-2148221808.jpg',
-                    clientName: 'محمد احمد',
-                    clientCompanyName: 'زاد',
-                    address: 'العنوان',
-                  ),
-                ],
-              ),
-              SizedBox(height: 40.h),
-              TransporterAllItemsWidget(
-                additionalItems: [],
-                items: [],
-              ),
-              SizedBox(height: 20.h),
-              Row(
-                children: [
-                  CustomText(
-                    text: 'نوع النقل:',
-                    textStyle:
-                        thirdTextStyle().copyWith(fontWeight: FontWeight.w700),
-                  ),
-                  SizedBox(width: 10.w),
-                  CustomText(
-                    text: 'سيارة نصف نقل',
-                    textAlign: TextAlign.start,
-                    textStyle: thirdTextStyle()
-                        .copyWith(fontWeight: FontWeight.normal),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20.h),
-              Row(
-                children: [
-                  CustomText(
-                    text: 'ملاحظات:',
-                    textStyle:
-                        thirdTextStyle().copyWith(fontWeight: FontWeight.w700),
-                  ),
-                  SizedBox(width: 10.w),
-                  CustomText(
-                    text: 'يفضل نص نقل شيفروليه ٤*٤',
-                    textAlign: TextAlign.start,
-                    textStyle: thirdTextStyle()
-                        .copyWith(fontWeight: FontWeight.normal),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20.h),
-              Row(
-                children: [
-                  CustomText(
-                    text: 'سعر النقل:',
-                    textStyle:
-                        thirdTextStyle().copyWith(fontWeight: FontWeight.w700),
-                  ),
-                  SizedBox(width: 10.w),
-                  CustomText(
-                    text: '١٢٠٠ ر.س',
-                    textStyle:
-                        thirdTextStyle().copyWith(fontWeight: FontWeight.w500),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20.h),
-              const TransporterPriceOverview(
-                price: 10,
-              ),
-              SizedBox(height: 40.h),
-              Align(
-                child: CustomButtonWithIcon(
-                  width: 302.w,
-                  height: 57.h,
+      body: BlocProvider(
+        create: (context) =>
+            TrnasporterOrderDetailsCubit(transportId: transportId)
+              ..getTransport(),
+        child: TrnasporterOrderDetailsBlocBuilder(
+          builder: (context, state) {
+            final orderCubit = TrnasporterOrderDetailsCubit.instance(context);
+            if (state is GetTransportLoadingState) return const DefaultLoader();
+            if (state is GetTransportErrorState) {
+              return NoDataWidget(
                   onPressed: () {
-                    navigateTo(context, const TransportProcessScreen());
+                    orderCubit.getTransport();
                   },
-                  text: 'بدأعملية التوصيل',
-                  iconData: Icons.place,
-                  textStyle: thirdTextStyle().copyWith(
-                      color: Colors.white, fontWeight: FontWeight.w500),
+                  text: state.error);
+            }
+            if (orderCubit.errorInOrder) {
+              return NoDataWidget(
+                  onPressed: () {
+                    orderCubit.getTransport();
+                  },
+                  text: 'حدث خطأ في الطلب برجاء المحاولة مجددا');
+            }
+            final order = orderCubit.order;
+            final supplyRequest = order.supplyRequest;
+            final vendor = supplyRequest.vendor;
+            final user = supplyRequest.user;
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      children: [
+                        CustomTransporterOrderListTile(
+                          clientImageUrl: user.logoUrl,
+                          clientName: user.name,
+                          clientCompanyName: user.oraganizationName,
+                          address: user.detailAddress,
+                        ),
+                        DottedLine(
+                          direction: Axis.vertical,
+                          lineLength: 60.h,
+                          // dashGapLength: 5,
+                          dashLength: 10.h,
+                          lineThickness: 1,
+                        ),
+                        CustomTransporterOrderListTile(
+                          clientImageUrl: vendor.logoUrl,
+                          clientName: vendor.name,
+                          clientCompanyName: vendor.oraganizationName,
+                          address: vendor.detailAddress,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 40.h),
+                    TransporterAllItemsWidget(
+                      additionalItems: supplyRequest.additionalItems,
+                      items: supplyRequest.requestItems,
+                    ),
+                    SizedBox(height: 20.h),
+                    rowItem('نوع النقل', order.transportationMethod),
+                    if (order.transportationOffer?.notes != null)
+                      rowItem('ملاحظات', order.transportationOffer!.notes),
+                    rowItem('سعر النقل',
+                        order.transportationOffer!.price.toString()),
+                    SizedBox(height: 20.h),
+                    TransporterPriceOverview(
+                      price: order.transportationOffer!.price,
+                    ),
+                    SizedBox(height: 40.h),
+                    Align(
+                      child: CustomButtonWithIcon(
+                        width: 302.w,
+                        height: 57.h,
+                        onPressed: () {
+                          navigateTo(
+                              context,
+                              TransportProcessScreen(
+                                order: order,
+                              ));
+                        },
+                        text: 'بدأعملية التوصيل',
+                        iconData: Icons.place,
+                        textStyle: thirdTextStyle().copyWith(
+                            color: Colors.white, fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            );
+          },
         ),
       ),
+    );
+  }
+
+  Widget rowItem(String key, String val) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            CustomText(
+              text: key,
+              textStyle: thirdTextStyle().copyWith(fontWeight: FontWeight.w700),
+            ),
+            SizedBox(width: 10.w),
+            CustomText(
+              text: val,
+              textAlign: TextAlign.start,
+              textStyle:
+                  thirdTextStyle().copyWith(fontWeight: FontWeight.normal),
+            ),
+          ],
+        ),
+        SizedBox(height: 20.h),
+      ],
     );
   }
 }

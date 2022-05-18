@@ -48,7 +48,7 @@ class TransporterDeliveryOrdersScreen extends StatelessWidget {
             child: Column(
               children: [
                 TitleWithFilterBuildItem(
-                  title: 'عروض اسعار',
+                  title: 'أوامر التوصيل',
                   changeSortType: (sortType) {},
                   hasSort: false,
                 ),
@@ -65,7 +65,10 @@ class TransporterDeliveryOrdersScreen extends StatelessWidget {
                       order: orders[index],
                       onTap: () {
                         navigateTo(
-                            context, const TransporterOrderDetailsScreen());
+                            context,
+                            TransporterOrderDetailsScreen(
+                              transportId: orders[index].id,
+                            ));
                       },
                     ),
                   ),
