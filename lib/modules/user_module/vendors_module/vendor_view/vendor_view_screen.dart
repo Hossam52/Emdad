@@ -187,6 +187,7 @@ class _CategoryWithProducts extends StatelessWidget {
     var products = categoryModel.products;
     products =
         products.take(products.length > 10 ? 10 : products.length).toList();
+
     return Column(
       children: [
         ListTile(
@@ -215,26 +216,34 @@ class _CategoryWithProducts extends StatelessWidget {
         SizedBox(
           height: 250.h,
           width: double.infinity,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            primary: true,
-            shrinkWrap: true,
-            itemBuilder: (_, index) => ProductCardBuildItem(
-              product: products[index],
-              onProductTapped: () {
-                navigateTo(
-                    context,
-                    BlocProvider.value(
-                      value: CartCubit.instance(context),
-                      child: ProductDetailsScreen(
-                          productId: products[index].id, isVendor: false),
-                    ));
-              },
-            ),
-            itemCount: products.length,
-          ),
+          child: Builder(builder: (context) {
+            if (products.isEmpty) {
+              return EmptyData(
+                emptyText: 'لا يوجد منتجات خاصة ب ${categoryModel.category}',
+                displayImage: false,
+              );
+            }
+            return ListView.builder(
+              scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              primary: true,
+              shrinkWrap: true,
+              itemBuilder: (_, index) => ProductCardBuildItem(
+                product: products[index],
+                onProductTapped: () {
+                  navigateTo(
+                      context,
+                      BlocProvider.value(
+                        value: CartCubit.instance(context),
+                        child: ProductDetailsScreen(
+                            productId: products[index].id, isVendor: false),
+                      ));
+                },
+              ),
+              itemCount: products.length,
+            );
+          }),
         ),
       ],
     );

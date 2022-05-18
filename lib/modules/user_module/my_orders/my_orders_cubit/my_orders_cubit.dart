@@ -52,8 +52,8 @@ class MyOrdersCubit extends Cubit<MyOrdersStates> {
     }
   }
 
-  OrderTabDetails get orderTab => details[1];
-  // OrderTabDetails get orderTab => details[selectedTabIndex];
+  // OrderTabDetails get orderTab => details[1];
+  OrderTabDetails get orderTab => details[selectedTabIndex];
 
   final _services = UserServices.instance;
   late List<OrderTabDetails> details;

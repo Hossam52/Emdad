@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:emdad/layout/widgets/custom_bottom_nav_item.dart';
+import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,125 +21,70 @@ typedef VendorBlocConsumer = BlocConsumer<VendorCubit, VendorStates>;
 
 //
 class VendorCubit extends Cubit<VendorStates> {
-  VendorCubit() : super(IntitalVendorState());
+  VendorCubit() : super(IntitalVendorState()) {
+    bottomItems = [
+      CustomBottomNavItemModel(
+        child: VendorOffersScreen(),
+        title: 'طلبات عرض سعر',
+        icon: Icons.show_chart_outlined,
+      ),
+      CustomBottomNavItemModel(
+        child: const VendorProductsScreen(),
+        title: 'منتجاتي',
+        icon: Icons.shopping_cart_outlined,
+      ),
+      CustomBottomNavItemModel(
+        child: const VendorPurchaseOrdersScreen(),
+        title: 'طلبات أوامر الشراء',
+        icon: Icons.how_to_reg_outlined,
+      ),
+      CustomBottomNavItemModel(
+        child: const SettingsScreen(),
+        title: 'الضبط',
+        icon: MyIcons.settings,
+      ),
+    ];
+  }
   static VendorCubit instance(BuildContext context) =>
       BlocProvider.of<VendorCubit>(context);
   final vendorServices = VendorServices.instance;
-  final List<VendorBottomBarItem> bottomItems = []; //Will implement it
-
-  File? productImage;
-  List<XFile>? productOtherImages = [];
-  ImagePicker get picker => _picker;
-  final ImagePicker _picker = ImagePicker();
-
-  Future<void> getProductImage() async {
-    final XFile? pickedFile =
-        await _picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      productImage = File(pickedFile.path);
-      emit(ProductImagePickedSuccessState());
-    } else {
-      print('No image selected. ');
-      emit(ProductImagePickedErrorState());
-    }
-  }
-
-  Future<void> getProductOtherImages() async {
-    final List<XFile>? pickedFiles = await _picker.pickMultiImage();
-
-    if (pickedFiles!.isNotEmpty) {
-      productOtherImages!.addAll(pickedFiles);
-      emit(ProductPickedMultiImagesSuccessState());
-    } else {
-      print('No images selected. ');
-      emit(ProductPickedMultiImagesErrorState());
-    }
-
-    print(
-        'Image list length selected. ' + productOtherImages!.length.toString());
-  }
-
-  void removeProductImage() {
-    productImage = null;
-    emit(RemoveProductImageStateState());
-  }
-
-  void removeProductOtherImages(int index) {
-    productOtherImages!.removeAt(index);
-    emit(RemoveProductOtherImagesStateState());
-  }
-
-  bool? isSelected = false;
-
-  List<ProductDetailsModel> products = [
-    ProductDetailsModel(
-      productId: 1,
-      unit: 'طن',
-      minimum: '٤',
-      itemPrice: '٤٠٠',
-      tax: '١٥٪',
-    ),
-    ProductDetailsModel(
-      productId: 2,
-      unit: 'طن',
-      minimum: '٤',
-      itemPrice: '٤٠٠',
-      tax: '١٥٪',
-    ),
-    ProductDetailsModel(
-      productId: 3,
-      unit: 'طن',
-      minimum: '٤',
-      itemPrice: '٤٠٠',
-      tax: '١٥٪',
-    ),
-    ProductDetailsModel(
-      productId: 4,
-      unit: 'طن',
-      minimum: '٤',
-      itemPrice: '٤٠٠',
-      tax: '١٥٪',
-    ),
-  ];
-
-  changeCheckBoxState(bool value) {
-    isSelected = value;
-    emit(ChangeCheckBoxState());
-  }
-
-  deletePriceDetails(int index) {
-    products.removeAt(index);
-    emit(DeletePriceDetailsState());
-  }
+  late List<CustomBottomNavItemModel> bottomItems;
 
   int currentPageIndex = 0;
 
-  List<String> titles = [
-    'طلب عرض سعر',
-    'منتجاتي',
-    'طلبات أوامر الشراء',
-    'الملف الشخصي',
-  ];
+  // List<String> titles = [
+  //   'طلب عرض سعر',
+  //   'منتجاتي',
+  //   'طلبات أوامر الشراء',
+  //   'الملف الشخصي',
+  // ];
 
-  List<Widget> screens = [
-    VendorOffersScreen(),
-    VendorProductsScreen(),
-    const VendorPurchaseOrdersScreen(),
-    const SettingsScreen(),
-  ];
+  // List<Widget> screens = [
+  //   VendorOffersScreen(),
+  //   const VendorProductsScreen(),
+  //   const VendorPurchaseOrdersScreen(),
+  //   const SettingsScreen(),
+  // ];
+  CustomBottomNavItemModel get selectedBottomItem =>
+      bottomItems[currentPageIndex];
+  void changeToOffers() {
+    changeIndex(0);
+  }
+
+  void changeToProducts() {
+    changeIndex(1);
+  }
+
+  void changeToPurchase() {
+    changeIndex(2);
+  }
+
+  void chnageeToSettings() {
+    changeIndex(3);
+  }
 
   void changeIndex(int index) {
     currentPageIndex = index;
     emit(ChangeBottomNavBarState());
   }
-}
-
-class VendorBottomBarItem {
-  String title;
-  IconData icon;
-  VendorBottomBarItem({
-    required this.title,
-    required this.icon,
-  });
 }

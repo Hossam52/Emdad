@@ -20,7 +20,10 @@ class DrawerListBuildItem extends StatelessWidget {
     return ListTile(
       title: Text(title, style: thirdTextStyle()),
       leading: Icon(icon, color: Colors.black, size: size),
-      onTap: onTap,
+      onTap: () {
+        Navigator.pop(context);
+        onTap();
+      },
       contentPadding: const EdgeInsets.symmetric(horizontal: 22),
     );
   }

@@ -1,6 +1,8 @@
+import 'package:emdad/layout/custom_drawer.dart';
 import 'package:emdad/layout/transporter_layout/cubit/transporter_cubit.dart';
 import 'package:emdad/layout/transporter_layout/cubit/transporter_state.dart';
 import 'package:emdad/layout/transporter_layout/transporter_bottom_navigation_bar.dart';
+import 'package:emdad/layout/user_layout/layout_components/drawer_list_build_item.dart';
 import 'package:emdad/layout/user_layout/layout_components/user_layout_drawer.dart';
 import 'package:emdad/layout/widgets/profile_check_wrapper.dart';
 import 'package:emdad/modules/transporter_module/transporter_cubits/transporter_offers_cubit/transporter_offers_cubit.dart';
@@ -60,7 +62,7 @@ class _TransporterLayoutState extends State<TransporterLayout> {
               length: 4,
               child: Scaffold(
                 appBar: AppBar(
-                  title: Text(cubit.selectedTitle()),
+                  title: Text(cubit.selectedBottom.title),
                   centerTitle: true,
                   leading: Builder(builder: (context) {
                     return IconButton(
@@ -79,7 +81,7 @@ class _TransporterLayoutState extends State<TransporterLayout> {
                   actions: [
                     IconButton(
                       icon: SvgPicture.asset(
-                          '//${Constants.defaultIconUrl}/notification.svg'),
+                          '${Constants.defaultIconUrl}/notification.svg'),
                       onPressed: () {},
                     ),
                     const ChangeLangWidget(),
@@ -87,15 +89,68 @@ class _TransporterLayoutState extends State<TransporterLayout> {
                 ),
                 bottomNavigationBar:
                     TransporterBottomNavigationBar(cubit: cubit),
-                drawer: const Drawer(
-                  child: UserDrawer(),
-                ),
-                body: cubit.selectedScreens[cubit.currentIndex],
+                drawer: const _TransporterDrawer(),
+                body: cubit.selectedBottom.child,
               ),
             );
           },
         ),
       ),
+    );
+  }
+}
+
+class _TransporterDrawer extends StatelessWidget {
+  const _TransporterDrawer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = TransporterCubit.get(context);
+    return CustomDrawer(
+      drawerItems: [
+        DrawerListBuildItem(
+          title: 'الرئيسية',
+          icon: MyIcons.home,
+          onTap: () {
+            cubit.changeToOffers();
+          },
+        ),
+        DrawerListBuildItem(
+          title: 'أوامر توصيل',
+          icon: MyIcons.note,
+          onTap: () {
+            cubit.changeToPurchase();
+          },
+        ),
+        DrawerListBuildItem(
+          title: 'الاشعارات',
+          icon: MyIcons.bell2,
+          onTap: () {},
+        ),
+        DrawerListBuildItem(
+          title: 'طلب مساعدة',
+          icon: MyIcons.question,
+          onTap: () {},
+        ),
+        DrawerListBuildItem(
+          title: 'الدعم والخصوصية',
+          icon: MyIcons.support,
+          onTap: () {},
+        ),
+        DrawerListBuildItem(
+          title: 'عنا',
+          icon: Icons.info_outlined,
+          size: 24,
+          onTap: () {},
+        ),
+        DrawerListBuildItem(
+          title: 'الضبط',
+          icon: MyIcons.settings,
+          onTap: () {
+            cubit.changeToSettings();
+          },
+        ),
+      ],
     );
   }
 }

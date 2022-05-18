@@ -1,3 +1,5 @@
+import 'package:emdad/layout/custom_drawer.dart';
+import 'package:emdad/layout/user_layout/layout_components/drawer_list_build_item.dart';
 import 'package:emdad/layout/user_layout/layout_components/user_layout_drawer.dart';
 import 'package:emdad/layout/vendor_layout/cubit/vendor_cubit.dart';
 import 'package:emdad/layout/widgets/profile_check_wrapper.dart';
@@ -6,6 +8,7 @@ import 'package:emdad/modules/vendor_module/screens/vendor_offers_view/vendor_of
 import 'package:emdad/modules/vendor_module/vendor_cubits/products_cubit/vendor_product_cubit.dart';
 import 'package:emdad/modules/vendor_module/vendor_cubits/purchase_orders_cubit/purchase_orders_cubit.dart';
 import 'package:emdad/shared/componants/components.dart';
+import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
 import 'package:emdad/shared/cubit/app_cubit.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
@@ -59,9 +62,7 @@ class _VendorLayoutState extends State<VendorLayout> {
             var vendorCubit = VendorCubit.instance(context);
             return Scaffold(
               resizeToAvoidBottomInset: false,
-              drawer: const Drawer(
-                child: UserDrawer(),
-              ),
+              drawer: const _VendorDrawer(),
               appBar: AppBar(
                 leading: Builder(builder: (context) {
                   return IconButton(
@@ -72,7 +73,7 @@ class _VendorLayoutState extends State<VendorLayout> {
                   );
                 }),
                 title: CustomText(
-                  text: vendorCubit.titles[vendorCubit.currentPageIndex],
+                  text: vendorCubit.selectedBottomItem.title,
                   textStyle: primaryTextStyle().copyWith(
                     color: AppColors.primaryColor,
                     fontWeight: FontWeight.w700,
@@ -86,7 +87,7 @@ class _VendorLayoutState extends State<VendorLayout> {
                   const ChangeLangWidget()
                 ],
               ),
-              body: vendorCubit.screens[vendorCubit.currentPageIndex],
+              body: vendorCubit.selectedBottomItem.child,
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
                   navigateTo(
@@ -115,82 +116,52 @@ class _VendorLayoutState extends State<VendorLayout> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
-                      Expanded(
-                        child: _BottomWidget(
-                          iconData: Icons.show_chart_outlined,
-                          index: 0,
-                          title: 'طلبات عرض سعر',
+                    children: [
+                      for (int i = 0; i < vendorCubit.bottomItems.length; i++)
+                        Expanded(
+                          flex:
+                              i != vendorCubit.bottomItems.length - 1 && i != 0
+                                  ? 2
+                                  : 1,
+                          child: _BottomWidget(
+                            iconData: vendorCubit.bottomItems[i].icon,
+                            index: i,
+                            title: vendorCubit.bottomItems[i].title,
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: _BottomWidget(
-                          iconData: Icons.shopping_cart_outlined,
-                          index: 1,
-                          title: 'منتجاتي',
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: _BottomWidget(
-                          iconData: Icons.how_to_reg_outlined,
-                          index: 2,
-                          title: 'طلبات أوامر الشراء',
-                        ),
-                      ),
-                      Expanded(
-                        child: _BottomWidget(
-                          iconData: Icons.settings_outlined,
-                          index: 3,
-                          title: 'الضبط',
-                        ),
-                      ),
+                      // Expanded(
+                      //   child: _BottomWidget(
+                      //     iconData: Icons.show_chart_outlined,
+                      //     index: 0,
+                      //     title: 'طلبات عرض سعر',
+                      //   ),
+                      // ),
+                      // Expanded(
+                      //   flex: 2,
+                      //   child: _BottomWidget(
+                      //     iconData: Icons.shopping_cart_outlined,
+                      //     index: 1,
+                      //     title: 'منتجاتي',
+                      //   ),
+                      // ),
+                      // Expanded(
+                      //   flex: 2,
+                      //   child: _BottomWidget(
+                      //     iconData: Icons.how_to_reg_outlined,
+                      //     index: 2,
+                      //     title: 'طلبات أوامر الشراء',
+                      //   ),
+                      // ),
+                      // Expanded(
+                      //   child: _BottomWidget(
+                      //     iconData: Icons.settings_outlined,
+                      //     index: 3,
+                      //     title: 'الضبط',
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
-
-                //////////////////////
-
-                // child: BottomNavigationBar(
-                //   currentIndex: vendorCubit.currentPageIndex,
-                //   onTap: (index) {
-                //     vendorCubit.changeIndex(index);
-                //   },
-                //   elevation: 10,
-                //   selectedItemColor: Colors.white,
-                //   backgroundColor: AppColors.primaryColor,
-                //   items: [
-                //     BottomNavigationBarItem(
-                //       label: 'طلبات عرض سعر',
-                //       icon: Padding(
-                //         padding: EdgeInsets.symmetric(horizontal: 5.w),
-                //         child: const Icon(Icons.show_chart_outlined),
-                //       ),
-                //     ),
-                //     BottomNavigationBarItem(
-                //       label: 'منتجاتي',
-                //       icon: Padding(
-                //         padding: EdgeInsets.symmetric(horizontal: 5.w),
-                //         child: const Icon(Icons.shopping_cart_outlined),
-                //       ),
-                //     ),
-                //     BottomNavigationBarItem(
-                //       label: 'طلبات أوامر الشراء',
-                //       icon: Padding(
-                //         padding: EdgeInsets.symmetric(horizontal: 5.w),
-                //         child: const Icon(Icons.how_to_reg_outlined),
-                //       ),
-                //     ),
-                //     BottomNavigationBarItem(
-                //       label: 'الضبط',
-                //       icon: Padding(
-                //         padding: EdgeInsets.symmetric(horizontal: 5.w),
-                //         child: const Icon(Icons.settings_outlined),
-                //       ),
-                //     ),
-                //   ],
-                // ),
               ),
             );
           },
@@ -245,6 +216,69 @@ class _BottomWidget extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class _VendorDrawer extends StatelessWidget {
+  const _VendorDrawer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = VendorCubit.instance(context);
+    return CustomDrawer(
+      drawerItems: [
+        DrawerListBuildItem(
+          title: 'الرئيسية',
+          icon: MyIcons.home,
+          onTap: () {
+            cubit.changeToOffers();
+          },
+        ),
+        DrawerListBuildItem(
+          title: 'إنشاء جديد',
+          icon: MyIcons.note,
+          onTap: () {
+            navigateTo(context, const VendorAddNewProductScreen());
+          },
+        ),
+        DrawerListBuildItem(
+          title: 'منتجاتي',
+          icon: MyIcons.money,
+          size: 15,
+          onTap: () {
+            cubit.changeToProducts();
+          },
+        ),
+        DrawerListBuildItem(
+          title: 'الاشعارات',
+          icon: MyIcons.bell2,
+          onTap: () {},
+        ),
+        DrawerListBuildItem(
+          title: 'طلب مساعدة',
+          icon: MyIcons.question,
+          onTap: () {},
+        ),
+        DrawerListBuildItem(
+          title: 'الدعم والخصوصية',
+          icon: MyIcons.support,
+          onTap: () {},
+        ),
+        DrawerListBuildItem(
+          title: 'عنا',
+          icon: Icons.info_outlined,
+          size: 24,
+          onTap: () {},
+        ),
+        DrawerListBuildItem(
+          title: 'الضبط',
+          icon: MyIcons.settings,
+          onTap: () {
+            cubit.chnageeToSettings();
+          },
+        ),
+      ],
     );
   }
 }

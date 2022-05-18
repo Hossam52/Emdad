@@ -25,7 +25,7 @@ class SupplyRequestCartModel {
       'quantity': quantity,
       'productUnit': productUnit,
       // 'unitPrice': unitPrice,
-      // 'units': units.map((x) => x.toMap()).toList(),
+      'units': units.map((x) => x.toMap()).toList(),
     };
   }
 

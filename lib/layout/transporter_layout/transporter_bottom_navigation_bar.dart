@@ -1,6 +1,7 @@
 import 'package:emdad/layout/transporter_layout/cubit/transporter_cubit.dart';
 import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
+import 'package:emdad/shared/styles/font_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 
@@ -27,32 +28,20 @@ class TransporterBottomNavigationBar extends StatelessWidget {
       onTap: (index) {
         cubit.changeBottomNav(index);
       },
+      unselectedLabelStyle: subTextStyle(),
       elevation: 5,
       selectedItemColor: Colors.white,
       showUnselectedLabels: true,
       unselectedItemColor: Colors.white38,
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(MyIcons.home),
-          label: 'عروض سعر',
-          tooltip: 'طلبات عرض سعر',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person_outlined),
-          label: 'أوامر توصيل',
-          tooltip: 'طلبات أوامر توصيل',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person_add_alt),
-          label: 'الملف الشخصي',
-          tooltip: 'الملف الشخصي',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(MyIcons.settings),
-          label: 'الضبط',
-          tooltip: 'الضبط',
-        ),
-      ],
+      items: cubit.bottomItems
+          .map(
+            (item) => BottomNavigationBarItem(
+              icon: Icon(item.icon),
+              label: item.title,
+              tooltip: item.title,
+            ),
+          )
+          .toList(),
     );
   }
 }
