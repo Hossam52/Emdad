@@ -58,6 +58,7 @@ class SharedMethods {
 
   static String? getUserToken() {
     String? token = Constants.userToken ??
+        Constants.guestToken ??
         Constants.vendorToken ??
         Constants.transporterToken;
     return token;
@@ -75,6 +76,7 @@ class SharedMethods {
     try {
       CacheHelper.removeData(key: 'vendorToken');
       CacheHelper.removeData(key: 'userToken');
+      CacheHelper.removeData(key: 'guestToken');
       CacheHelper.removeData(key: 'transporterToken');
       CacheHelper.removeData(key: 'userType');
       Constants.vendorToken = null;

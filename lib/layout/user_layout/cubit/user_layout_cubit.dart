@@ -12,7 +12,7 @@ import 'package:meta/meta.dart';
 part 'user_layout_state.dart';
 
 class UserLayoutCubit extends Cubit<UserLayoutState> {
-  UserLayoutCubit() : super(UserLayoutInitial()) {
+  UserLayoutCubit({bool isGuest = false}) : super(UserLayoutInitial()) {
     bottomItems = [
       CustomBottomNavItemModel(
         child: UserHomeScreen(),
@@ -30,7 +30,7 @@ class UserLayoutCubit extends Cubit<UserLayoutState> {
         icon: MyIcons.tag,
       ),
       CustomBottomNavItemModel(
-        child: const SettingsScreen(),
+        child: isGuest ? const GuestSettings() : const SettingsScreen(),
         title: 'الضبط',
         icon: MyIcons.settings,
       ),

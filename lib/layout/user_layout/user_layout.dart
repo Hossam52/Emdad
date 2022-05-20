@@ -2,6 +2,7 @@ import 'package:emdad/layout/custom_drawer.dart';
 import 'package:emdad/layout/user_layout/cubit/user_layout_cubit.dart';
 import 'package:emdad/layout/user_layout/layout_components/drawer_list_build_item.dart';
 import 'package:emdad/layout/user_layout/layout_components/user_bottom_navigation_bar.dart';
+import 'package:emdad/layout/user_layout/layout_components/user_drawer.dart';
 import 'package:emdad/layout/widgets/profile_check_wrapper.dart';
 import 'package:emdad/modules/user_module/home_module/user_home_cubit/user_home_cubit.dart';
 import 'package:emdad/modules/user_module/my_orders/my_orders_cubit/my_orders_cubit.dart';
@@ -86,70 +87,13 @@ class _UserLayoutState extends State<UserLayout> {
                   ],
                 ),
                 bottomNavigationBar: UserBottomNavigationBar(cubit: cubit),
-                drawer: const _UserDrawer(),
+                drawer: const UserDrawer(),
                 body: cubit.selectedBottom.child,
               ),
             );
           },
         ),
       ),
-    );
-  }
-}
-
-class _UserDrawer extends StatelessWidget {
-  const _UserDrawer({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final userCubit = UserLayoutCubit.get(context);
-
-    return CustomDrawer(
-      drawerItems: [
-        DrawerListBuildItem(
-          title: 'الرئيسية',
-          icon: MyIcons.home,
-          onTap: () {
-            userCubit.changeToMainPage();
-          },
-        ),
-        DrawerListBuildItem(
-          title: 'عروض',
-          icon: MyIcons.money,
-          size: 15,
-          onTap: () {
-            userCubit.changeToOffers();
-          },
-        ),
-        DrawerListBuildItem(
-          title: 'الاشعارات',
-          icon: MyIcons.bell2,
-          onTap: () {},
-        ),
-        DrawerListBuildItem(
-          title: 'طلب مساعدة',
-          icon: MyIcons.question,
-          onTap: () {},
-        ),
-        DrawerListBuildItem(
-          title: 'الدعم والخصوصية',
-          icon: MyIcons.support,
-          onTap: () {},
-        ),
-        DrawerListBuildItem(
-          title: 'عنا',
-          icon: Icons.info_outlined,
-          size: 24,
-          onTap: () {},
-        ),
-        DrawerListBuildItem(
-          title: 'الضبط',
-          icon: MyIcons.settings,
-          onTap: () {
-            userCubit.changeToSettings();
-          },
-        ),
-      ],
     );
   }
 }

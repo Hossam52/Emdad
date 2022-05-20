@@ -1,4 +1,5 @@
 import 'package:emdad/models/users/auth/user_register_data_model.dart';
+import 'package:emdad/modules/auth_module/auth_widgets/skip_auth.dart';
 import 'package:emdad/modules/auth_module/cubit/auth_cubit.dart';
 import 'package:emdad/modules/auth_module/screens/register_view/country_code_picker.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';
@@ -42,6 +43,9 @@ class RegisterScreen extends StatelessWidget {
               },
               icon: const Icon(Icons.arrow_back),
             ),
+            actions: const [
+              SkipAuthButton(),
+            ],
           ),
           body: DefaultGestureWidget(
             child: SingleChildScrollView(

@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:emdad/layout/guest_layout/guest_user_layout.dart';
 import 'package:emdad/layout/transporter_layout/cubit/transporter_cubit.dart';
 import 'package:emdad/layout/transporter_layout/transporter_layout.dart';
 import 'package:emdad/layout/user_layout/user_layout.dart';
@@ -40,6 +41,7 @@ void main() async {
   bool? onBoarding = await CacheHelper.getData(key: 'onBoarding');
   Constants.lang = await CacheHelper.getData(key: 'lang');
   Constants.userToken = await CacheHelper.getData(key: 'userToken');
+  Constants.guestToken = await CacheHelper.getData(key: 'guestToken');
   Constants.vendorToken = await CacheHelper.getData(key: 'vendorToken');
   Constants.transporterToken =
       await CacheHelper.getData(key: 'transporterToken');
@@ -50,6 +52,8 @@ void main() async {
         startWidget = const VendorLayout();
       } else if (Constants.userToken != null) {
         startWidget = const UserLayout();
+      } else if (Constants.guestToken != null) {
+        startWidget = const GuestUserLayout();
       } else if (Constants.transporterToken != null) {
         startWidget = const TransporterLayout();
       } else {

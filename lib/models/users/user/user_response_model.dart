@@ -14,6 +14,15 @@ class UserResponseModel {
     message = json['message'];
     data = json['data'] != null ? Data.fromJson(json['data']) : null;
   }
+  UserResponseModel.guestFromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    message = json['message'];
+    data = Data.guestUserFromJson(json['data']);
+  }
+}
+
+class GuestUserModel extends UserResponseModel {
+  GuestUserModel() : super(status: true, data: Data.guestUser());
 }
 
 class Data {
@@ -21,10 +30,18 @@ class Data {
   String? accessToken;
 
   Data({this.user, this.accessToken});
+  factory Data.guestUser() {
+    return Data(user: User.guestUser());
+  }
 
   Data.fromJson(Map<String, dynamic> json) {
     user = json['user'] != null ? User.fromMap(json['user']) : null;
     accessToken = json['accessToken'];
+  }
+  Data.guestUserFromJson(Map<String, dynamic> json) {
+    print(json);
+    accessToken = json['accessToken'];
+    user = User.guestUser();
   }
 }
 
@@ -79,7 +96,17 @@ class User {
     this.isFavourite,
     this.userType,
   });
-
+  factory User.guestUser() {
+    return User(
+      logoUrl:
+          '''https://cdn.chums.co.uk/content/assets/blog/men's%20avatar.png''',
+      name: 'Guest user',
+      organizationName: '',
+      country: '',
+      userType: 'guest',
+    );
+  }
+  bool get isGuest => userType == 'guest';
   Map<String, dynamic> toMap() {
     return {
       'sId': sId,

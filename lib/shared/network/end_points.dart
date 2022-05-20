@@ -3,6 +3,8 @@ const String baseUrl = 'https://emdad-ecommerce.herokuapp.com/api/mobile/';
 class EndPoints {
   static const String login = 'auth/login';
 
+  static const String loginGuest = 'auth/registerGuest';
+
   static const String register = 'auth/register';
 
   static const String verifyOtp = 'auth/otp';

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:emdad/layout/transporter_layout/transporter_layout.dart';
+import 'package:emdad/layout/guest_layout/guest_user_layout.dart';
 import 'package:emdad/layout/user_layout/user_layout.dart';
 import 'package:emdad/layout/vendor_layout/vendor_layout_screen.dart';
 import 'package:emdad/models/enums/enums.dart';
@@ -93,6 +94,34 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  Future<void> loginGuestUser(BuildContext context) async {
+    try {
+      emit(LoginGuestUserLoadingState());
+      final map = await AuthServices.loginGuest();
+      final guestModel = UserResponseModel.guestFromJson(map);
+      print(map);
+      // validateLogin(response, context, type);
+      // emit(LoginSuccessState());
+      // return;
+      if (map['status']) {
+        // validateLogin(response, context);
+        navigateToLayout(context, guestModel);
+        emit(LoginGuestUserSuccessState());
+      } else {
+        emit(LoginGuestUserErrorState(error: 'Error'));
+      }
+
+      emit(LoginGuestUserSuccessState());
+    } catch (e) {
+      showSnackBar(
+        context: context,
+        text: e.toString(),
+        snackBarStates: SnackBarStates.error,
+      );
+      emit(LoginGuestUserErrorState(error: e.toString()));
+    }
+  }
+
   ///
   UserResponseModel? userResponseModel;
 
@@ -137,26 +166,34 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  void navigateToLayout(BuildContext context, UserResponseModel? model) {
-    switch (model!.data!.user!.userType) {
+  void navigateToLayout(BuildContext context, UserResponseModel? model,
+      [String? type]) {
+    final userType = model?.data?.user?.userType ?? type;
+    switch (userType) {
       case 'vendor':
-        Constants.vendorToken = model.data!.accessToken;
+        Constants.vendorToken = model!.data!.accessToken;
         CacheHelper.saveData(key: 'vendorToken', value: Constants.vendorToken);
         navigateTo(context, const VendorLayout());
         break;
       case 'user':
-        Constants.userToken = model.data!.accessToken;
+        Constants.userToken = model!.data!.accessToken;
         CacheHelper.saveData(key: 'userToken', value: Constants.userToken);
         navigateTo(context, const UserLayout());
         break;
       case 'transporter':
-        Constants.transporterToken = model.data!.accessToken;
+        Constants.transporterToken = model!.data!.accessToken;
         CacheHelper.saveData(
             key: 'transporterToken', value: Constants.transporterToken);
         navigateTo(context, const TransporterLayout());
         break;
+      case 'guest':
+        Constants.userToken = model!.data!.accessToken;
+        CacheHelper.saveData(key: 'guestToken', value: Constants.userToken);
+        AppCubit.get(context).setUser = model;
+        navigateTo(context, const GuestUserLayout());
+        break;
     }
-    CacheHelper.saveData(key: 'userType', value: model.data!.user!.userType);
+    CacheHelper.saveData(key: 'userType', value: userType);
   }
 
   ButtonState registerButtonStates = ButtonState.idle;

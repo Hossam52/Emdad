@@ -16,6 +16,12 @@ class AuthServices {
     return response;
   }
 
+  static Future<Map<String, dynamic>> loginGuest() async {
+    final response =
+        await DioHelper.postData(url: EndPoints.loginGuest, data: {});
+    return response.data;
+  }
+
   static Future<Response> registerUser(Map<String, dynamic> data) async {
     final Response response = await DioHelper.postData(
       url: EndPoints.register,

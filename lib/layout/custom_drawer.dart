@@ -13,6 +13,7 @@ class CustomDrawer extends StatelessWidget {
   final List<DrawerListBuildItem> drawerItems;
   @override
   Widget build(BuildContext context) {
+    final user = AppCubit.get(context).getUser;
     return Drawer(
       child: SingleChildScrollView(
         child: Column(
@@ -21,7 +22,8 @@ class CustomDrawer extends StatelessWidget {
             SizedBox(height: 28.h),
             for (var item in drawerItems) item,
             DrawerListBuildItem(
-              title: 'تسجيل خروج',
+              title:
+                  user == null || user.isGuest ? 'تسجيل الدخول' : 'تسجيل خروج',
               icon: Icons.logout,
               onTap: () {
                 SharedMethods.signOutVendor(context);

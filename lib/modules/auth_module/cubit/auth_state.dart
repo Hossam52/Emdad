@@ -17,6 +17,17 @@ class LoginSuccessState extends AuthState {}
 class LoginErrorState extends AuthState {}
 
 ///
+//LoginGuestUser online fetch data
+class LoginGuestUserLoadingState extends AuthState {}
+
+class LoginGuestUserSuccessState extends AuthState {}
+
+class LoginGuestUserErrorState extends AuthState {
+  final String error;
+  LoginGuestUserErrorState({required this.error});
+}
+
+///
 class UserRegisterLoadingState extends AuthState {}
 
 class UserRegisterSuccessState extends AuthState {}

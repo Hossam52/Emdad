@@ -5,6 +5,7 @@ class Constants {
 
   static String? token;
   static String? userToken;
+  static String? guestToken;
   static String? vendorToken;
   static String? transporterToken;
   static const int paginationSize = 10;

@@ -76,19 +76,7 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
               const Divider(height: 0),
-              SettingTileBuildItem(
-                title: 'الخصوصية',
-                leading: const Icon(MyIcons.policy,
-                    color: AppColors.primaryColor, size: 18),
-                onTap: () {},
-              ),
-              const Divider(height: 0),
-              SettingTileBuildItem(
-                title: 'المساعدة',
-                leading: const Icon(MyIcons.question_fill,
-                    color: AppColors.primaryColor, size: 18),
-                onTap: () {},
-              ),
+              const _PrivacyAndHelp(),
               const Divider(height: 0),
             ],
           ),
@@ -102,6 +90,76 @@ class SettingsScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _PrivacyAndHelp extends StatelessWidget {
+  const _PrivacyAndHelp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SettingTileBuildItem(
+          title: 'الخصوصية',
+          leading: const Icon(MyIcons.policy,
+              color: AppColors.primaryColor, size: 18),
+          onTap: () {},
+        ),
+        const Divider(height: 0),
+        SettingTileBuildItem(
+          title: 'المساعدة',
+          leading: const Icon(MyIcons.question_fill,
+              color: AppColors.primaryColor, size: 18),
+          onTap: () {},
+        ),
+      ],
+    );
+  }
+}
+
+class GuestSettings extends StatelessWidget {
+  const GuestSettings({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const ProfileInfoBuildItem(),
+            ListView(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(16),
+              children: [
+                SettingTileBuildItem(
+                  title: 'تغيير اللغة',
+                  leading: const Icon(MyIcons.translation,
+                      color: AppColors.primaryColor, size: 18),
+                  trailing: DropdownButton<Object>(
+                    onChanged: (val) {},
+                    items: const [DropdownMenuItem(child: Text('العربية'))],
+                  ),
+                ),
+                const Divider(height: 0),
+                const _PrivacyAndHelp(),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: CustomButton(
+                onPressed: () {
+                  SharedMethods.signOutVendor(context);
+                },
+                text: 'تسجيل الدخول',
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

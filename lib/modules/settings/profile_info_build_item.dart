@@ -56,15 +56,16 @@ class ProfileInfoBuildItem extends StatelessWidget {
                       ],
                     ),
                   ),
-                  CustomIconButton(
-                    width: 45.w,
-                    height: 45.h,
-                    onPressed: () {
-                      navigateTo(context, UpdateProfileScreen());
-                    },
-                    icon: const Icon(MyIcons.edit, color: Colors.white),
-                    buttonColor: AppColors.secondaryColor,
-                  ),
+                  if (!user.isGuest)
+                    CustomIconButton(
+                      width: 45.w,
+                      height: 45.h,
+                      onPressed: () {
+                        navigateTo(context, UpdateProfileScreen());
+                      },
+                      icon: const Icon(MyIcons.edit, color: Colors.white),
+                      buttonColor: AppColors.secondaryColor,
+                    ),
                 ],
               ),
             ],

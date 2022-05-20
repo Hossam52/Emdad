@@ -22,7 +22,7 @@ class SupplyRequestServices {
     final response = await DioHelper.getData(
         query: map,
         url: UserEndPoints.supplyRequests,
-        token: Constants.userToken);
+        token: SharedMethods.getUserToken());
     return response.data;
   }
 
@@ -30,7 +30,7 @@ class SupplyRequestServices {
   Future<Map<String, dynamic>> getOrder({required String orderId}) async {
     final response = await DioHelper.getData(
       url: UserEndPoints.getSupplyRequestInfo(orderId),
-      token: Constants.userToken,
+      token: SharedMethods.getUserToken(),
     );
     log(response.data.toString());
     return response.data;
@@ -41,7 +41,7 @@ class SupplyRequestServices {
     log(requestModel.toMap().toString());
     final response = await DioHelper.putData(
         url: UserEndPoints.supplyRequests,
-        token: Constants.userToken,
+        token: SharedMethods.getUserToken(),
         data: requestModel.toMap());
     log(response.data.toString());
     return response.data;
@@ -54,7 +54,7 @@ class SupplyRequestServices {
     map.addAll(pagination?.toMap() ?? <String, dynamic>{});
     final response = await DioHelper.getData(
         url: UserEndPoints.supplyRequests,
-        token: Constants.userToken,
+        token: SharedMethods.getUserToken(),
         query: map);
     return response.data;
   }

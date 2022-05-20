@@ -1,11 +1,9 @@
 import 'dart:developer';
 
-import 'package:dio/dio.dart';
 import 'package:emdad/models/request_models/user/category_request_model.dart';
 import 'package:emdad/models/request_models/user/filter_vendors_request.dart';
-import 'package:emdad/shared/componants/constants.dart';
+import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/network/remote/dio_helper.dart';
-import 'package:emdad/shared/network/services/generate_path_variable.dart';
 import 'package:emdad/shared/network/services/user/user_endpoints.dart';
 
 class UserVendorServices {
@@ -15,7 +13,7 @@ class UserVendorServices {
     log(vendorId);
     final response = await DioHelper.getData(
       url: UserEndPoints.vendor(vendorId),
-      token: Constants.userToken,
+      token: SharedMethods.getUserToken(),
     );
     log(response.data.toString());
     return response.data;
@@ -27,7 +25,7 @@ class UserVendorServices {
     log(categoryRequestModel.toMap().toString());
     final response = await DioHelper.getData(
         url: UserEndPoints.vendorProducts(vendorID),
-        token: Constants.userToken,
+        token: SharedMethods.getUserToken(),
         query: categoryRequestModel.toMap());
     log(response.data.toString());
     return response.data;
@@ -36,7 +34,7 @@ class UserVendorServices {
   Future<Map<String, dynamic>> toggleVendorFavorite(String vendorId) async {
     final response = await DioHelper.postData(
       url: UserEndPoints.vendorFavorite(vendorId),
-      token: Constants.userToken,
+      token: SharedMethods.getUserToken(),
       data: {},
     );
     return response.data;
@@ -46,7 +44,7 @@ class UserVendorServices {
       {FilterVendorRequest? filterRequest}) async {
     final response = await DioHelper.getData(
       url: UserEndPoints.vendors,
-      token: Constants.userToken,
+      token: SharedMethods.getUserToken(),
       query: filterRequest?.toMap(),
     );
     log(filterRequest?.toMap().toString() ?? '');
@@ -57,7 +55,7 @@ class UserVendorServices {
       {FilterVendorRequest? filterRequest}) async {
     final response = await DioHelper.getData(
       url: UserEndPoints.getFavoriteVendors,
-      token: Constants.userToken,
+      token: SharedMethods.getUserToken(),
       query: filterRequest?.toMap(),
     );
     log(filterRequest?.toMap().toString() ?? '');

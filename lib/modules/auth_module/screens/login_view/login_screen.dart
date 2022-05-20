@@ -1,3 +1,4 @@
+import 'package:emdad/modules/auth_module/auth_widgets/skip_auth.dart';
 import 'package:emdad/modules/auth_module/cubit/auth_cubit.dart';
 import 'package:emdad/modules/auth_module/screens/register_view/register_screen.dart';
 import 'package:emdad/shared/componants/components.dart';
@@ -31,7 +32,11 @@ class LoginScreen extends StatelessWidget {
           return responsiveWidget(
             responsive: (context, DeviceInformation deviceInformation) {
               return Scaffold(
-                appBar: AppBar(),
+                appBar: AppBar(
+                  actions: const [
+                    SkipAuthButton(),
+                  ],
+                ),
                 body: DefaultGestureWidget(
                   child: SingleChildScrollView(
                     child: Padding(
