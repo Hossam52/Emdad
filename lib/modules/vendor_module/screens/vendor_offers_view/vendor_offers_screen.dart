@@ -59,6 +59,8 @@ class VendorOffersScreen extends StatelessWidget {
                     itemBuilder: (context, index) => OrderBuildItem(
                       // order: orders[index],
                       title: offers[index].id,
+                      subTitleText: offers[index].orderItemsString,
+
                       date: offers[index].createdAt,
                       image: offers[index].user.logoUrl,
                       hasBadge: false,

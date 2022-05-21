@@ -21,7 +21,7 @@ class DefaultCachedNetworkImage extends StatelessWidget {
       color: Colors.grey[200]!.withOpacity(0.4),
       child: CachedNetworkImage(
         imageUrl: imageUrl,
-        fit: fit,
+        fit: BoxFit.fill,
         errorWidget: (context, url, error) {
           return Image.asset(
             'assets/images/image_not_avilable.png',

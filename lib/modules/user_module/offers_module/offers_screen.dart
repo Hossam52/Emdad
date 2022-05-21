@@ -98,6 +98,8 @@ class OffersScreen extends StatelessWidget {
                           return OrderBuildItem(
                             // order: orders[index],
                             title: offers[index].id,
+                            subTitleText: offers[index].orderItemsString,
+
                             date: offers[index].createdAt,
                             image: offers[index].vendor.logoUrl,
                             hasBadge: true,

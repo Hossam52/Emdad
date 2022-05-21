@@ -141,7 +141,7 @@ class _FeaturedVendors extends StatelessWidget {
               autoPlay: true,
               pauseAutoPlayOnTouch: true,
               enableInfiniteScroll: false,
-              viewportFraction: 0.7,
+              viewportFraction: 0.9,
               height: 180.h,
             ),
             itemBuilder: (context, index, int pageViewIndex) {

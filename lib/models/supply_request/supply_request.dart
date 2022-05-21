@@ -134,6 +134,14 @@ class SupplyRequest {
   bool get isUser => transportationHandlerEnum == FacilityType.user;
   bool get isVendor => transportationHandlerEnum == FacilityType.vendor;
 
+  String get orderItemsString {
+    final mainItems = requestItems.map((e) => e.name).join(' - ');
+    final additionalItems =
+        this.additionalItems.map((e) => e.description).join(' - ');
+    return [mainItems, additionalItems]
+        .join(additionalItems.isNotEmpty ? ' \n ' : '');
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,

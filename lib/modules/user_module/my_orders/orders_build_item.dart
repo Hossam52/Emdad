@@ -11,10 +11,11 @@ class OrderBuildItem extends StatelessWidget {
     Key? key,
     required this.hasBadge,
     required this.onTap,
-    this.trailing,
     required this.title,
     required this.image,
     required this.date,
+    this.trailing,
+    this.subTitleText,
     this.badgeText,
   }) : super(key: key);
   final String title;
@@ -24,6 +25,7 @@ class OrderBuildItem extends StatelessWidget {
   final String? badgeText;
   final Function() onTap;
   final Widget? trailing;
+  final String? subTitleText;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -63,6 +65,7 @@ class OrderBuildItem extends StatelessWidget {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
+                    if (subTitleText != null) Text(subTitleText!),
                     Text(
                       SharedMethods.mappedDate(
                         date, // order.createdAt,

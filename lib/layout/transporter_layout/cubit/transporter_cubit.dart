@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:emdad/layout/transporter_layout/cubit/transporter_state.dart';
 import 'package:emdad/layout/widgets/custom_bottom_nav_item.dart';
+import 'package:emdad/modules/settings/setting_screen.dart';
 import 'package:emdad/modules/transporter_module/screens/transporter_delivery_orders_view/transporter_delivery_orders_screen.dart';
 import 'package:emdad/modules/transporter_module/screens/transporter_offers_view/transporter_offers_screen.dart';
 import 'package:emdad/modules/transporter_module/screens/transporter_profile_screen.dart';
@@ -23,7 +24,7 @@ class TransporterCubit extends Cubit<TransporterState> {
         icon: Icons.person_add_alt,
       ),
       CustomBottomNavItemModel(
-        child: const TransporterSettingScreen(),
+        child: const SettingsScreen(),
         title: 'الضبط',
         icon: MyIcons.settings,
       ),
@@ -46,7 +47,7 @@ class TransporterCubit extends Cubit<TransporterState> {
   }
 
   void changeToSettings() {
-    changeBottomNav(3);
+    changeBottomNav(2);
   }
 
   void changeBottomNav(int index) {

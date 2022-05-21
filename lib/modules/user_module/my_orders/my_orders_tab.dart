@@ -47,6 +47,7 @@ class MyOrdersTab extends StatelessWidget {
               itemBuilder: (context, index) => OrderBuildItem(
                 // order: orders[index],
                 title: orders[index].id,
+                subTitleText: orders[index].orderItemsString,
                 date: orders[index].createdAt,
                 image: orders[index].vendor.logoUrl,
 

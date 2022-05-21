@@ -60,6 +60,8 @@ class VendorPurchaseOrdersScreen extends StatelessWidget {
                   itemBuilder: (context, index) => OrderBuildItem(
                     // order: orders[index],
                     title: orders[index].id,
+                    subTitleText: orders[index].orderItemsString,
+
                     date: orders[index].createdAt,
                     image: orders[index].user.logoUrl,
                     hasBadge: false,

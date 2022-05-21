@@ -26,31 +26,7 @@ class SettingsScreen extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             padding: const EdgeInsets.all(16),
             children: [
-              SettingTileBuildItem(
-                title: 'تغير رقم الهاتف',
-                leading: SvgPicture.asset(
-                  '${Constants.defaultIconUrl}/phone.svg',
-                  width: 13,
-                ),
-                onTap: () {},
-              ),
-              const Divider(height: 0),
-              SettingTileBuildItem(
-                title: 'تغيير الرقم السري',
-                leading: const Icon(MyIcons.lock,
-                    color: AppColors.primaryColor, size: 17),
-                onTap: () {
-                  navigateTo(context, ChangePasswordScreen());
-                },
-              ),
-              SettingTileBuildItem(
-                title: 'تغيير الايميل',
-                leading: const Icon(Icons.email,
-                    color: AppColors.primaryColor, size: 17),
-                onTap: () {
-                  navigateTo(context, ChangeEmailScreen());
-                },
-              ),
+              const ChangePhoneAndEmailAndPasswordWidget(),
               const Divider(height: 0),
               SettingTileBuildItem(
                 title: 'الاشعارات',
@@ -91,6 +67,43 @@ class SettingsScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class ChangePhoneAndEmailAndPasswordWidget extends StatelessWidget {
+  const ChangePhoneAndEmailAndPasswordWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SettingTileBuildItem(
+          title: 'تغير رقم الهاتف',
+          leading: SvgPicture.asset(
+            '${Constants.defaultIconUrl}/phone.svg',
+            width: 13,
+          ),
+          onTap: () {},
+        ),
+        const Divider(height: 0),
+        SettingTileBuildItem(
+          title: 'تغيير الرقم السري',
+          leading:
+              const Icon(MyIcons.lock, color: AppColors.primaryColor, size: 17),
+          onTap: () {
+            navigateTo(context, ChangePasswordScreen());
+          },
+        ),
+        SettingTileBuildItem(
+          title: 'تغيير الايميل',
+          leading:
+              const Icon(Icons.email, color: AppColors.primaryColor, size: 17),
+          onTap: () {
+            navigateTo(context, ChangeEmailScreen());
+          },
+        ),
+      ],
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:emdad/modules/auth_module/cubit/auth_cubit.dart';
 import 'package:emdad/modules/auth_module/screens/update_profile/update_profile_widgets/background_stack.dart';
 import 'package:emdad/modules/auth_module/screens/update_profile/update_profile_widgets/custom_update_profile_app_bar.dart';
 import 'package:emdad/modules/auth_module/screens/update_profile/update_profile_widgets/update_profile_text_field.dart';
+import 'package:emdad/modules/settings/setting_screen.dart';
 import 'package:emdad/modules/user_module/vendors_module/change_filters_cubit/change_filters_cubit.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/cubit/app_cubit.dart';
@@ -104,6 +105,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                 validator: (val) {
                                   return null;
                                 }),
+                            SizedBox(height: 15.h),
+                            const ChangePhoneAndEmailAndPasswordWidget(),
                             SizedBox(height: 15.h),
                             Row(
                               children: [
@@ -231,7 +234,10 @@ class _CustomDropDown extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 8.0.w),
               child: DropdownButtonHideUnderline(
-                child: DropdownButtonFormField<String>(
+                child: DropdownButton<String>(
+                    isDense: false,
+                    isExpanded: true,
+                    // itemHeight: 1000.h,
                     elevation: 1,
                     value: selected,
                     items: items
