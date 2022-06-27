@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:emdad/common_cubits/filter_supply_requests_cubit/filter_supply_requests_cubit.dart';
 import 'package:emdad/models/enums/order_status.dart';
 import 'package:emdad/modules/user_module/checkout/checkout_screen.dart';
 import 'package:emdad/modules/user_module/my_orders/orders_build_item.dart';
@@ -69,46 +70,58 @@ class VendorShippingOffersScreen extends StatelessWidget {
                 emptyText: 'لا يوجد عروض توصيل حتي الان',
               );
             }
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  TitleWithFilterBuildItem(
-                    title: 'عروض التوصيل',
-                    changeSortType: (sortType) {},
-                    hasSort: false,
-                  ),
-                  ListView.builder(
-                    itemCount: offers.length,
-                    shrinkWrap: true,
-                    padding: const EdgeInsets.all(16),
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) => OrderBuildItem(
-                      // order: VendorOffersCubit.instance(context)
-                      //     .offers
-                      //     .first, //Replace it
-                      title: offers[index].transporter.oraganizationName,
-                      date: offers[index].updatedAt,
-                      image: offers[index].transporter.logo,
-                      hasBadge: false,
-                      trailing: Text(offers[index]
-                          .transportationRequest
-                          .transportationMethod),
-                      onTap: () {
-                        navigateTo(context, Material(
-                          child: Builder(builder: (context) {
-                            return ShippingOfferDetails(
-                              transportationOffer: offers[index],
-                              onAcceptOffer: () {
-                                offersCubit.acceptTransportationOffer(
-                                    context, offers[index].id);
-                              },
-                            );
-                          }),
-                        ));
-                      },
+            return BlocProvider(
+              create: (context) =>
+                  FilterSuuplyRequestsCubit.transportationOffers(offers),
+              child: FilterSuuplyRequestsBlocBuilder(
+                builder: (context, state) {
+                  final offers = FilterSuuplyRequestsCubit.instance(context)
+                      .transportationOffers;
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        TitleWithFilterBuildItem(
+                          title: 'عروض التوصيل',
+                          filterCubit:
+                              FilterSuuplyRequestsCubit.instance(context),
+                          changeSortType: (sortType) {},
+                          hasSort: false,
+                        ),
+                        ListView.builder(
+                          itemCount: offers.length,
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.all(16),
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) => OrderBuildItem(
+                            // order: VendorOffersCubit.instance(context)
+                            //     .offers
+                            //     .first, //Replace it
+                            title: offers[index].transporter.oraganizationName,
+                            date: offers[index].updatedAt,
+                            image: offers[index].transporter.logo,
+                            hasBadge: false,
+                            trailing: Text(offers[index]
+                                .transportationRequest
+                                .transportationMethod),
+                            onTap: () {
+                              navigateTo(context, Material(
+                                child: Builder(builder: (context) {
+                                  return ShippingOfferDetails(
+                                    transportationOffer: offers[index],
+                                    onAcceptOffer: () {
+                                      offersCubit.acceptTransportationOffer(
+                                          context, offers[index].id);
+                                    },
+                                  );
+                                }),
+                              ));
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                  );
+                },
               ),
             );
           },

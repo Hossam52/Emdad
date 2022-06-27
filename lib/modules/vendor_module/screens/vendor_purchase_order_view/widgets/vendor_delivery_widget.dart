@@ -1,21 +1,13 @@
-import 'dart:developer';
-
-import 'package:emdad/layout/vendor_layout/cubit/vendor_cubit.dart';
-import 'package:emdad/models/enums/enums.dart';
-import 'package:emdad/models/supply_request/order_transportation_request.dart';
 import 'package:emdad/models/supply_request/supply_request.dart';
-import 'package:emdad/modules/user_module/order_view/shipping/shipping_offers_screen.dart';
 import 'package:emdad/modules/vendor_module/screens/vendor_purchase_order_view/vendor_order_cubit/vendor_order_cubit.dart';
 import 'package:emdad/modules/vendor_module/screens/vendor_purchase_order_view/vendor_order_cubit/vendor_order_states.dart';
 import 'package:emdad/modules/vendor_module/screens/vendor_shipping_offers/vendor_shipping_offers.dart';
-import 'package:emdad/modules/vendor_module/vendor_cubits/vendor_shipping_offers_cubit/vendor_shipping_offers_cubit.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
 import 'package:emdad/shared/widgets/custom_checkbox.dart';
 import 'package:emdad/shared/widgets/default_home_title_build_item.dart';
-import 'package:emdad/shared/widgets/dialogs/edit_price_dialogs.dart';
 import 'package:emdad/shared/widgets/dialogs/request_transform_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,7 +28,7 @@ class VendorDeliveryWidget extends StatelessWidget {
         onEditPrice: onEditPrice,
       );
     } else if (order.transportationRequest!.transportationOffer == null) {
-      return _TransportationRequest(onEditPrice: onEditPrice, order: order);
+      return _TransportationRequest(order: order);
     } else {
       return _TransportationOffer(
         order: order,
@@ -91,7 +83,7 @@ class _AddTransportationRequest extends StatelessWidget {
         return _CardWidget(
           onEditPrice:
               vendorOrderCubit.vendorManageTransport ? onEditPrice : null,
-          prefixWidget: order.vendorProvidePriceOffer
+          prefixWidget: order.hasTransportation // order.vendorProvidePriceOffer
               ? null
               : ListTile(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 20),
@@ -105,8 +97,7 @@ class _AddTransportationRequest extends StatelessWidget {
                   ),
                 ),
           child: Builder(builder: (context) {
-            if (vendorOrderCubit.vendorManageTransport ||
-                order.vendorProvidePriceOffer) {
+            if (vendorOrderCubit.vendorManageTransport) {
               return _VendorHandleTransport(
                   onEditPrice: onEditPrice, order: order);
             }

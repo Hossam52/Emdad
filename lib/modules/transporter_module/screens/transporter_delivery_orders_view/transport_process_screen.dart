@@ -61,12 +61,7 @@ class _TransportProcessScreenState extends State<TransportProcessScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(height: 40.h),
-            CustomTransporterOrderListTile(
-              clientImageUrl: user.logoUrl,
-              clientName: user.name,
-              clientCompanyName: user.oraganizationName,
-              address: user.detailAddress,
-            ),
+            CustomTransporterOrderListTile(client: user),
             SizedBox(height: 40.h),
             _DeliveryButton(
               title: 'تم الوصول ل مكان الاتقاطس',
@@ -79,12 +74,7 @@ class _TransportProcessScreenState extends State<TransportProcessScreen> {
               displayWithSuccess: initialProcessValue <= 0,
             ),
             SizedBox(height: 30.h),
-            CustomTransporterOrderListTile(
-              clientImageUrl: vendor.logoUrl,
-              clientName: vendor.name,
-              clientCompanyName: vendor.oraganizationName,
-              address: vendor.detailAddress,
-            ),
+            CustomTransporterOrderListTile(client: vendor),
             SizedBox(height: 30.h),
             _DeliveryButton(
               title: 'تم الوصول الي موقع التوصيل',

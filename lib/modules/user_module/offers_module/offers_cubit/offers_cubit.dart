@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,16 +41,15 @@ class OffersCubit extends Cubit<OffersStates> {
   List<SupplyRequest> get offers {
     _assignOrders();
     final offersRequests = tabItems[_selectedTab].orders!;
-    // final offersRequests = _requestOffers!.supplyRequests;
-    // if (_sortOffersBy == SortBy.none) {
-    //   return offersRequests;
-    // } else if (_sortOffersBy == SortBy.name) {
-    //   return _sortByName(offersRequests);
-    // } else if (_sortOffersBy == SortBy.date) {
-    //   return _sortByDate(offersRequests);
-    // } else {
-    // }
-    return offersRequests;
+    if (_sortOffersBy == SortBy.none) {
+      return offersRequests;
+    } else if (_sortOffersBy == SortBy.name) {
+      return _sortByName(offersRequests);
+    } else if (_sortOffersBy == SortBy.date) {
+      return _sortByDate(offersRequests);
+    } else {
+      return offersRequests;
+    }
   }
 
   late List<OfferTabItem> tabItems;
@@ -87,12 +87,14 @@ class OffersCubit extends Cubit<OffersStates> {
   }
 
   List<SupplyRequest> _sortByName(List<SupplyRequest> offersRequests) {
-    offersRequests.sort(((first, second) => first.vendor.oraganizationName
-        .compareTo(second.vendor.oraganizationName)));
+    offersRequests
+        .sort(((first, second) => first.vendor.id.compareTo(second.vendor.id)));
     return offersRequests;
   }
 
   List<SupplyRequest> _sortByDate(List<SupplyRequest> offersRequests) {
+    final random = Random();
+
     offersRequests
         .sort(((first, second) => first.createdAt.compareTo(second.createdAt)));
     return offersRequests.reversed.toList();
@@ -113,7 +115,6 @@ class OffersCubit extends Cubit<OffersStates> {
       _requestOffers = AllSupplyRequestsModel.fromMap(map);
       emit(GetRequestOffersSuccessState());
     } catch (e) {
-      log(e.toString());
       emit(GetRequestOffersErrorState(error: e.toString()));
       rethrow;
     }

@@ -1,5 +1,7 @@
 import 'package:emdad/layout/transporter_layout/transporter_layout.dart';
 import 'package:emdad/models/supply_request/supply_request.dart';
+import 'package:emdad/models/supply_request/user_preview.dart';
+import 'package:emdad/modules/map_module/screens/map_screen.dart';
 import 'package:emdad/modules/transporter_module/transporter_cubits/transporter_order_details_cubit/transporter_order_details_cubit.dart';
 import 'package:emdad/modules/transporter_module/transporter_cubits/transporter_order_details_cubit/transporter_order_details_states.dart';
 import 'package:emdad/modules/transporter_module/transporter_widgets/transporter_all_items.dart';
@@ -46,7 +48,7 @@ class TransporterOfferDetailsScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
         ),
         title: CustomText(
-          text: 'تتفاصيل الطلب',
+          text: 'تفاصيل الطلب',
           textStyle: primaryTextStyle().copyWith(
             color: Colors.white,
             fontWeight: FontWeight.w700,
@@ -189,17 +191,9 @@ class _OrderRequesterAndRecieverLocations extends StatelessWidget {
         SvgPicture.asset('assets/images/shipping_fast.svg'),
         Column(
           children: [
-            CustomListTile(
-              imageUrl: vendor.logo,
-              title: vendor.oraganizationName,
-              subTitle: vendor.detailAddress,
-            ),
+            CustomListTile(user: vendor),
             SizedBox(height: 30.h),
-            CustomListTile(
-              imageUrl: user.logo,
-              title: user.oraganizationName,
-              subTitle: user.detailAddress,
-            ),
+            CustomListTile(user: user),
           ],
         ),
       ],
@@ -350,14 +344,9 @@ class SuccessSendingOffer extends StatelessWidget {
 class CustomListTile extends StatelessWidget {
   const CustomListTile({
     Key? key,
-    required this.imageUrl,
-    required this.title,
-    required this.subTitle,
+    required this.user,
   }) : super(key: key);
-
-  final String imageUrl;
-  final String title;
-  final String subTitle;
+  final UserPreviewModel user;
 
   @override
   Widget build(BuildContext context) {
@@ -375,7 +364,7 @@ class CustomListTile extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: DefaultCachedNetworkImage(
-                imageUrl: imageUrl, //order.vendor.logoUrl,
+                imageUrl: user.logoUrl, //order.vendor.logoUrl,
                 fit: BoxFit.cover,
               ),
             ),
@@ -384,12 +373,12 @@ class CustomListTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CustomText(
-                  text: title,
+                  text: user.oraganizationName,
                   textStyle: thirdTextStyle()
                       .copyWith(color: AppColors.primaryColor, fontSize: 12.sp),
                 ),
                 CustomText(
-                  text: subTitle,
+                  text: user.detailAddress,
                   textStyle:
                       subTextStyle().copyWith(fontWeight: FontWeight.normal),
                 ),
@@ -407,7 +396,15 @@ class CustomListTile extends StatelessWidget {
           ),
           child: Center(
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                navigateTo(
+                    context,
+                    MapScreen(
+                      lat: user.locationObject.lat,
+                      lng: user.locationObject.lng,
+                      screenTitle: user.oraganizationName,
+                    ));
+              },
               icon: Icon(
                 Icons.edit_location_outlined,
                 color: Colors.white,

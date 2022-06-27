@@ -61,7 +61,7 @@ class MyOrdersScreen extends StatelessWidget {
                       onPressed: () {
                         myOrdersCubit.orderTab.getOrders();
                       },
-                      text: 'Error ${state.error}');
+                      text: state.error);
                 }
                 return TabBarView(
                   children: [

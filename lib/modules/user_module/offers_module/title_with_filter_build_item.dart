@@ -1,9 +1,5 @@
-import 'dart:developer';
-
+import 'package:emdad/common_cubits/filter_supply_requests_cubit/filter_supply_requests_cubit.dart';
 import 'package:emdad/models/enums/enums.dart';
-import 'package:emdad/modules/user_module/offers_module/offers_cubit/offers_cubit.dart';
-import 'package:emdad/shared/componants/components.dart';
-import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
 import 'package:flutter/material.dart';
@@ -13,12 +9,14 @@ class TitleWithFilterBuildItem extends StatelessWidget {
       {Key? key,
       required this.title,
       required this.changeSortType,
-      required this.hasSort})
+      required this.hasSort,
+      this.filterCubit})
       : super(key: key);
 
   final String title;
   final void Function(SortBy) changeSortType;
   final bool hasSort;
+  final FilterSuuplyRequestsCubit? filterCubit;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -36,79 +34,81 @@ class TitleWithFilterBuildItem extends StatelessWidget {
           children: [
             Text(title, style: thirdTextStyle()),
             const Spacer(),
-            IconButton(
-              onPressed: () {
-                showAppFilter(
-                  context: context,
-                  onSearch: () {},
-                  onDelete: () {},
-                  filterItem: Column(
-                    children: [
-                      ListTile(
-                        title: const Text('الموقع'),
-                        trailing: DropdownButton<Object>(
-                          onChanged: (val) {},
-                          items: const [
-                            DropdownMenuItem(
-                              child: Text('الموقع'),
-                            ),
-                          ],
-                        ),
-                      ),
-                      ListTile(
-                        title: const Text('تمت المشاهدة'),
-                        trailing: DropdownButton<Object>(
-                            onChanged: (val) {}, items: const []),
-                      ),
-                      ListTile(
-                        title: const Text("التاريخ"),
-                        trailing: DropdownButton<Object>(
-                            onChanged: (val) {}, items: const []),
-                      ),
-                    ],
-                  ),
-                );
-              },
-              icon: const Icon(MyIcons.funnel),
-            ),
+            // IconButton(
+            //   onPressed: () {
+            //     showAppFilter(
+            //       context: context,
+            //       onSearch: () {},
+            //       onDelete: () {},
+            //       filterItem: Column(
+            //         children: [
+            //           ListTile(
+            //             title: const Text('الموقع'),
+            //             trailing: DropdownButton<Object>(
+            //               onChanged: (val) {},
+            //               items: const [
+            //                 DropdownMenuItem(
+            //                   child: Text('الموقع'),
+            //                 ),
+            //               ],
+            //             ),
+            //           ),
+            //           ListTile(
+            //             title: const Text('تمت المشاهدة'),
+            //             trailing: DropdownButton<Object>(
+            //                 onChanged: (val) {}, items: const []),
+            //           ),
+            //           ListTile(
+            //             title: const Text("التاريخ"),
+            //             trailing: DropdownButton<Object>(
+            //                 onChanged: (val) {}, items: const []),
+            //           ),
+            //         ],
+            //       ),
+            //     );
+            //   },
+            //   icon: const Icon(MyIcons.funnel),
+            // ),
             Stack(
               alignment: AlignmentDirectional.topEnd,
               children: [
-                PopupMenuButton(
+                PopupMenuButton<SortBy>(
                   icon: const Icon(Icons.sort),
                   tooltip: 'ترتيب',
+                  onSelected: (sortBy) {
+                    filterCubit?.changeSortType(sortBy);
+                  },
                   itemBuilder: (BuildContext context) => [
                     const PopupMenuItem(
                       child: Text('ترتيب حسب'),
                       enabled: false,
                     ),
                     PopupMenuItem(
-                      child: const Text(
-                        'الكل',
-                      ),
+                      value: SortBy.none,
+                      child: _buildPopupMenuChild('الكل', filterCubit!.notSort),
                       onTap: () {
                         changeSortType(SortBy.none);
                       },
                     ),
                     PopupMenuItem(
-                      child: const Text(
-                        'الاسم',
-                      ),
+                      value: SortBy.name,
+                      child: _buildPopupMenuChild(
+                          'الاسم', filterCubit!.sortByName),
                       onTap: () {
                         changeSortType(SortBy.name);
                       },
                     ),
                     PopupMenuItem(
-                      child: const Text(
-                        'التاريخ',
-                      ),
+                      value: SortBy.date,
+                      child: _buildPopupMenuChild(
+                          'التاريخ', filterCubit!.sortByDate),
                       onTap: () {
                         changeSortType(SortBy.date);
                       },
                     ),
                   ],
                 ),
-                if (!hasSort) _hasFilterDot()
+                _hasFilterDot()
               ],
             ),
           ],
@@ -117,13 +117,24 @@ class TitleWithFilterBuildItem extends StatelessWidget {
     );
   }
 
-  // Widget _buildPopupMenuChild(String title,) {
-  //   return Row(
-  //     children: [Text(title)],
-  //   );
-  // }
+  Widget _buildPopupMenuChild(String title, bool isSelected) {
+    return Row(
+      children: [
+        Text(title),
+        const SizedBox(width: 2),
+        if (isSelected) _selectedDot()
+      ],
+    );
+  }
 
   Widget _hasFilterDot() {
+    if (!filterCubit!.notSort) {
+      return _selectedDot();
+    }
+    return Container();
+  }
+
+  Widget _selectedDot() {
     return const CircleAvatar(
       backgroundColor: AppColors.primaryColor,
       radius: 4,

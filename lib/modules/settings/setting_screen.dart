@@ -1,5 +1,6 @@
 import 'package:emdad/modules/auth_module/screens/update_profile/change_email/change_email.dart';
 import 'package:emdad/modules/auth_module/screens/update_profile/change_password/change_password.dart';
+import 'package:emdad/modules/auth_module/screens/update_profile/change_phone/change_phone_screen.dart';
 import 'package:emdad/modules/settings/profile_info_build_item.dart';
 import 'package:emdad/modules/settings/setting_tile_build_item.dart';
 import 'package:emdad/shared/componants/components.dart';
@@ -84,7 +85,9 @@ class ChangePhoneAndEmailAndPasswordWidget extends StatelessWidget {
             '${Constants.defaultIconUrl}/phone.svg',
             width: 13,
           ),
-          onTap: () {},
+          onTap: () {
+            navigateTo(context, ChangePhoneScreen());
+          },
         ),
         const Divider(height: 0),
         SettingTileBuildItem(

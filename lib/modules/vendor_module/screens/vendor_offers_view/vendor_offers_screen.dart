@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:emdad/common_cubits/filter_supply_requests_cubit/filter_supply_requests_cubit.dart';
 import 'package:emdad/layout/vendor_layout/cubit/vendor_cubit.dart';
 import 'package:emdad/modules/user_module/my_orders/orders_build_item.dart';
 import 'package:emdad/modules/user_module/offers_module/offers_cubit/offers_cubit.dart';
@@ -15,6 +16,7 @@ import 'package:emdad/shared/widgets/load_more_data.dart';
 import 'package:emdad/shared/widgets/ui_componants/default_loader.dart';
 import 'package:emdad/shared/widgets/ui_componants/no_data_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -34,62 +36,82 @@ class VendorOffersScreen extends StatelessWidget {
             return const DefaultLoader();
           }
           final vendorOffersCubit = VendorOffersCubit.instance(context);
+          if (state is GetVendorOffersErrorState) {
+            return NoDataWidget(
+              onPressed: () {
+                vendorOffersCubit.getVendorOffers();
+              },
+              text: state.error,
+            );
+          }
+
           if (vendorOffersCubit.hasErrorOnLoadOffers) {
             return NoDataWidget(onPressed: () {
               vendorOffersCubit.getVendorOffers();
             });
           }
           final offers = vendorOffersCubit.offers;
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                TitleWithFilterBuildItem(
-                  title: 'طلبات عروض سعر',
-                  changeSortType: (sortType) {},
-                  hasSort: false,
-                ),
-                if (offers.isEmpty)
-                  const EmptyData(emptyText: 'لا يوجد طلبات')
-                else
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    padding: const EdgeInsets.all(16),
-                    itemCount: offers.length,
-                    itemBuilder: (context, index) => OrderBuildItem(
-                      // order: orders[index],
-                      title: offers[index].id,
-                      subTitleText: offers[index].orderItemsString,
-
-                      date: offers[index].createdAt,
-                      image: offers[index].user.logoUrl,
-                      hasBadge: false,
-                      onTap: () async {
-                        final refreshPage = await navigateTo(
-                            context,
-                            VendorOrderDetailsScreen(
-                              title: 'طلب عرض سعر',
-                              orderId: offers[index].id,
-                            ));
-                        log(refreshPage.toString());
-                        if (refreshPage != null && refreshPage) {
-                          vendorOffersCubit.getVendorOffers();
-                        }
-                      },
+          return BlocProvider(
+            create: (context) => FilterSuuplyRequestsCubit(offers),
+            child: FilterSuuplyRequestsBlocBuilder(builder: (context, state) {
+              final offers =
+                  FilterSuuplyRequestsCubit.instance(context).supplyRequests;
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    TitleWithFilterBuildItem(
+                      title: 'طلبات عروض سعر',
+                      filterCubit: FilterSuuplyRequestsCubit.instance(context),
+                      changeSortType:
+                          FilterSuuplyRequestsCubit.instance(context)
+                              .changeSortType,
+                      hasSort:
+                          FilterSuuplyRequestsCubit.instance(context).notSort,
                     ),
-                  ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 50.h),
-                  child: LoadMoreData(
-                    isLoading: state is GetMoreVendorOffersLoadingState,
-                    visible: !vendorOffersCubit.isLastPage,
-                    onLoadingMore: () {
-                      vendorOffersCubit.getMoreVendorOffers();
-                    },
-                  ),
-                )
-              ],
-            ),
+                    if (offers.isEmpty)
+                      const EmptyData(emptyText: 'لا يوجد طلبات')
+                    else
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.all(16),
+                        itemCount: offers.length,
+                        itemBuilder: (context, index) => OrderBuildItem(
+                          // order: orders[index],
+                          title: offers[index].id,
+                          subTitleText: offers[index].orderItemsString,
+
+                          date: offers[index].createdAt,
+                          image: offers[index].user.logoUrl,
+                          hasBadge: false,
+                          onTap: () async {
+                            final refreshPage = await navigateTo(
+                                context,
+                                VendorOrderDetailsScreen(
+                                  title: 'طلب عرض سعر',
+                                  orderId: offers[index].id,
+                                ));
+                            log(refreshPage.toString());
+                            if (refreshPage != null && refreshPage) {
+                              vendorOffersCubit.getVendorOffers();
+                            }
+                          },
+                        ),
+                      ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 50.h),
+                      child: LoadMoreData(
+                        isLoading: state is GetMoreVendorOffersLoadingState,
+                        visible: !vendorOffersCubit.isLastPage,
+                        onLoadingMore: () {
+                          vendorOffersCubit.getMoreVendorOffers();
+                        },
+                      ),
+                    )
+                  ],
+                ),
+              );
+            }),
           );
         },
       ),

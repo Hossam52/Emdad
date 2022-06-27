@@ -1,3 +1,6 @@
+import 'package:emdad/models/supply_request/user_preview.dart';
+import 'package:emdad/modules/map_module/screens/map_screen.dart';
+import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
 import 'package:emdad/shared/widgets/default_cached_image.dart';
@@ -9,16 +12,9 @@ import 'custom_text.dart';
 class CustomTransporterOrderListTile extends StatelessWidget {
   const CustomTransporterOrderListTile({
     Key? key,
-    required this.clientImageUrl,
-    required this.clientName,
-    required this.clientCompanyName,
-    required this.address,
+    required this.client,
   }) : super(key: key);
-
-  final String clientImageUrl;
-  final String clientName;
-  final String clientCompanyName;
-  final String address;
+  final UserPreviewModel client;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +36,7 @@ class CustomTransporterOrderListTile extends StatelessWidget {
               shape: BoxShape.circle,
             ),
             child: DefaultCachedNetworkImage(
-              imageUrl: clientImageUrl, //order.vendor.logoUrl,
+              imageUrl: client.logoUrl,
               fit: BoxFit.cover,
             ),
           ),
@@ -57,9 +53,9 @@ class CustomTransporterOrderListTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                richText('العميل', clientName),
-                richText('المؤسسة', clientCompanyName),
-                richText('العنوان', address),
+                richText('العميل', client.name),
+                richText('المؤسسة', client.oraganizationName),
+                richText('العنوان', client.detailAddress),
               ],
             ),
           ),
@@ -101,30 +97,41 @@ class CustomTransporterOrderListTile extends StatelessWidget {
           //   ],
           // ),
           Expanded(
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Image.asset(
-                  'assets/images/map.png',
-                  width: 122.w,
-                  height: 81.h,
-                  fit: BoxFit.cover,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    CustomText(
-                      text: 'اختر الموقع علي الخريطة',
-                      textStyle:
-                          subTextStyle().copyWith(fontWeight: FontWeight.w500),
-                    ),
-                    const Icon(
-                      Icons.place,
-                      color: AppColors.textButtonColor,
-                    ),
-                  ],
-                ),
-              ],
+            child: GestureDetector(
+              onTap: () {
+                navigateTo(
+                  context,
+                  MapScreen(
+                      lat: client.locationObject.lat,
+                      lng: client.locationObject.lng,
+                      screenTitle: client.oraganizationName),
+                );
+              },
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/map.png',
+                    width: 122.w,
+                    height: 81.h,
+                    fit: BoxFit.cover,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      CustomText(
+                        text: 'اختر الموقع علي الخريطة',
+                        textStyle: subTextStyle()
+                            .copyWith(fontWeight: FontWeight.w500),
+                      ),
+                      const Icon(
+                        Icons.place,
+                        color: AppColors.textButtonColor,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ],

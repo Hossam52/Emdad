@@ -53,6 +53,14 @@ class CartScreen extends StatelessWidget {
           if (vendorProfileState is GetVendorInfoLoadingState) {
             return const DefaultLoader();
           }
+          if (vendorProfileState is GetVendorInfoErrorState) {
+            return NoDataWidget(
+              onPressed: () {
+                vendorProfileCubit.getVendorInfo();
+              },
+              text: vendorProfileState.error,
+            );
+          }
           if (!vendorProfileCubit.isProfileLoaded) {
             return NoDataWidget(
               onPressed: () {

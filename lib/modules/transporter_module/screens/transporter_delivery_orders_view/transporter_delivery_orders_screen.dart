@@ -1,3 +1,4 @@
+import 'package:emdad/common_cubits/filter_supply_requests_cubit/filter_supply_requests_cubit.dart';
 import 'package:emdad/modules/transporter_module/screens/transporter_delivery_orders_view/transporter_order_details.dart';
 import 'package:emdad/modules/transporter_module/screens/transporter_offers_view/transporter_offers_screen.dart';
 import 'package:emdad/modules/transporter_module/transporter_cubits/transporter_offers_cubit/transporter_offers_cubit.dart';
@@ -13,6 +14,7 @@ import 'package:emdad/shared/widgets/default_loader.dart';
 import 'package:emdad/shared/widgets/empty_data.dart';
 import 'package:emdad/shared/widgets/ui_componants/no_data_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TransporterDeliveryOrdersScreen extends StatelessWidget {
   const TransporterDeliveryOrdersScreen({Key? key}) : super(key: key);
@@ -44,35 +46,47 @@ class TransporterDeliveryOrdersScreen extends StatelessWidget {
         }
         final orders = deliveryOrdersCubit.orders;
         return responsiveWidget(
-          responsive: (context, deviceInfo) => SingleChildScrollView(
-            child: Column(
-              children: [
-                TitleWithFilterBuildItem(
-                  title: 'أوامر التوصيل',
-                  changeSortType: (sortType) {},
-                  hasSort: false,
-                ),
-                if (orders.isEmpty)
-                  const EmptyData(emptyText: 'لا يوجد اوامر توصيل')
-                else
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    padding: const EdgeInsets.all(16),
-                    itemCount: orders.length,
-                    itemBuilder: (context, index) =>
-                        TransporterOrderItemPreview(
-                      order: orders[index],
-                      onTap: () {
-                        navigateTo(
-                            context,
-                            TransporterOrderDetailsScreen(
-                              transportId: orders[index].id,
-                            ));
-                      },
-                    ),
+          responsive: (context, deviceInfo) => BlocProvider(
+            create: (context) =>
+                FilterSuuplyRequestsCubit.transporterOrders(orders),
+            child: FilterSuuplyRequestsBlocBuilder(
+              builder: (context, state) {
+                final orders = FilterSuuplyRequestsCubit.instance(context)
+                    .transporterSupplyRequests;
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      TitleWithFilterBuildItem(
+                        title: 'أوامر التوصيل',
+                        filterCubit:
+                            FilterSuuplyRequestsCubit.instance(context),
+                        changeSortType: (sortType) {},
+                        hasSort: false,
+                      ),
+                      if (orders.isEmpty)
+                        const EmptyData(emptyText: 'لا يوجد اوامر توصيل')
+                      else
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: const EdgeInsets.all(16),
+                          itemCount: orders.length,
+                          itemBuilder: (context, index) =>
+                              TransporterOrderItemPreview(
+                            order: orders[index],
+                            onTap: () {
+                              navigateTo(
+                                  context,
+                                  TransporterOrderDetailsScreen(
+                                    transportId: orders[index].id,
+                                  ));
+                            },
+                          ),
+                        ),
+                    ],
                   ),
-              ],
+                );
+              },
             ),
           ),
         );

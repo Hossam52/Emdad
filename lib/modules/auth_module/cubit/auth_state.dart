@@ -39,6 +39,8 @@ class UserVerifyOtpLoadingState extends AuthState {}
 
 class UserVerifyOtpSuccessState extends AuthState {}
 
+class UserVerifyOtpIdleState extends AuthState {}
+
 class UserVerifyOtpErrorState extends AuthState {}
 
 ///

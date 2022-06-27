@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:emdad/models/enums/enums.dart';
 import 'package:emdad/models/users/user/user_response_model.dart';
+import 'package:emdad/modules/map_module/screens/map_screen.dart';
 import 'package:emdad/modules/user_module/home_module/vendor_profile_cubit/vendor_profile_cubit.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
@@ -28,6 +29,17 @@ class VendorButtonsBuild extends StatelessWidget {
     return Row(
       children: [
         CustomIconButton(
+          onPressed: () {
+            navigateTo(
+                context,
+                MapScreen(
+                  lat: vendor.locationObject!.lat,
+                  lng: vendor.locationObject!.lng,
+                  screenTitle: '${vendor.name} Location',
+                  locationName:
+                      'this is location of vendor ${vendor.name} with organization ${vendor.organizationName}',
+                ));
+          },
           width: 32.w,
           height: 32.h,
           icon: const Icon(MyIcons.map_pin_fill,
@@ -75,20 +87,6 @@ class VenderReport extends StatelessWidget {
           children: [
             // const Text('الابلاغ عن مورد'),
             // const SizedBox(height: 10),
-            CustomTextFormField(
-              type: TextInputType.text,
-              hasBorder: true,
-              borderRadius: 10,
-              hint: 'الاسم',
-              contentPadding: const EdgeInsets.all(4),
-              validation: (str) {
-                return null;
-              },
-              titleText: ' الاسم',
-            ),
-            SizedBox(
-              height: SharedMethods.getHeightFraction(context, 0.03),
-            ),
             DefaultDropDown(
                 elevation: 4,
                 label: 'تصنيف المشكلة',

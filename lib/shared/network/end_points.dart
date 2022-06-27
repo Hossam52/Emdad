@@ -9,7 +9,7 @@ class EndPoints {
 
   static const String verifyOtp = 'auth/otp';
 
-  static const String resendOtp = 'auth/otp';
+  static const String resendOtp = 'auth/otp/resend';
 
   static const String completeProfile = 'profile/complete';
 

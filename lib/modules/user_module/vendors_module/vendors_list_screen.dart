@@ -69,9 +69,11 @@ class VendorsListScreen extends StatelessWidget {
                       return const Center(child: DefaultLoader());
                     }
                     if (state is GetVendorsErrorState) {
-                      return NoDataWidget(onPressed: () {
-                        filterVendorCubit.getVendors();
-                      });
+                      return NoDataWidget(
+                          onPressed: () {
+                            filterVendorCubit.getVendors();
+                          },
+                          text: state.error);
                     }
                     if (filterVendorCubit.errorVendors) {
                       return NoDataWidget(onPressed: () {

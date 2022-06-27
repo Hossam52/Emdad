@@ -36,6 +36,13 @@ class UserHomeScreen extends StatelessWidget {
         final userHomeCubit = UserHomeCubit.instance(context);
         if (state is GetHomeDataLoadingState) {
           return const DefaultLoader();
+        } else if (state is GetHomeDataErrorState) {
+          return NoDataWidget(
+            onPressed: () {
+              userHomeCubit.getHomeData();
+            },
+            text: state.error,
+          );
         } else if (!userHomeCubit.isLoadedHomeData) {
           return NoDataWidget(onPressed: () {
             userHomeCubit.getHomeData();

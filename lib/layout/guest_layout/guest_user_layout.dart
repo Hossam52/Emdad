@@ -75,13 +75,8 @@ class _UserLayoutState extends State<GuestUserLayout> {
                         MaterialLocalizations.of(context).openAppDrawerTooltip,
                   );
                 }),
-                actions: [
-                  const ChangeLangWidget(),
-                  IconButton(
-                    icon: SvgPicture.asset(
-                        '${Constants.defaultIconUrl}/notification.svg'),
-                    onPressed: () {},
-                  ),
+                actions: const [
+                  ChangeLangWidget(),
                 ],
               ),
               bottomNavigationBar: UserBottomNavigationBar(cubit: cubit),

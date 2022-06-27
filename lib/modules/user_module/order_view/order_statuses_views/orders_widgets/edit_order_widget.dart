@@ -26,66 +26,50 @@ class EditOrderItemsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!order.vendorProvidePriceOffer) return const SizedBox.shrink();
+
     return CustomIconButton(
       width: 45.w,
       height: 45.h,
       icon: const Icon(MyIcons.edit, color: Colors.white),
       buttonColor: AppColors.secondaryColor,
       onPressed: () async {
-        // log(order.requestItems
-        //     .map((e) => ProductModelInCart(
-        //         product: ProductModel.emptyModel().copyWith(
-        //           units: e.units,
-        //           name: e.name,
-        //         ),
-        //         selectedProductUnit: SupplyRequestCartModel(
-        //             units: e.units,
-        //             name: e.name,
-        //             productUnit: e.productUnit,
-        //             quantity: e.quantity,
-        //             unitPrice: e.units.firstWhere(
-        //                 (element) => element.productUnit == e.productUnit,
-        //                 orElse: () {
-        //               return ProductUnit(
-        //                   productUnit: '',
-        //                   pricePerUnit: 0,
-        //                   minimumAmountPerOrder: 0);
-        //             }).pricePerUnit,
-        //             id: 'e.units.firstWhere((element) => element.productUnit==e.productUnit)')))
-        //     .toList()
-        //     .toString());
-        // return;
         final successResendOrder = await navigateTo(
           context,
           MultiBlocProvider(
             providers: [
               BlocProvider(
                 create: (context) => CartCubit(
-                  intialCartItems: order.requestItems
-                      .map((e) => ProductModelInCart(
-                          product: ProductModel.emptyModel().copyWith(
-                              units: e.units, name: e.name, images: ['']),
-                          selectedProductUnit: SupplyRequestCartModel(
-                              units: e.units,
-                              name: e.name,
-                              productUnit: e.productUnit,
-                              quantity: e.quantity,
-                              unitPrice: e.units
-                                  .firstWhere(
-                                    (element) =>
-                                        element.productUnit == e.productUnit,
-                                    //     orElse: () {
-                                    //   return e.units.first;
-                                    //   ProductUnit(
-                                    //       productUnit: '',
-                                    //       pricePerUnit: 0,
-                                    //       minimumAmountPerOrder: 0,
-                                    //       id: '');
-                                    // }
-                                  )
-                                  .pricePerUnit,
-                              id: 'e.units.firstWhere((element) => element.productUnit==e.productUnit)')))
-                      .toList(),
+                  intialCartItems: order.requestItems.map((e) {
+                    log(e.productUnit);
+                    log(e.units.first.productUnit);
+
+                    return ProductModelInCart(
+                        product: ProductModel.emptyModel().copyWith(
+                            id: e.id,
+                            units: e.units,
+                            name: e.name,
+                            images: ['']),
+                        selectedProductUnit: SupplyRequestCartModel(
+                            units: e.units,
+                            name: e.name,
+                            productUnit: e.productUnit,
+                            quantity: e.quantity,
+                            unitPrice: e.units
+                                .firstWhere(
+                                  (element) =>
+                                      element.productUnit == e.productUnit,
+                                  //     orElse: () {
+                                  //   return e.units.first;
+                                  //   ProductUnit(
+                                  //       productUnit: '',
+                                  //       pricePerUnit: 0,
+                                  //       minimumAmountPerOrder: 0,
+                                  //       id: '');
+                                  // }
+                                )
+                                .pricePerUnit,
+                            id: e.id!));
+                  }).toList(),
                   initialAdditioalItems:
                       order.additionalItems.map((e) => e.description).toList(),
                 ),

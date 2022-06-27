@@ -70,6 +70,13 @@ class VendorViewScreen extends StatelessWidget {
             if (state is GetVendorInfoLoadingState) {
               return const DefaultLoader();
             }
+            if (state is GetVendorInfoErrorState) {
+              return NoDataWidget(
+                  text: state.error,
+                  onPressed: () {
+                    vendorProfileCubit.getVendorInfo();
+                  });
+            }
             if (!vendorProfileCubit.isProfileLoaded) {
               return NoDataWidget(onPressed: () {
                 vendorProfileCubit.getVendorInfo();

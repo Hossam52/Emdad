@@ -39,7 +39,7 @@ class HomeVendorBuildItem extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: DefaultCachedNetworkImage(
-                      imageUrl: user.logoUrl!,
+                      imageUrl: user.logoUrl ?? '',
                       fit: BoxFit.cover,
                     ),
                   ),

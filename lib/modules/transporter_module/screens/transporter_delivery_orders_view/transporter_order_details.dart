@@ -83,10 +83,7 @@ class TransporterOrderDetailsScreen extends StatelessWidget {
                     Column(
                       children: [
                         CustomTransporterOrderListTile(
-                          clientImageUrl: user.logoUrl,
-                          clientName: user.name,
-                          clientCompanyName: user.oraganizationName,
-                          address: user.detailAddress,
+                          client: user,
                         ),
                         DottedLine(
                           direction: Axis.vertical,
@@ -96,10 +93,7 @@ class TransporterOrderDetailsScreen extends StatelessWidget {
                           lineThickness: 1,
                         ),
                         CustomTransporterOrderListTile(
-                          clientImageUrl: vendor.logoUrl,
-                          clientName: vendor.name,
-                          clientCompanyName: vendor.oraganizationName,
-                          address: vendor.detailAddress,
+                          client: vendor,
                         ),
                       ],
                     ),

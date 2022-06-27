@@ -18,6 +18,7 @@ import 'package:emdad/models/users/auth/user_register_data_model.dart';
 import 'package:emdad/models/users/user/user_response_model.dart';
 import 'package:emdad/models/users/user/user_response_model.dart' as userModel;
 import 'package:emdad/modules/auth_module/screens/facility_type_view/facility_type_screen.dart';
+import 'package:emdad/modules/auth_module/screens/login_view/login_screen.dart';
 import 'package:emdad/modules/auth_module/screens/phone_confirm_view/phone_confirm_screen.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/constants.dart';
@@ -233,6 +234,11 @@ class AuthCubit extends Cubit<AuthState> {
       }
     } catch (e) {
       registerButtonStates = ButtonState.fail;
+      showSnackBar(
+        context: context,
+        text: e.toString(),
+        snackBarStates: SnackBarStates.error,
+      );
       emit(UserRegisterErrorState());
       rethrow;
     }
@@ -263,18 +269,21 @@ class AuthCubit extends Cubit<AuthState> {
           text: response.data['message'],
           snackBarStates: SnackBarStates.success,
         );
+        verifyOtpButtonState = ButtonState.idle;
+        emit(UserVerifyOtpIdleState());
+        await Future.delayed(Duration(seconds: 1)).then((_) {});
         emit(UserVerifyOtpSuccessState());
       } else {
         verifyOtpButtonState = ButtonState.fail;
-        showSnackBar(
-          context: context,
-          text: response.data['message'],
-          snackBarStates: SnackBarStates.error,
-        );
-        emit(UserVerifyOtpErrorState());
+        throw response.data['message'];
       }
     } catch (e) {
       verifyOtpButtonState = ButtonState.fail;
+      showSnackBar(
+        context: context,
+        text: e.toString(),
+        snackBarStates: SnackBarStates.error,
+      );
       emit(UserVerifyOtpErrorState());
       rethrow;
     }
@@ -313,14 +322,14 @@ class AuthCubit extends Cubit<AuthState> {
         );
         emit(UserResendOtpSuccessState());
       } else {
-        showSnackBar(
-          context: context,
-          text: response.data['message'],
-          snackBarStates: SnackBarStates.error,
-        );
-        emit(UserResendOtpErrorState());
+        throw response.data['message'];
       }
     } catch (e) {
+      showSnackBar(
+        context: context,
+        text: e.toString(),
+        snackBarStates: SnackBarStates.error,
+      );
       emit(UserResendOtpErrorState());
       rethrow;
     }
@@ -380,9 +389,17 @@ class AuthCubit extends Cubit<AuthState> {
       print(response.data);
       if (response.data['status']) {
         completeProfileModel = UserResponseModel.fromJson(response.data);
-        navigateToLayout(context, userResponseModel);
+        // navigateToLayout(context, userResponseModel);
         completeProfileStates = ButtonState.success;
+        emit(UserVerifyOtpIdleState());
+        await Future.delayed(Duration(seconds: 1));
+        showSnackBar(
+          context: context,
+          text: response.data['message'],
+          snackBarStates: SnackBarStates.success,
+        );
         emit(UserCompleteProfileSuccessState());
+        navigateToAndFinish(context, LoginScreen());
       } else {
         showSnackBar(
           context: context,
@@ -501,6 +518,18 @@ class AuthCubit extends Cubit<AuthState> {
       emit(ChangeEmailSuccessState());
     } catch (e) {
       emit(ChangeEmailErrorState(error: e.toString()));
+    }
+  }
+
+  Future<void> changePhoneNumber({required String phoneNumber}) async {
+    try {
+      emit(UpdateProfileLoadingState());
+
+      //TODO: integrate with api change phone number
+
+      emit(UpdateProfileSuccessState());
+    } catch (e) {
+      emit(UpdateProfileErrorState(error: e.toString()));
     }
   }
 

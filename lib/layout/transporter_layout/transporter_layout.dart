@@ -11,6 +11,7 @@ import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
 import 'package:emdad/shared/cubit/app_cubit.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/widgets/change_language_widget.dart';
+import 'package:emdad/shared/widgets/notifications_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -77,13 +78,9 @@ class _TransporterLayoutState extends State<TransporterLayout> {
                           .openAppDrawerTooltip,
                     );
                   }),
-                  actions: [
-                    IconButton(
-                      icon: SvgPicture.asset(
-                          '${Constants.defaultIconUrl}/notification.svg'),
-                      onPressed: () {},
-                    ),
-                    const ChangeLangWidget(),
+                  actions: const [
+                    NotificationsButton(),
+                    ChangeLangWidget(),
                   ],
                 ),
                 bottomNavigationBar:

@@ -16,6 +16,7 @@ import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:emdad/shared/widgets/custom_text.dart';
 import 'package:emdad/shared/widgets/custom_text_form_field.dart';
 import 'package:emdad/shared/widgets/dialogs/add_new_price.dart';
+import 'package:emdad/shared/widgets/dialogs/confirm_exit_product_edit_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -38,74 +39,83 @@ class _VendorEditProductScreenState extends State<VendorEditProductScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => VendorProductCrudCubit(widget.product),
-      child: VendorProductCrudCubitBlocBuilder(
-        builder: (context, state) {
-          return VendorBlocConsumer(
-            listener: (context, state) {},
-            builder: (context, state) {
-              final productCubit = VendorProductCrudCubit.instance(context);
-              return Scaffold(
-                backgroundColor: AppColors.scaffoldBackgroundColor,
-                appBar: _appBar(context),
-                body: ListView(
-                  physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics(),
-                  ),
-                  children: [
-                    Padding(
-                      padding:
-                          EdgeInsets.only(right: 16.w, top: 20.h, bottom: 20.h),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const MainProductImage(),
-                          SizedBox(height: 20.h),
-                          const AllProductImages(),
-                        ],
-                      ),
+    return WillPopScope(
+      onWillPop: () async {
+        final res = await showDialog(
+            context: context,
+            builder: (_) => const ConfirmExitProductEditDialog());
+        if (res != null && res == true) return true;
+        return false;
+      },
+      child: BlocProvider(
+        create: (context) => VendorProductCrudCubit(widget.product),
+        child: VendorProductCrudCubitBlocBuilder(
+          builder: (context, state) {
+            return VendorBlocConsumer(
+              listener: (context, state) {},
+              builder: (context, state) {
+                final productCubit = VendorProductCrudCubit.instance(context);
+                return Scaffold(
+                  backgroundColor: AppColors.scaffoldBackgroundColor,
+                  appBar: _appBar(context),
+                  body: ListView(
+                    physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics(),
                     ),
-                    Container(
-                      width: double.infinity,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30.r),
-                          topRight: Radius.circular(30.r),
-                        ),
-                        color: Colors.white,
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 20.h, horizontal: 20.w),
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                            right: 16.w, top: 20.h, bottom: 20.h),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            ProductDetailsWidget(productCubit: productCubit),
-                            Align(
-                              child: CustomButton(
-                                width: 176.w,
-                                height: 60.h,
-                                backgroundColor: AppColors.primaryColor,
-                                onPressed: () {
-                                  productCubit.editProduct();
-                                },
-                                text: 'حفظ',
-                                radius: 10.r,
-                              ),
-                            ),
+                            const MainProductImage(),
+                            SizedBox(height: 20.h),
+                            const AllProductImages(),
                           ],
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          );
-        },
+                      Container(
+                        width: double.infinity,
+                        clipBehavior: Clip.antiAlias,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30.r),
+                            topRight: Radius.circular(30.r),
+                          ),
+                          color: Colors.white,
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 20.h, horizontal: 20.w),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ProductDetailsWidget(productCubit: productCubit),
+                              Align(
+                                child: CustomButton(
+                                  width: 176.w,
+                                  height: 60.h,
+                                  backgroundColor: AppColors.primaryColor,
+                                  onPressed: () {
+                                    productCubit.editProduct();
+                                  },
+                                  text: 'حفظ',
+                                  radius: 10.r,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }
@@ -118,12 +128,7 @@ class _VendorEditProductScreenState extends State<VendorEditProductScreen> {
           bottom: Radius.circular(15.r),
         ),
       ),
-      leading: IconButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        icon: const Icon(Icons.arrow_back, color: Colors.white),
-      ),
+      iconTheme: IconThemeData(color: Colors.white),
       title: CustomText(
         text: 'تعديل منتج',
         textStyle: primaryTextStyle().copyWith(

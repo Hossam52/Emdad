@@ -55,9 +55,12 @@ class _VendorProductsScreenState extends State<VendorProductsScreen> {
                     return const DefaultLoader();
                   }
                   if (state is GetAllVendorProductsErrorState) {
-                    return NoDataWidget(onPressed: () {
-                      vendorProductsCubit.getAllVendorProducts();
-                    });
+                    return NoDataWidget(
+                      onPressed: () {
+                        vendorProductsCubit.getAllVendorProducts();
+                      },
+                      text: state.error,
+                    );
                   }
                   if (vendorProductsCubit.isAllProductsNotLoaded) {
                     return NoDataWidget(onPressed: () {

@@ -166,6 +166,7 @@ class VendorProductCrudCubit extends Cubit<VendorProductCrudStates> {
         final String productName = productNameController.text;
         final String description = productDescriptionController.text;
         final bool isPriceShown = product.isPriceShown;
+        //TODO: implement edit product api
       } else {
         throw 'Error happened';
       }

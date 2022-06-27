@@ -74,9 +74,12 @@ class _CategoryScreenState extends State<CategoryScreen> {
             return const DefaultLoader();
           }
           if (state is GetCategoryProductsErrorState) {
-            return NoDataWidget(onPressed: () {
-              getProducts();
-            });
+            return NoDataWidget(
+              onPressed: () {
+                getProducts();
+              },
+              text: state.error,
+            );
           }
           final products = vendorProfileCubit.allProducts;
           if (products.isEmpty) {

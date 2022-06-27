@@ -15,6 +15,7 @@ import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:emdad/shared/widgets/custom_text.dart';
 import 'package:emdad/shared/widgets/custom_text_form_field.dart';
 import 'package:emdad/shared/widgets/dialogs/add_new_price.dart';
+import 'package:emdad/shared/widgets/dialogs/confirm_exit_product_edit_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,105 +32,117 @@ class _VendorAddNewProductScreenState extends State<VendorAddNewProductScreen> {
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => VendorProductCrudCubit.newProduct(),
-      child: VendorProductCrudCubitBlocConsumer(
-        listener: (context, state) {
-          if (state is AddProductErrorState) {
-            SharedMethods.showToast(context, state.error,
-                textColor: Colors.white, color: AppColors.errorColor);
-          }
-          if (state is AddProductSuccessState) {
-            SharedMethods.showToast(context, 'تم اضافة المنتج بنجاح',
-                textColor: Colors.white);
-            VendorProductsCubit.instance(context).getAllVendorProducts();
-            Navigator.pop(context);
-          }
-        },
-        builder: (context, state) {
-          final productCubit = VendorProductCrudCubit.instance(context);
-          return Form(
-            key: formKey,
-            child: Scaffold(
-              backgroundColor: AppColors.scaffoldBackgroundColor,
-              appBar: _appBar(context),
-              body: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(
-                  parent: AlwaysScrollableScrollPhysics(),
-                ),
-                child: SizedBox(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                            right: 16.w, top: 20.h, bottom: 20.h),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const MainProductImage(),
-                            SizedBox(height: 20.h),
-                            const AllProductImages(),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        clipBehavior: Clip.antiAlias,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(30.r),
-                            topRight: Radius.circular(30.r),
-                          ),
-                          color: Colors.white,
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 20.h, horizontal: 20.w),
+    return WillPopScope(
+      onWillPop: () async {
+        final res = await showDialog(
+            context: context,
+            builder: (_) => const ConfirmExitProductEditDialog());
+        if (res != null && res == true) return true;
+        return false;
+      },
+      child: BlocProvider(
+        create: (context) => VendorProductCrudCubit.newProduct(),
+        child: VendorProductCrudCubitBlocConsumer(
+          listener: (context, state) {
+            if (state is AddProductErrorState) {
+              SharedMethods.showToast(context, state.error,
+                  textColor: Colors.white, color: AppColors.errorColor);
+            }
+            if (state is AddProductSuccessState) {
+              SharedMethods.showToast(context, 'تم اضافة المنتج بنجاح',
+                  textColor: Colors.white);
+              VendorProductsCubit.instance(context).getAllVendorProducts();
+              Navigator.pop(context);
+            }
+          },
+          builder: (context, state) {
+            final productCubit = VendorProductCrudCubit.instance(context);
+            return Form(
+              key: formKey,
+              child: Scaffold(
+                backgroundColor: AppColors.scaffoldBackgroundColor,
+                appBar: _appBar(context),
+                body: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics(),
+                  ),
+                  child: SizedBox(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                              right: 16.w, top: 20.h, bottom: 20.h),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
-                              ProductDetailsWidget(productCubit: productCubit),
-                              Align(
-                                child: state is AddProductLoadingState
-                                    ? const CircularProgressIndicator()
-                                    : CustomButton(
-                                        width: 176.w,
-                                        height: 60.h,
-                                        backgroundColor: AppColors.primaryColor,
-                                        onPressed: () {
-                                          if (formKey.currentState!
-                                              .validate()) {
-                                            final validateProductData =
-                                                productCubit
-                                                    .validateProductData(
-                                                        context);
-                                            if (validateProductData == null) {
-                                              productCubit.addNewProduct();
-                                            } else {
-                                              SharedMethods.showToast(
-                                                  context, validateProductData,
-                                                  textColor: Colors.white,
-                                                  color: AppColors.errorColor);
-                                            }
-                                          }
-                                        },
-                                        text: 'إضافة',
-                                        radius: 10.r,
-                                      ),
-                              ),
+                              const MainProductImage(),
+                              SizedBox(height: 20.h),
+                              const AllProductImages(),
                             ],
                           ),
                         ),
-                      ),
-                    ],
+                        Container(
+                          width: double.infinity,
+                          clipBehavior: Clip.antiAlias,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30.r),
+                              topRight: Radius.circular(30.r),
+                            ),
+                            color: Colors.white,
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 20.h, horizontal: 20.w),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ProductDetailsWidget(
+                                    productCubit: productCubit),
+                                Align(
+                                  child: state is AddProductLoadingState
+                                      ? const CircularProgressIndicator()
+                                      : CustomButton(
+                                          width: 176.w,
+                                          height: 60.h,
+                                          backgroundColor:
+                                              AppColors.primaryColor,
+                                          onPressed: () {
+                                            if (formKey.currentState!
+                                                .validate()) {
+                                              final validateProductData =
+                                                  productCubit
+                                                      .validateProductData(
+                                                          context);
+                                              if (validateProductData == null) {
+                                                productCubit.addNewProduct();
+                                              } else {
+                                                SharedMethods.showToast(context,
+                                                    validateProductData,
+                                                    textColor: Colors.white,
+                                                    color:
+                                                        AppColors.errorColor);
+                                              }
+                                            }
+                                          },
+                                          text: 'إضافة',
+                                          radius: 10.r,
+                                        ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
@@ -142,12 +155,13 @@ class _VendorAddNewProductScreenState extends State<VendorAddNewProductScreen> {
           bottom: Radius.circular(15.r),
         ),
       ),
-      leading: IconButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        icon: const Icon(Icons.arrow_back, color: Colors.white),
-      ),
+      iconTheme: IconThemeData(color: Colors.white),
+      // leading: IconButton(
+      //   onPressed: () {
+      //     Navigator.of(context).pop();
+      //   },
+      //   icon: const Icon(Icons.arrow_back, color: Colors.white),
+      // ),
       title: CustomText(
         text: 'إضافة منتج',
         textStyle: primaryTextStyle().copyWith(

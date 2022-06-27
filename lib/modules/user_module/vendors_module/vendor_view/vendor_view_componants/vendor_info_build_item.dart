@@ -50,7 +50,7 @@ class VendorInfoBuildItem extends StatelessWidget {
                 LocationBuildItem(location: city!, textColor: Colors.white),
                 Text(vendorType ?? ' ',
                     style: thirdTextStyle().copyWith(color: Colors.white)),
-                if (isCart == false) const DefaultRatingbar(rate: 3.0),
+                if (isCart == false) const DefaultRatingBarNotTapped(rate: 3.0),
                 SizedBox(height: 27.h),
                 tailing,
               ],

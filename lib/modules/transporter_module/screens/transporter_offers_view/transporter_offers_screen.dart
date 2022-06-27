@@ -1,3 +1,4 @@
+import 'package:emdad/common_cubits/filter_supply_requests_cubit/filter_supply_requests_cubit.dart';
 import 'package:emdad/modules/transporter_module/screens/transporter_offers_view/transporter_offer_details_screen.dart';
 import 'package:emdad/modules/transporter_module/transporter_cubits/transporter_offers_cubit/transporter_offers_cubit.dart';
 import 'package:emdad/modules/transporter_module/transporter_cubits/transporter_offers_cubit/transporter_offers_states.dart';
@@ -14,6 +15,7 @@ import 'package:emdad/shared/widgets/empty_data.dart';
 import 'package:emdad/shared/widgets/load_more_data.dart';
 import 'package:emdad/shared/widgets/ui_componants/no_data_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TransporterOffersScreen extends StatelessWidget {
@@ -49,46 +51,56 @@ class TransporterOffersScreen extends StatelessWidget {
             await transporterCubit.getOffers();
           },
           child: responsiveWidget(
-            responsive: (context, deviceInfo) => SingleChildScrollView(
-              child: Column(
-                children: [
-                  TitleWithFilterBuildItem(
-                    title: 'عروض اسعار',
-                    changeSortType: (sortType) {},
-                    hasSort: false,
-                  ),
-                  if (offers.isEmpty)
-                    const Center(
-                        child: EmptyData(emptyText: 'لا يوجد عروض اسعار'))
-                  else
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.all(16),
-                      itemCount: offers.length,
-                      itemBuilder: (context, index) {
-                        final offer = offers[index];
-                        return TransporterOrderItemPreview(
-                          order: offer,
-                          onTap: () {
-                            navigateTo(
-                                context,
-                                TransporterOfferDetailsScreen(
-                                  transportId: offer.id,
-                                ));
+            responsive: (context, deviceInfo) => BlocProvider(
+              create: (context) =>
+                  FilterSuuplyRequestsCubit.transporterOrders(offers),
+              child: FilterSuuplyRequestsBlocBuilder(builder: (context, state) {
+                final offers = FilterSuuplyRequestsCubit.instance(context)
+                    .transporterSupplyRequests;
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      TitleWithFilterBuildItem(
+                        title: 'عروض اسعار',
+                        filterCubit:
+                            FilterSuuplyRequestsCubit.instance(context),
+                        changeSortType: (sortType) {},
+                        hasSort: false,
+                      ),
+                      if (offers.isEmpty)
+                        const Center(
+                            child: EmptyData(emptyText: 'لا يوجد عروض اسعار'))
+                      else
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: const EdgeInsets.all(16),
+                          itemCount: offers.length,
+                          itemBuilder: (context, index) {
+                            final offer = offers[index];
+                            return TransporterOrderItemPreview(
+                              order: offer,
+                              onTap: () {
+                                navigateTo(
+                                    context,
+                                    TransporterOfferDetailsScreen(
+                                      transportId: offer.id,
+                                    ));
+                              },
+                            );
                           },
-                        );
-                      },
-                    ),
-                  LoadMoreData(
-                    onLoadingMore: () {
-                      transporterCubit.getMoreOffers();
-                    },
-                    isLoading: state is GetMoreOffersLoadingState,
-                    visible: !transporterCubit.isLastPage,
-                  )
-                ],
-              ),
+                        ),
+                      LoadMoreData(
+                        onLoadingMore: () {
+                          transporterCubit.getMoreOffers();
+                        },
+                        isLoading: state is GetMoreOffersLoadingState,
+                        visible: !transporterCubit.isLastPage,
+                      )
+                    ],
+                  ),
+                );
+              }),
             ),
           ),
         );

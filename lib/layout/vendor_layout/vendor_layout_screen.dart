@@ -13,6 +13,7 @@ import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
 import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/custom_text.dart';
+import 'package:emdad/shared/widgets/notifications_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -78,12 +79,9 @@ class _VendorLayoutState extends State<VendorLayout> {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                actions: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: SvgPicture.asset('assets/images/alert.svg'),
-                  ),
-                  const ChangeLangWidget()
+                actions: const [
+                  ChangeLangWidget(),
+                  NotificationsButton(),
                 ],
               ),
               body: vendorCubit.selectedBottomItem.child,
