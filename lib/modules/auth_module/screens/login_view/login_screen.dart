@@ -1,5 +1,6 @@
 import 'package:emdad/modules/auth_module/auth_widgets/skip_auth.dart';
 import 'package:emdad/modules/auth_module/cubit/auth_cubit.dart';
+import 'package:emdad/modules/auth_module/screens/forgot_password_view/forgot_password_screen.dart';
 import 'package:emdad/modules/auth_module/screens/register_view/register_screen.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';
@@ -118,7 +119,8 @@ class LoginScreen extends StatelessWidget {
                                 'هل نسيت كلمة المرور ؟',
                               ),
                               onPressed: () {
-                                // TODO:
+                                navigateTo(
+                                    context, const ForgotPasswordScreen());
                               },
                             ),
                             const SizedBox(

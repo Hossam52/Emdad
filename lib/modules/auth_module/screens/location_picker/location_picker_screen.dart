@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:emdad/modules/auth_module/cubit/auth_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
@@ -5,15 +7,40 @@ import 'package:open_location_picker/open_location_picker.dart';
 
 import 'bloc.dart';
 
-class LocationPickerScreen extends StatelessWidget {
+class LocationPickerScreen extends StatefulWidget {
   const LocationPickerScreen({Key? key, required this.authCubit})
       : super(key: key);
 
   final AuthCubit authCubit;
+
+  @override
+  State<LocationPickerScreen> createState() => _LocationPickerScreenState();
+}
+
+class _LocationPickerScreenState extends State<LocationPickerScreen> {
+  final Location location = Location();
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: OpenStreetMaps(
+        // body: Center(
+        //   child: OpenMapPicker(
+        //     decoration: const InputDecoration(hintText: "My location"),
+        //     expands: false,
+        //     onChanged: (newValue) => log(
+        //       newValue!.toLatLng().toString(),
+        //     ),
+        //   ),
+        // ),
+        body: OpenMapSettings(
+      getLocationStream: () => location.onLocationChanged.map((event) {
+        return LatLng(event.latitude!, event.longitude!);
+      }),
+      child: OpenStreetMaps(
         searchHint: 'ابحث هنا',
         myLocationButton: (value) => FloatingActionButton(
           onPressed: () async {
@@ -43,14 +70,19 @@ class LocationPickerScreen extends StatelessWidget {
           },
           child: const Icon(Icons.location_on),
         ),
-        onDone: (location) {
-          authCubit.addLocation(location);
+        onDone: (locationd) async {
+          log((await location.onLocationChanged.last).toString());
+          return;
+          widget.authCubit.addLocation(locationd);
           Navigator.pop(context);
         },
         options: OpenMapOptions(),
-        bloc: CustomBloc(OpenMapState.selected(
-            SelectedLocation.single(authCubit.selectedLocationTest))),
+        bloc: CustomBloc(
+          OpenMapState.selected(
+            SelectedLocation.single(null),
+          ),
+        ),
       ),
-    );
+    ));
   }
 }

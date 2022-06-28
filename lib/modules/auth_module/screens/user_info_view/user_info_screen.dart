@@ -75,7 +75,8 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                           controller: organizationNameController,
                           hint: 'الهدي والتقوي',
                           type: TextInputType.text,
-                          validation: (String? value) => SharedMethods.defaultValidation(value),
+                          validation: (String? value) =>
+                              SharedMethods.defaultValidation(value),
                           titleText: 'آسم المؤسسة',
                           backgroundColor: AppColors.textWhiteGrey,
                           hasBorder: false,
@@ -85,7 +86,8 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                           controller: commercialRegisterController,
                           hint: '١٢٣٤٥٦٧٨',
                           type: TextInputType.text,
-                          validation: (String? value) => SharedMethods.defaultValidation(value),
+                          validation: (String? value) =>
+                              SharedMethods.defaultValidation(value),
                           titleText: 'السجل التجاري',
                           backgroundColor: AppColors.textWhiteGrey,
                           hasBorder: false,
@@ -130,8 +132,9 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                                     country: cubit.selectedCountry!,
                                     city: cubit.selectedCity!,
                                     locationData: LocationData(
-                                      latitude: 31.00,
-                                      longitude: 31.00,
+                                      latitude: cubit.selectedLocationTest!.lat,
+                                      longitude:
+                                          cubit.selectedLocationTest!.lon,
                                     ),
                                   ),
                                   facilityType: FacilityType.user,

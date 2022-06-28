@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
@@ -309,7 +310,15 @@ class AuthCubit extends Cubit<AuthState> {
     return map;
   }
 
-  void resendOtp(String token, VerifyOtpStep step, BuildContext context) async {
+  bool displayCounterOtp = false;
+
+  void changeDisplayCounter() {
+    displayCounterOtp = !displayCounterOtp;
+    emit(UpdateCounterOtpValue());
+  }
+
+  Future<void> resendOtp(
+      String token, VerifyOtpStep step, BuildContext context) async {
     try {
       emit(UserResendOtpLoadingState());
       Response response =

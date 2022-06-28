@@ -62,7 +62,7 @@ class _MapScreenState extends State<MapScreen> {
                       onMapCreated: _onMapCreated,
                       initialCameraPosition: CameraPosition(
                         target: _center,
-                        zoom: 6.2,
+                        zoom: 5.3,
                       ),
                       markers: MapCubit.instance(context).markers,
                       myLocationButtonEnabled: false,

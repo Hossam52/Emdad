@@ -56,7 +56,7 @@ class OffersScreen extends StatelessWidget {
               responsive: (context, deviceInfo) => BlocProvider(
                 create: (context) => FilterSuuplyRequestsCubit(offers),
                 child: FilterSuuplyRequestsBlocBuilder(
-                  builder: (context, state) {
+                  builder: (context, _) {
                     return SingleChildScrollView(
                       child: Column(
                         children: [

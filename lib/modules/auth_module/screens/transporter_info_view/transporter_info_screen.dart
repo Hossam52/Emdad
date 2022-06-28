@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:emdad/models/enums/enums.dart';
 import 'package:emdad/models/users/app_user_model.dart';
 import 'package:emdad/models/users/transporter/transporter_data_model.dart';
 import 'package:emdad/modules/auth_module/cubit/auth_cubit.dart';
 import 'package:emdad/modules/auth_module/screens/vendor_info_view/chip_wrap_build_item.dart';
 import 'package:emdad/modules/auth_module/screens/vendor_info_view/choose_location_build_item.dart';
+import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
@@ -152,6 +155,15 @@ class TransporterInfoScreen extends StatelessWidget {
                               onPressed: () {
                                 formKey.currentState!.save();
                                 if (formKey.currentState!.validate()) {
+                                  if (cubit.transporterType.isEmpty) {
+                                    return showSnackBar(
+                                      context: context,
+                                      text:
+                                          'يجب اختيار وسيلة نقل واحدة علي الاقل',
+                                      snackBarStates: SnackBarStates.error,
+                                    );
+                                  }
+
                                   cubit.completeProfile(
                                     TransporterDataModel(
                                       transportationMethods:
@@ -163,8 +175,10 @@ class TransporterInfoScreen extends StatelessWidget {
                                       city: cubit.selectedCity!,
                                       country: cubit.selectedCountry!,
                                       locationData: LocationData(
-                                        latitude: 31.0,
-                                        longitude: 31.0,
+                                        latitude:
+                                            cubit.selectedLocationTest!.lat,
+                                        longitude:
+                                            cubit.selectedLocationTest!.lon,
                                       ),
                                     ),
                                     facilityType: FacilityType.transport,

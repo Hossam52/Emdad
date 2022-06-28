@@ -202,7 +202,7 @@ class _CategoryWithProducts extends StatelessWidget {
     var products = categoryModel.products;
     products =
         products.take(products.length > 10 ? 10 : products.length).toList();
-
+    if (products.isEmpty) return Container();
     return Column(
       children: [
         ListTile(

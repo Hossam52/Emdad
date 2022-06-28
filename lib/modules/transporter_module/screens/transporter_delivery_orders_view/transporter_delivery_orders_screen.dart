@@ -50,7 +50,7 @@ class TransporterDeliveryOrdersScreen extends StatelessWidget {
             create: (context) =>
                 FilterSuuplyRequestsCubit.transporterOrders(orders),
             child: FilterSuuplyRequestsBlocBuilder(
-              builder: (context, state) {
+              builder: (context, _) {
                 final orders = FilterSuuplyRequestsCubit.instance(context)
                     .transporterSupplyRequests;
                 return SingleChildScrollView(

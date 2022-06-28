@@ -54,7 +54,7 @@ class TransporterOffersScreen extends StatelessWidget {
             responsive: (context, deviceInfo) => BlocProvider(
               create: (context) =>
                   FilterSuuplyRequestsCubit.transporterOrders(offers),
-              child: FilterSuuplyRequestsBlocBuilder(builder: (context, state) {
+              child: FilterSuuplyRequestsBlocBuilder(builder: (context, _) {
                 final offers = FilterSuuplyRequestsCubit.instance(context)
                     .transporterSupplyRequests;
                 return SingleChildScrollView(

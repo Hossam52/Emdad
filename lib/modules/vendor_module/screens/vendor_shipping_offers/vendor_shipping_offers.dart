@@ -74,7 +74,7 @@ class VendorShippingOffersScreen extends StatelessWidget {
               create: (context) =>
                   FilterSuuplyRequestsCubit.transportationOffers(offers),
               child: FilterSuuplyRequestsBlocBuilder(
-                builder: (context, state) {
+                builder: (context, _) {
                   final offers = FilterSuuplyRequestsCubit.instance(context)
                       .transportationOffers;
                   return SingleChildScrollView(

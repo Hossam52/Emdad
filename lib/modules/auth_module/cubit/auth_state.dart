@@ -50,6 +50,8 @@ class UserResendOtpSuccessState extends AuthState {}
 
 class UserResendOtpErrorState extends AuthState {}
 
+class UpdateCounterOtpValue extends AuthState {}
+
 ///
 class UserCompleteProfileLoadingState extends AuthState {}
 

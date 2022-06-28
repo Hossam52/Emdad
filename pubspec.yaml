@@ -52,6 +52,7 @@ dependencies:
   flutter_progress_hud: ^2.0.0
   fluttertoast: ^8.0.9
   google_maps_flutter: ^2.1.8
+  flutter_timer_countdown: ^1.0.3
 
 dev_dependencies:
   flutter_test:

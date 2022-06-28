@@ -53,7 +53,7 @@ class VendorOffersScreen extends StatelessWidget {
           final offers = vendorOffersCubit.offers;
           return BlocProvider(
             create: (context) => FilterSuuplyRequestsCubit(offers),
-            child: FilterSuuplyRequestsBlocBuilder(builder: (context, state) {
+            child: FilterSuuplyRequestsBlocBuilder(builder: (context, _) {
               final offers =
                   FilterSuuplyRequestsCubit.instance(context).supplyRequests;
               return SingleChildScrollView(
