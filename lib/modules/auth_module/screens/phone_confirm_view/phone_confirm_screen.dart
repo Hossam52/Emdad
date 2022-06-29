@@ -223,16 +223,7 @@ class _ConfirmScreenContentState extends State<ConfirmScreenContent> {
                           ),
                         ),
                         SizedBox(width: 20.w),
-                        Expanded(
-                          child: CustomButton(
-                            onPressed: () {},
-                            text: 'تغيير رقم الهاتف',
-                            textColor: AppColors.textButtonColor,
-                            backgroundColor: Colors.white,
-                            borderColor: AppColors.textButtonColor,
-                            radius: 4.r,
-                          ),
-                        ),
+                        const Spacer(),
                       ],
                     ),
                     SizedBox(height: 20.h),

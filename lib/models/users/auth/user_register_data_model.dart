@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'dart:developer';
+
 class UserRegisterDataModel {
   late String name;
   late String password;
@@ -53,6 +55,7 @@ class PhoneNumberDataModel {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['countryCode'] = countryCode;
     data['number'] = number;
+    log(data.toString());
     return data;
   }
 

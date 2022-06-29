@@ -53,6 +53,7 @@ dependencies:
   fluttertoast: ^8.0.9
   google_maps_flutter: ^2.1.8
   flutter_timer_countdown: ^1.0.3
+  extended_phone_number_input: ^1.0.2
 
 dev_dependencies:
   flutter_test:
