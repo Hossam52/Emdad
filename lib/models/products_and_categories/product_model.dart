@@ -8,23 +8,16 @@ class ProductModel {
   String productType;
   List<ProductUnit> units;
   bool isPriceShown;
-  List<String> images;
-  ProductModel({
-    required this.id,
-    required this.vendorId,
-    required this.name,
-    required this.description,
-    required this.productType,
-    required this.units,
-    required this.isPriceShown,
-    required this.images,
-  }) {
-//     images = images
-//         .map(
-//             (e) => 'https://emdad-ecommerce.herokuapp.com/images/products/' + e)
-//         .toList();
-// //TODO: Remove the link above as it for test
-  }
+  List<String> imagesUrls;
+  ProductModel(
+      {required this.id,
+      required this.vendorId,
+      required this.name,
+      required this.description,
+      required this.productType,
+      required this.units,
+      required this.isPriceShown,
+      required this.imagesUrls});
   ProductModel.emptyModel()
       : id = '',
         name = '',
@@ -33,7 +26,7 @@ class ProductModel {
         productType = '',
         units = [],
         isPriceShown = true,
-        images = [];
+        imagesUrls = [];
 
   Map<String, dynamic> toMap() {
     return {
@@ -44,7 +37,7 @@ class ProductModel {
       'productType': productType,
       'units': units.map((x) => x.toMap()).toList(),
       'isPriceShown': isPriceShown,
-      'images': images,
+      'images': imagesUrls,
     };
   }
 
@@ -58,7 +51,7 @@ class ProductModel {
       units: List<ProductUnit>.from(
           map['units']?.map((x) => ProductUnit.fromMap(x))),
       isPriceShown: map['isPriceShown'] ?? false,
-      images: List<String>.from(map['images']),
+      imagesUrls: List<String>.from(map['imagesUrls']),
     );
   }
 
@@ -85,7 +78,7 @@ class ProductModel {
       productType: productType ?? this.productType,
       units: units ?? this.units,
       isPriceShown: isPriceShown ?? this.isPriceShown,
-      images: images ?? this.images,
+      imagesUrls: images ?? this.imagesUrls,
     );
   }
 }

@@ -70,32 +70,33 @@ class User {
   LocationObject? locationObject;
   bool? isFavourite;
   String? userType;
-  User({
-    this.sId,
-    this.name,
-    this.isVerified,
-    this.password,
-    this.primaryPhoneNumber,
-    this.primaryEmail,
-    this.secondaryEmail,
-    this.modificationDate,
-    this.vendorType,
-    this.firebaseToken,
-    this.creationDate,
-    this.iV,
-    this.city,
-    this.commercialRegister,
-    this.country,
-    this.location,
-    this.organizationName,
-    this.updatedAt,
-    this.logo,
-    this.id,
-    this.logoUrl,
-    this.locationObject,
-    this.isFavourite,
-    this.userType,
-  });
+  double? overAllRating;
+  User(
+      {this.sId,
+      this.name,
+      this.isVerified,
+      this.password,
+      this.primaryPhoneNumber,
+      this.primaryEmail,
+      this.secondaryEmail,
+      this.modificationDate,
+      this.vendorType,
+      this.firebaseToken,
+      this.creationDate,
+      this.iV,
+      this.city,
+      this.commercialRegister,
+      this.country,
+      this.location,
+      this.organizationName,
+      this.updatedAt,
+      this.logo,
+      this.id,
+      this.logoUrl,
+      this.locationObject,
+      this.isFavourite,
+      this.userType,
+      this.overAllRating});
   factory User.guestUser() {
     return User(
       logoUrl:
@@ -169,6 +170,7 @@ class User {
           : null,
       isFavourite: map['isFavourite'] ?? false,
       userType: map['userType'],
+      overAllRating: map['overAllRating'],
     );
   }
 
@@ -190,6 +192,62 @@ class User {
     } else {
       return vendorType!.first;
     }
+  }
+
+  User copyWith({
+    String? sId,
+    String? name,
+    bool? isVerified,
+    String? password,
+    PhoneNumberDataModel? primaryPhoneNumber,
+    String? primaryEmail,
+    String? secondaryEmail,
+    String? modificationDate,
+    List<String>? vendorType,
+    String? firebaseToken,
+    String? creationDate,
+    int? iV,
+    String? city,
+    String? commercialRegister,
+    String? country,
+    Location? location,
+    String? organizationName,
+    String? updatedAt,
+    String? logo,
+    String? id,
+    String? logoUrl,
+    LocationObject? locationObject,
+    bool? isFavourite,
+    String? userType,
+    double? overAllRating,
+  }) {
+    return User(
+      sId: sId ?? this.sId,
+      name: name ?? this.name,
+      isVerified: isVerified ?? this.isVerified,
+      password: password ?? this.password,
+      primaryPhoneNumber: primaryPhoneNumber ?? this.primaryPhoneNumber,
+      primaryEmail: primaryEmail ?? this.primaryEmail,
+      secondaryEmail: secondaryEmail ?? this.secondaryEmail,
+      modificationDate: modificationDate ?? this.modificationDate,
+      vendorType: vendorType ?? this.vendorType,
+      firebaseToken: firebaseToken ?? this.firebaseToken,
+      creationDate: creationDate ?? this.creationDate,
+      iV: iV ?? this.iV,
+      city: city ?? this.city,
+      commercialRegister: commercialRegister ?? this.commercialRegister,
+      country: country ?? this.country,
+      location: location ?? this.location,
+      organizationName: organizationName ?? this.organizationName,
+      updatedAt: updatedAt ?? this.updatedAt,
+      logo: logo ?? this.logo,
+      id: id ?? this.id,
+      logoUrl: logoUrl ?? this.logoUrl,
+      locationObject: locationObject ?? this.locationObject,
+      isFavourite: isFavourite ?? this.isFavourite,
+      userType: userType ?? this.userType,
+      overAllRating: overAllRating ?? this.overAllRating,
+    );
   }
 }
 

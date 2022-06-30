@@ -27,9 +27,9 @@ class CartBuildItem extends StatelessWidget {
           const SizedBox(width: 3),
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.29,
-            child: productInCart.product.images.isNotEmpty
+            child: productInCart.product.imagesUrls.isNotEmpty
                 ? DefaultCachedNetworkImage(
-                    imageUrl: productInCart.product.images.first,
+                    imageUrl: productInCart.product.imagesUrls.first,
                     fit: BoxFit.cover,
                   )
                 : Container(),

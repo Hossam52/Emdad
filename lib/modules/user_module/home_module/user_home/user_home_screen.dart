@@ -147,8 +147,8 @@ class _FeaturedVendors extends StatelessWidget {
             options: CarouselOptions(
               autoPlay: true,
               pauseAutoPlayOnTouch: true,
-              enableInfiniteScroll: false,
-              viewportFraction: 0.9,
+              enableInfiniteScroll: true,
+              viewportFraction: 0.8,
               height: 180.h,
             ),
             itemBuilder: (context, index, int pageViewIndex) {

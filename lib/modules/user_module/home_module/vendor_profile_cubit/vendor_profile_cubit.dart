@@ -32,7 +32,9 @@ class VendorProfileCubit extends Cubit<VendorProfileStates> {
   VendorInfoModel? _vendor;
   bool get isProfileLoaded => _vendor != null;
   //Main vendor data
-  User get getVendorData => _vendor!.vendorInfo;
+  User get getVendorData => _vendor!.vendorInfo.copyWith(
+        overAllRating: _vendor?.overAllRating,
+      );
 
   //All rates for this vendor
   List<RateModel> get getRatings => _vendor!.ratings;

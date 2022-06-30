@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:emdad/models/products_and_categories/product_model.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -26,90 +28,107 @@ class ProductCardBuildItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin:
-          isList ? const EdgeInsetsDirectional.only(end: 17) : EdgeInsets.zero,
-      elevation: 0,
-      child: GestureDetector(
-        onTap: onProductTapped,
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            // gradient: !selectedCard
-            //     ? null
-            //     : LinearGradient(
-            //         colors: [
-            //             AppColors.primaryColor,
-            //             AppColors.primaryColor.withOpacity(0.5),
-            //             AppColors.primaryColor.withOpacity(0.45),
-            //             AppColors.primaryColor.withOpacity(0.4),
-            //             AppColors.primaryColor.withOpacity(0.1),
-            //             AppColors.primaryColor.withOpacity(0.0),
-            //             AppColors.primaryColor.withOpacity(0.0),
-            //           ],
-            //         begin: AlignmentDirectional.topCenter,
-            //         end: AlignmentDirectional.bottomCenter),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 110.w,
-                height: 130.h,
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: DefaultCachedNetworkImage(
-                  imageUrl: product!.images.first,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              SizedBox(height: 4.h),
-              // Row(
-              //   children: [
-              //     const DefaultRatingbar(rate: 4.0, size: 14),
-              //     const SizedBox(width: 4),
-              //     Text(
-              //       '(4.2)',
-              //       style: subTextStyle().copyWith(
-              //         fontWeight: FontWeight.w600,
-              //         color: Colors.amber,
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              Container(
-                color: selectedCard
-                    ? AppColors.successColor.withOpacity(0.3)
-                    : null,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          product!.name,
-                          style: subTextStyle().copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Text(
-                          getPiceAccordingToUnit(),
-                          style: subTextStyle().copyWith(
-                            color: Colors.black54,
-                          ),
-                        ),
-                      ],
+    return SizedBox(
+      width: 130.h,
+      child: Card(
+        margin: isList
+            ? const EdgeInsetsDirectional.only(end: 17)
+            : EdgeInsets.zero,
+        elevation: 0,
+        child: GestureDetector(
+          onTap: onProductTapped,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              // gradient: !selectedCard
+              //     ? null
+              //     : LinearGradient(
+              //         colors: [
+              //             AppColors.primaryColor,
+              //             AppColors.primaryColor.withOpacity(0.5),
+              //             AppColors.primaryColor.withOpacity(0.45),
+              //             AppColors.primaryColor.withOpacity(0.4),
+              //             AppColors.primaryColor.withOpacity(0.1),
+              //             AppColors.primaryColor.withOpacity(0.0),
+              //             AppColors.primaryColor.withOpacity(0.0),
+              //           ],
+              //         begin: AlignmentDirectional.topCenter,
+              //         end: AlignmentDirectional.bottomCenter),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    width: 110.w,
+                    height: 150.h,
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    if (trailing != null) trailing!,
-                  ],
+                    child: DefaultCachedNetworkImage(
+                      imageUrl: product!.imagesUrls.first,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
-              )
-            ],
+                SizedBox(height: 4.h),
+                // Row(
+                //   children: [
+                //     const DefaultRatingbar(rate: 4.0, size: 14),
+                //     const SizedBox(width: 4),
+                //     Text(
+                //       '(4.2)',
+                //       style: subTextStyle().copyWith(
+                //         fontWeight: FontWeight.w600,
+                //         color: Colors.amber,
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                Expanded(
+                  child: Container(
+                    color: selectedCard
+                        ? AppColors.successColor.withOpacity(0.3)
+                        : null,
+                    child: LayoutBuilder(builder: (context, constraints) {
+                      log(constraints.maxWidth.toString());
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  product!.name,
+                                  style: subTextStyle().copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Text(
+                                  getPiceAccordingToUnit(),
+                                  // maxLines: 2,
+                                  // overflow: TextOverflow.ellipsis,
+                                  style: subTextStyle().copyWith(
+                                    color: Colors.black54,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          if (trailing != null) trailing!,
+                        ],
+                      );
+                    }),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

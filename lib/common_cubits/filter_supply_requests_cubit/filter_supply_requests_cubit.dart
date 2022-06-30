@@ -32,7 +32,7 @@ class FilterSuuplyRequestsCubit extends Cubit<FilterSuuplyRequestsStates> {
   late final List<SupplyRequest> _originalSupplyRequests;
   late final List<TransporterSupplyRequest> _originalTransSupplyRequests;
   late final List<TransportationOfferModel> _originalTransportationOffers;
-  SortBy _sortOffersBy = SortBy.none;
+  SortBy _sortOffersBy = SortBy.date;
 
   bool get sortByName => _sortOffersBy == SortBy.name;
   bool get sortByDate => _sortOffersBy == SortBy.date;

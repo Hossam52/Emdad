@@ -94,7 +94,7 @@ class HomeVendorBuildItem extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          '4.9',
+                          (user.overAllRating ?? 0).toStringAsFixed(1),
                           style: subTextStyle().copyWith(
                             fontWeight: FontWeight.w600,
                             color: AppColors.thirdColor,

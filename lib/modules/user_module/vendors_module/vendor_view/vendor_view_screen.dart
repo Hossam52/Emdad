@@ -91,11 +91,8 @@ class VendorViewScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       VendorInfoBuildItem(
-                        name: user.organizationName!,
                         isCart: false,
-                        city: user.city,
-                        logoUrl: user.logoUrl,
-                        vendorType: user.allVendorTypeString,
+                        vendor: user,
                         tailing: VendorButtonsBuild(
                           vendor: user,
                         ),

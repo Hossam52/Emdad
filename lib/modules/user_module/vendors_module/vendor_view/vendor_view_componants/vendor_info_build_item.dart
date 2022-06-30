@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:emdad/models/users/user/user_response_model.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
 import 'package:emdad/shared/widgets/default_circle_image.dart';
@@ -12,7 +15,8 @@ class VendorInfoBuildItem extends StatelessWidget {
     Key? key,
     required this.isCart,
     required this.tailing,
-    required this.name,
+    this.vendor,
+    this.name,
     this.logoUrl,
     this.city,
     this.vendorType,
@@ -23,10 +27,12 @@ class VendorInfoBuildItem extends StatelessWidget {
   final String? logoUrl;
   final String? city;
   final String? vendorType;
-  final String name;
+  final String? name;
+  final User? vendor;
 
   @override
   Widget build(BuildContext context) {
+    log((vendor?.overAllRating ?? 'NULL ').toString());
     return Container(
       padding: const EdgeInsets.all(16),
       color: AppColors.primaryColor,
@@ -36,7 +42,7 @@ class VendorInfoBuildItem extends StatelessWidget {
           DefaultCircleImage(
             width: 90.r,
             height: 90.r,
-            imageUrl: logoUrl!,
+            imageUrl: logoUrl ?? vendor?.logoUrl ?? '',
           ),
           SizedBox(width: 25.w),
           Expanded(
@@ -44,13 +50,16 @@ class VendorInfoBuildItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (isCart)
-                  Text(name,
+                  Text(name ?? vendor?.organizationName ?? 'Organization name',
                       style: secondaryTextStyle().copyWith(
                           color: Colors.white, fontWeight: FontWeight.w600)),
-                LocationBuildItem(location: city!, textColor: Colors.white),
-                Text(vendorType ?? ' ',
+                LocationBuildItem(
+                    location: city ?? vendor?.city ?? 'City',
+                    textColor: Colors.white),
+                Text(vendorType ?? vendor?.allVendorTypeString ?? '',
                     style: thirdTextStyle().copyWith(color: Colors.white)),
-                if (isCart == false) const DefaultRatingBarNotTapped(rate: 3.0),
+                if (isCart == false)
+                  DefaultRatingBarNotTapped(rate: vendor?.overAllRating ?? 0),
                 SizedBox(height: 27.h),
                 tailing,
               ],

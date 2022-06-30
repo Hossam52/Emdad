@@ -226,11 +226,11 @@ class _ProductImages extends StatelessWidget {
       children: [
         PageView.builder(
           controller: pageController,
-          itemCount: product!.images.length,
+          itemCount: product!.imagesUrls.length,
           scrollDirection: Axis.horizontal,
           physics: const PageScrollPhysics(),
           itemBuilder: (context, index) => DefaultCachedNetworkImage(
-            imageUrl: product!.images[index],
+            imageUrl: product!.imagesUrls[index],
             fit: BoxFit.cover,
           ),
         ),
@@ -238,7 +238,7 @@ class _ProductImages extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           child: SmoothPageIndicator(
             controller: pageController,
-            count: product!.images.length,
+            count: product!.imagesUrls.length,
             effect: const ScrollingDotsEffect(
               dotWidth: 8,
               dotHeight: 8,

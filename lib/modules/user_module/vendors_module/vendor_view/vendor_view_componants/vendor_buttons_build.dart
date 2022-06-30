@@ -53,8 +53,10 @@ class VendorButtonsBuild extends StatelessWidget {
           },
           width: 32.w,
           height: 32.h,
-          icon: Icon(vendor.isFavourite! ? Icons.star : Icons.star_border,
-              size: 21, color: AppColors.thirdColor),
+          icon: Icon(
+              vendor.isFavourite! ? Icons.favorite : Icons.favorite_border,
+              size: 21,
+              color: AppColors.thirdColor),
         ),
         SizedBox(width: 20.w),
         CustomIconButton(

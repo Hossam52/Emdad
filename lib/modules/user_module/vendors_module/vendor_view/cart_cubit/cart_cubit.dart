@@ -69,7 +69,7 @@ class CartCubit extends Cubit<CartStates> {
   //void remove from list
   void removeFromCart(String productId) {
     _cartList.removeWhere((product) => product.product.id == productId);
-    emit(RemoveFromCartState());
+    emit(EditAndAddToCartState());
   }
 
   //add or remove product from cart

@@ -85,7 +85,8 @@ class TitleWithFilterBuildItem extends StatelessWidget {
                     ),
                     PopupMenuItem(
                       value: SortBy.none,
-                      child: _buildPopupMenuChild('الكل', filterCubit!.notSort),
+                      child: _buildPopupMenuChild(
+                          'حذف الترتيب', filterCubit!.notSort),
                       onTap: () {
                         changeSortType(SortBy.none);
                       },

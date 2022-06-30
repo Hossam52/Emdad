@@ -26,8 +26,8 @@ class VendorProductCrudCubit extends Cubit<VendorProductCrudStates> {
       : super(IntitalVendorProductCrudCubitState()) {
     _units = List.from(_product.units);
 
-    _originalProductImages = List<String>.from(_product.images).sublist(1);
-    _originalMainImage = _product.images.first;
+    _originalProductImages = List<String>.from(_product.imagesUrls).sublist(1);
+    _originalMainImage = _product.imagesUrls.first;
 
     productNameController.text = _product.name;
     productDescriptionController.text = _product.description;
@@ -162,6 +162,7 @@ class VendorProductCrudCubit extends Cubit<VendorProductCrudStates> {
       // throw '';
       final imagesModel = await _uploadSelectedImagesToServer();
       if (imagesModel.status) {
+        log('${imagesModel.images}');
         final allImages = _getAllImagesList(imagesModel.images);
         final String productName = productNameController.text;
         final String description = productDescriptionController.text;
