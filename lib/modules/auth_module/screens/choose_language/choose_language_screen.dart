@@ -4,6 +4,7 @@ import 'package:emdad/shared/cubit/app_cubit.dart';
 import 'package:emdad/shared/responsive/responsive_widget.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,7 +18,7 @@ class ChooseLanguageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AppCubit(),
+      create: (_) => AppCubit(),
       child: BlocConsumer<AppCubit, AppState>(
         listener: (context, state) {},
         builder: (context, state) {
@@ -29,7 +30,7 @@ class ChooseLanguageScreen extends StatelessWidget {
                 backgroundColor: const Color(0xffF7F8FB),
               ),
               backgroundColor: const Color(0xffF7F8FB),
-              body: responsiveWidget(responsive: (context, deviceInfo) {
+              body: responsiveWidget(responsive: (_, deviceInfo) {
                 return Center(
                   child: SingleChildScrollView(
                     child: Padding(
@@ -46,7 +47,8 @@ class ChooseLanguageScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 50),
                             Text(
-                              'اختر اللغة',
+                              context.tr.choose_lang,
+                              locale: const Locale('ar'),
                               style: headersTextStyle().copyWith(
                                 color: AppColors.secondaryColor,
                                 fontWeight: FontWeight.w700,
@@ -54,7 +56,8 @@ class ChooseLanguageScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 5),
                             Text(
-                              'Choose Language',
+                              context.tr.choose_lang,
+                              locale: const Locale('en'),
                               style: TextStyle(
                                 fontSize: 22.sp,
                                 color: AppColors.secondaryColor,
@@ -78,9 +81,10 @@ class ChooseLanguageScreen extends StatelessWidget {
                                   label: 'ع',
                                   text: 'عربي',
                                   colorContainer: Colors.white,
-                                  colorText: cubit.localeApp.languageCode == 'ar'
-                                      ? AppColors.secondaryColor
-                                      : Colors.black12,
+                                  colorText:
+                                      cubit.localeApp.languageCode == 'ar'
+                                          ? AppColors.secondaryColor
+                                          : Colors.black12,
                                 ),
                                 const SizedBox(width: 20),
                                 buildChooseLanguage(
@@ -93,9 +97,10 @@ class ChooseLanguageScreen extends StatelessWidget {
                                   label: 'en',
                                   text: 'English',
                                   colorContainer: Colors.white,
-                                  colorText: cubit.localeApp.languageCode == 'en'
-                                      ? AppColors.secondaryColor
-                                      : Colors.black12,
+                                  colorText:
+                                      cubit.localeApp.languageCode == 'en'
+                                          ? AppColors.secondaryColor
+                                          : Colors.black12,
                                 ),
                               ],
                             ),

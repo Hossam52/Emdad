@@ -13,6 +13,7 @@ import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:emdad/shared/widgets/dialogs/request_transform_dialog.dart';
@@ -43,7 +44,7 @@ class _OrderInPorgressScreenState extends State<OrderInPorgressScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => OrderCubit(orderId: widget.orderId)..getOrder(),
+      create: (_) => OrderCubit(orderId: widget.orderId)..getOrder(),
       child: Scaffold(
         appBar: AppBar(
           title:
@@ -74,7 +75,7 @@ class _OrderInPorgressScreenState extends State<OrderInPorgressScreen> {
                         order: order,
                         displayedUser: order.vendor,
                         trailing: Text(
-                          'قيد التجهيز',
+                          context.tr.preparing,
                           style: subTextStyle().copyWith(color: Colors.white),
                         ),
                       ),
@@ -133,7 +134,7 @@ class _TransportationActions extends StatelessWidget {
               ));
         },
         width: 125.w,
-        text: 'عروض النقل',
+        text: context.tr.delivery_offers,
       );
     }
     return CustomButton(
@@ -144,7 +145,7 @@ class _TransportationActions extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (_) => OrderInPorgressScreen(
-                  title: 'قيد التحميل',
+                  title: context.tr.in_porcess,
                   orderId: order.id,
                   status: OrderStatus.inProgress),
             ),
@@ -152,7 +153,7 @@ class _TransportationActions extends StatelessWidget {
         }
       },
       width: 125.w,
-      text: 'طلب شركة نقل',
+      text: context.tr.get_delivery_comapny,
     );
   }
 

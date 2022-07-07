@@ -12,6 +12,7 @@ import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/default_home_title_build_item.dart';
 import 'package:emdad/shared/widgets/dialogs/request_transform_dialog.dart';
 import 'package:flutter/material.dart';
@@ -23,26 +24,14 @@ class ShippingWidget extends StatelessWidget {
   final SupplyRequest order;
   @override
   Widget build(BuildContext context) {
-    // final transportationRequest = order.transportationRequest;
-    // final transportationHandler = order.transportationHandlerEnum;
-    // if (transportationRequest == null) return Container();
-    // final transportOffer = transportationRequest.transportationOffer;
-
     return Column(
       children: [
         DefaultHomeTitleBuildItem(
-          title: 'النقل',
+          title: context.tr.shipping,
           onPressed: () {},
           hasButton: false,
         ),
         _Transportation(order: order),
-        // ShippingCardBuildItem(
-        //   name: transportationRequest.transportationMethod, // 'عربه نصف نقل',
-        //   info: transportOffer != null ? transportOffer.notes : '',
-
-        //   icon: const Icon(MyIcons.truck_thin, color: AppColors.primaryColor),
-        //   trailing: trailingWidget(transportationHandler, transportOffer),
-        // )
       ],
     );
   }
@@ -100,7 +89,7 @@ class _AddTransportationRequest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!order.isPayed) {
-      return const Text('لا يمكنك طلب وسيلة نقل الان حتي يتم الدفع');
+      return Text(context.tr.must_pay_before_request_transport);
     }
     return OrderBlocConsumer(
       listener: (context, state) {
@@ -116,13 +105,13 @@ class _AddTransportationRequest extends StatelessWidget {
           children: [
             Row(
               children: [
-                const Text('لم يتم طلب شركة نقل حتي الان'),
+                Text(context.tr.not_request_transportation_comapnay_yet),
                 const Spacer(),
                 TextButton(
                     onPressed: () async {
                       if (!order.isPayed) {
-                        SharedMethods.showToast(
-                            context, 'يجب الدفع قبل طلب شركة نقل',
+                        SharedMethods.showToast(context,
+                            context.tr.must_pay_before_request_transport,
                             textColor: Colors.white,
                             color: AppColors.errorColor);
                         return;
@@ -144,7 +133,7 @@ class _AddTransportationRequest extends StatelessWidget {
                             );
                           });
                     },
-                    child: const Text('طلب شركة نقل')),
+                    child: Text(context.tr.get_delivery_comapny)),
               ],
             ),
           ],
@@ -162,7 +151,8 @@ class _TransportationRequest extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _rowItem('وسيلة النقل', transportationRequest.transportationMethod),
+        _rowItem(context.tr.transportation_method,
+            transportationRequest.transportationMethod),
         TextButton(
             onPressed: () {
               navigateTo(
@@ -177,7 +167,7 @@ class _TransportationRequest extends StatelessWidget {
                   // )
                   );
             },
-            child: const Text('عروض النقل')),
+            child: Text(context.tr.transportation_offers)),
       ],
     );
   }
@@ -192,10 +182,10 @@ class _TransportationOffer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        _rowItem(context.tr.transportation_method,
+            order.transportationRequest!.transportationMethod),
         _rowItem(
-            'وسيلة النقل', order.transportationRequest!.transportationMethod),
-        _rowItem(
-          'عرض سعر شركة النقل',
+          context.tr.transport_company_price_offer,
           order.transportationRequest!.transportationOffer!.price.toString(),
         ),
       ],
@@ -210,9 +200,9 @@ class _UserHandleTransport extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _rowItem('تكلفة الطلب للمستخدم',
+        _rowItem(context.tr.order_cost_for_user,
             SharedMethods.getPrice(order.transportationPrice)),
-        _rowItem('الضريبة', '12%'),
+        _rowItem(context.tr.tax, '12%'),
       ],
     );
   }
@@ -227,15 +217,17 @@ class _VendorHandleTransport extends StatelessWidget {
     if (!order.hasTransportation) {
       if (order.vendorProvidePriceOffer) {
         return ShippingCardBuildItem(
-          name: 'سوف يقوم المورد بعملية النقل', // 'عربه نصف نقل',
-          info: 'سعر النقل ${order.transportationPrice}',
+          name: context.tr.vendor_handle_transport, // 'عربه نصف نقل',
+          info:
+              '${context.tr.transportation_price} ${order.transportationPrice}',
 
           icon: const Icon(MyIcons.truck_thin, color: AppColors.primaryColor),
           trailing: const SizedBox.shrink(),
         );
       }
-      return const ShippingCardBuildItem(
-        name: 'لم يتم طلب وسيلة نقل من المورد الي الان', // 'عربه نصف نقل',
+      return ShippingCardBuildItem(
+        name:
+            context.tr.vendor_not_request_transportation_yet, // 'عربه نصف نقل',
         info: '',
 
         icon: Icon(MyIcons.truck_thin, color: AppColors.errorColor),
@@ -259,7 +251,7 @@ class _VendorHandleTransport extends StatelessWidget {
     return ShippingCardBuildItem(
       name: transportationRequest.transportationMethod, // 'عربه نصف نقل',
       // info: 'لم يتم قبول عرض وسيلة النقل من المورد',
-      info: 'تم طلب وسيلة نقل من قبل المورد',
+      info: context.tr.vendor_request_transportation,
 
       icon: const Icon(MyIcons.truck_thin),
       trailing: Text(order.transportationPrice.toString()),

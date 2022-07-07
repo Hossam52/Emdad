@@ -11,6 +11,7 @@ import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
 import 'package:emdad/shared/cubit/app_cubit.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/custom_text.dart';
 import 'package:emdad/shared/widgets/notifications_button.dart';
@@ -47,13 +48,13 @@ class _VendorLayoutState extends State<VendorLayout> {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => VendorOffersCubit()..getVendorOffers(),
+            create: (_) => VendorOffersCubit()..getVendorOffers(),
           ),
           BlocProvider(
-            create: (context) => VendorProductsCubit(),
+            create: (_) => VendorProductsCubit(),
           ),
           BlocProvider(
-            create: (context) => PurchaseOrdersCubit()..getPurchaseOrders(),
+            create: (_) => PurchaseOrdersCubit()..getPurchaseOrders(),
           ),
         ],
         child: VendorBlocConsumer(
@@ -126,36 +127,6 @@ class _VendorLayoutState extends State<VendorLayout> {
                             title: vendorCubit.bottomItems[i].title,
                           ),
                         ),
-                      // Expanded(
-                      //   child: _BottomWidget(
-                      //     iconData: Icons.show_chart_outlined,
-                      //     index: 0,
-                      //     title: 'طلبات عرض سعر',
-                      //   ),
-                      // ),
-                      // Expanded(
-                      //   flex: 2,
-                      //   child: _BottomWidget(
-                      //     iconData: Icons.shopping_cart_outlined,
-                      //     index: 1,
-                      //     title: 'منتجاتي',
-                      //   ),
-                      // ),
-                      // Expanded(
-                      //   flex: 2,
-                      //   child: _BottomWidget(
-                      //     iconData: Icons.how_to_reg_outlined,
-                      //     index: 2,
-                      //     title: 'طلبات أوامر الشراء',
-                      //   ),
-                      // ),
-                      // Expanded(
-                      //   child: _BottomWidget(
-                      //     iconData: Icons.settings_outlined,
-                      //     index: 3,
-                      //     title: 'الضبط',
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),
@@ -226,21 +197,21 @@ class _VendorDrawer extends StatelessWidget {
     return CustomDrawer(
       drawerItems: [
         DrawerListBuildItem(
-          title: 'الرئيسية',
+          title: context.tr.main_page,
           icon: MyIcons.home,
           onTap: () {
             cubit.changeToOffers();
           },
         ),
         DrawerListBuildItem(
-          title: 'إنشاء جديد',
+          title: context.tr.add_new,
           icon: MyIcons.note,
           onTap: () {
             navigateTo(context, const VendorAddNewProductScreen());
           },
         ),
         DrawerListBuildItem(
-          title: 'منتجاتي',
+          title: context.tr.my_products,
           icon: MyIcons.money,
           size: 15,
           onTap: () {
@@ -248,28 +219,28 @@ class _VendorDrawer extends StatelessWidget {
           },
         ),
         DrawerListBuildItem(
-          title: 'الاشعارات',
+          title: context.tr.notifications,
           icon: MyIcons.bell2,
           onTap: () {},
         ),
         DrawerListBuildItem(
-          title: 'طلب مساعدة',
+          title: context.tr.ask_help,
           icon: MyIcons.question,
           onTap: () {},
         ),
         DrawerListBuildItem(
-          title: 'الدعم والخصوصية',
+          title: context.tr.support_and_privacy,
           icon: MyIcons.support,
           onTap: () {},
         ),
         DrawerListBuildItem(
-          title: 'عنا',
+          title: context.tr.about_us,
           icon: Icons.info_outlined,
           size: 24,
           onTap: () {},
         ),
         DrawerListBuildItem(
-          title: 'الضبط',
+          title: context.tr.settings,
           icon: MyIcons.settings,
           onTap: () {
             cubit.chnageeToSettings();

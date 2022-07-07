@@ -5,6 +5,7 @@ import 'package:emdad/models/supply_request/supply_request_change_log_model.dart
 import 'package:emdad/modules/user_module/order_view/order_tracking/tracking_list_tile.dart';
 import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +20,7 @@ class OrderTrackingScreen extends StatelessWidget {
     final statusLog = order.statusChangeLog;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('حالة الطلب'),
+        title: Text(context.tr.order_status),
         actions: const [
           ChangeLangWidget(
             color: Colors.black,
@@ -55,38 +56,38 @@ class OrderTrackingScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                'حالة التوصيل',
+                context.tr.delivery_status,
                 style: thirdTextStyle().copyWith(fontWeight: FontWeight.w700),
               ),
               TrackingStepBuildItem(
                 items: [
                   TrackingStatusItem(
-                    title: 'إرسال عرض سعر',
+                    title: context.tr.send_price_offer,
                     dateString: statusLog?.awaitingQuotation,
                     icon: MyIcons.contact_request,
                   ),
                   TrackingStatusItem(
-                    title: 'قبول الطلب',
+                    title: context.tr.accept_order,
                     dateString: statusLog?.awaitingApproval,
                     icon: MyIcons.accept,
                   ),
                   TrackingStatusItem(
-                    title: 'تجهيز الطلب',
+                    title: context.tr.prepare_order,
                     dateString: statusLog?.preparing,
                     icon: MyIcons.settings,
                   ),
                   TrackingStatusItem(
-                    title: 'وصلت نقطة الالتقاط',
+                    title: context.tr.arrived_pickup_location,
                     dateString: statusLog?.awaitingTransportation,
                     icon: MyIcons.shipping,
                   ),
                   TrackingStatusItem(
-                    title: 'وصلت نقطة التوصيل',
+                    title: context.tr.arrived_delivery_location,
                     dateString: statusLog?.onWay,
                     icon: MyIcons.shipping,
                   ),
                   TrackingStatusItem(
-                    title: 'تأكيد انتهاء العملية',
+                    title: context.tr.confirm_end_process,
                     dateString: statusLog?.delivered,
                     icon: Icons.check_circle_rounded,
                   ),

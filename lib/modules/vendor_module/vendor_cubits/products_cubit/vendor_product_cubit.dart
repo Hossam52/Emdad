@@ -41,7 +41,8 @@ class VendorProductsCubit extends Cubit<VendorProductStates> {
       emit(GetAllVendorProductsLoadingState());
       final map = await _services.productServices.getAllProducts(
           filterProducts:
-              FilterVendorProductsRequestModel(searchQuery: _searchQuery));
+              FilterVendorProductsRequestModel(searchQuery: _searchQuery),
+          pagination: PaginationRequestModel(limit: products.length));
       _productsModel = AllCategoryProductsModel.fromMap(map);
       emit(GetAllVendorProductsSuccessState());
     } catch (e) {

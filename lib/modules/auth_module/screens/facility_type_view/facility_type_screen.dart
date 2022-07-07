@@ -6,6 +6,7 @@ import 'package:emdad/modules/auth_module/screens/user_info_view/user_info_scree
 import 'package:emdad/modules/auth_module/screens/vendor_info_view/vendor_info_screen.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:emdad/shared/widgets/custom_text.dart';
 import 'package:emdad/shared/widgets/ui_componants/default_loader.dart';
@@ -27,7 +28,7 @@ class FacilityTypeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AuthCubit()..getUserSettings(),
+      create: (_) => AuthCubit()..getUserSettings(),
       child: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {},
         builder: (context, state) {
@@ -48,7 +49,7 @@ class FacilityTypeScreen extends StatelessWidget {
                         child: Column(
                           children: [
                             CustomText(
-                              text: 'حدد نوع المنشأة الخاصة بك',
+                              text: context.tr.choose_facility_type,
                               textStyle: thirdTextStyle(),
                             ),
                             SizedBox(height: 20.h),
@@ -71,7 +72,7 @@ class FacilityTypeScreen extends StatelessWidget {
                             Align(
                               alignment: AlignmentDirectional.bottomEnd,
                               child: CustomButton(
-                                text: 'التالى',
+                                text: context.tr.next,
                                 width: MediaQuery.of(context).size.width * 0.4,
                                 onPressed: cubit.facilityType != null
                                     ? () {
@@ -93,7 +94,8 @@ class FacilityTypeScreen extends StatelessWidget {
                                                 ));
                                             break;
                                           case FacilityType.transport:
-                                            navigateTo(context,
+                                            navigateTo(
+                                                context,
                                                 TransporterInfoScreen(
                                                   token: token,
                                                   cubit: cubit,

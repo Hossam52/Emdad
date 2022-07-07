@@ -3,6 +3,7 @@ import 'package:emdad/modules/user_module/vendors_module/product_details/product
 import 'package:emdad/modules/user_module/vendors_module/product_details/product_cubit.dart/product_states.dart';
 import 'package:emdad/modules/user_module/vendors_module/vendor_view/cart_cubit/cart_cubit.dart';
 import 'package:emdad/modules/vendor_module/screens/vender_add_product_view/vendor_edit_product_screen.dart';
+import 'package:emdad/modules/vendor_module/vendor_cubits/products_cubit/vendor_product_cubit.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/responsive/responsive_widget.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
@@ -100,13 +101,19 @@ class ProductDetailsScreen extends StatelessWidget {
                             child: IconButton(
                               icon:
                                   Icon(isVendor ? Icons.edit : null, size: 20),
-                              onPressed: () {
+                              onPressed: () async {
                                 if (isVendor) {
-                                  navigateTo(
+                                  final hasUpdateData = await navigateTo(
                                       context,
                                       VendorEditProductScreen(
                                         product: product,
                                       ));
+                                  print(hasUpdateData);
+                                  if (hasUpdateData != null && hasUpdateData) {
+                                    productCubit.getProduct();
+                                    VendorProductsCubit.instance(context)
+                                        .getAllVendorProducts();
+                                  }
                                 }
                               },
                             ),

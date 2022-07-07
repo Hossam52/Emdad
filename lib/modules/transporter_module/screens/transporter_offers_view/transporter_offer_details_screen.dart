@@ -14,6 +14,7 @@ import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:emdad/shared/widgets/custom_text.dart';
@@ -48,7 +49,7 @@ class TransporterOfferDetailsScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
         ),
         title: CustomText(
-          text: 'تفاصيل الطلب',
+          text: context.tr.order_details,
           textStyle: primaryTextStyle().copyWith(
             color: Colors.white,
             fontWeight: FontWeight.w700,
@@ -64,7 +65,7 @@ class TransporterOfferDetailsScreen extends StatelessWidget {
                   ..getTransport(),
           ),
           BlocProvider(
-            create: (context) => ChangeFiltersCubit()..initFilters(context),
+            create: (_) => ChangeFiltersCubit()..initFilters(context),
             lazy: false,
           ),
         ],
@@ -98,7 +99,7 @@ class TransporterOfferDetailsScreen extends StatelessWidget {
                   onPressed: () {
                     orderCubit.getTransport();
                   },
-                  text: 'حدث خطأ في الطلب برجاء المحاولة مجددا');
+                  text: context.tr.order_error_try_again);
             }
             final order = orderCubit.order;
             return SingleChildScrollView(
@@ -146,22 +147,22 @@ class TransporterOfferDetailsScreen extends StatelessWidget {
                                 ChangeFiltersCubit.instance(context)
                                     .selectedTransportation;
                             if (transportationMethod == null) {
-                              SharedMethods.showToast(
-                                  context, 'يجب اختيار وسيلة النقل اولا',
+                              SharedMethods.showToast(context,
+                                  context.tr.must_choose_transportation_method,
                                   color: AppColors.errorColor,
                                   textColor: Colors.white);
                               return;
                             }
                             if (!orderCubit.hasProvidePrice) {
-                              SharedMethods.showToast(
-                                  context, 'يجب تحديد سعر التوصيل',
+                              SharedMethods.showToast(context,
+                                  context.tr.must_speicify_delivery_price,
                                   color: AppColors.errorColor,
                                   textColor: Colors.white);
                               return;
                             }
-                            await orderCubit.createPriceOffer();
+                            await orderCubit.createPriceOffer(context);
                           },
-                          text: 'إرسال عرض سعر توصيل',
+                          text: context.tr.send_price_delivery,
                           textStyle: thirdTextStyle().copyWith(
                               color: Colors.white, fontWeight: FontWeight.w500),
                         ),
@@ -210,7 +211,7 @@ class _OrderNotes extends StatelessWidget {
     return Column(
       children: [
         CustomText(
-          text: 'ملاحظات',
+          text: context.tr.notes,
           textStyle: thirdTextStyle().copyWith(fontWeight: FontWeight.w700),
         ),
         Card(
@@ -222,7 +223,7 @@ class _OrderNotes extends StatelessWidget {
             width: double.infinity,
             padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
             child: CustomText(
-              text: 'يفضل نقل ' + desiredTransportation,
+              text: context.tr.prefer_transportation + desiredTransportation,
               textAlign: TextAlign.start,
               textStyle:
                   thirdTextStyle().copyWith(fontWeight: FontWeight.normal),
@@ -244,7 +245,7 @@ class _TransportationMethod extends StatelessWidget {
         return Row(
           children: [
             CustomText(
-              text: 'وسيلة النقل',
+              text: context.tr.transportation_method,
               textStyle: thirdTextStyle().copyWith(fontWeight: FontWeight.w700),
             ),
             SizedBox(width: 20.w),
@@ -290,13 +291,13 @@ class _TransporterNoteTextField extends StatelessWidget {
     return Column(
       children: [
         CustomText(
-          text: 'ملاحظاتك',
+          text: context.tr.your_notes,
           textStyle: thirdTextStyle().copyWith(fontWeight: FontWeight.w700),
         ),
         CustomTextFormField(
           validation: (_) => null,
           controller: controller,
-          hint: 'يمكنك كتابة هنا ملاحظاتك لصاحب هذا الطلب',
+          hint: context.tr.add_your_notes_for_the_requester,
           contentPadding: const EdgeInsets.all(5),
           minLines: 2,
           maxLines: 3,
@@ -315,7 +316,7 @@ class SuccessSendingOffer extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: CustomText(
-        text: 'تم إرسال العرض بنجاح',
+        text: context.tr.done_sending_offer,
         textStyle: thirdTextStyle().copyWith(fontWeight: FontWeight.w500),
       ),
       content: CircleAvatar(
@@ -326,7 +327,7 @@ class SuccessSendingOffer extends StatelessWidget {
       actions: <Widget>[
         CustomButton(
           width: 215.w,
-          text: 'إغلاق',
+          text: context.tr.close,
           backgroundColor: Colors.red,
           textStyle: thirdTextStyle()
               .copyWith(color: Colors.white, fontWeight: FontWeight.w500),

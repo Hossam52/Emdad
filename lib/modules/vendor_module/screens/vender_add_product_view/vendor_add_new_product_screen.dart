@@ -41,7 +41,7 @@ class _VendorAddNewProductScreenState extends State<VendorAddNewProductScreen> {
         return false;
       },
       child: BlocProvider(
-        create: (context) => VendorProductCrudCubit.newProduct(),
+        create: (_) => VendorProductCrudCubit.newProduct(),
         child: VendorProductCrudCubitBlocConsumer(
           listener: (context, state) {
             if (state is AddProductErrorState) {

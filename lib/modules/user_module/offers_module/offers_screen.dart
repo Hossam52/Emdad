@@ -13,6 +13,7 @@ import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/responsive/responsive_widget.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/custom_refresh_widget.dart';
 import 'package:emdad/shared/widgets/default_loader.dart';
 import 'package:emdad/shared/widgets/empty_data.dart';
@@ -53,15 +54,15 @@ class OffersScreen extends StatelessWidget {
             }
             final offers = offersCubit.offers;
             return responsiveWidget(
-              responsive: (context, deviceInfo) => BlocProvider(
-                create: (context) => FilterSuuplyRequestsCubit(offers),
+              responsive: (_, deviceInfo) => BlocProvider(
+                create: (_) => FilterSuuplyRequestsCubit(offers),
                 child: FilterSuuplyRequestsBlocBuilder(
                   builder: (context, _) {
                     return SingleChildScrollView(
                       child: Column(
                         children: [
                           TitleWithFilterBuildItem(
-                            title: 'عروض اسعار',
+                            title: context.tr.price_offers,
                             filterCubit:
                                 FilterSuuplyRequestsCubit.instance(context),
                             changeSortType: offersCubit.changeSortType,
@@ -97,7 +98,7 @@ class OffersScreen extends StatelessWidget {
                             ),
                           ),
                           if (offers.isEmpty)
-                            const EmptyData(emptyText: 'لا يوجد طلبات هنا')
+                            EmptyData(emptyText: context.tr.no_orders_here)
                           else
                             ListView.builder(
                               shrinkWrap: true,
@@ -123,7 +124,7 @@ class OffersScreen extends StatelessWidget {
                                         OrderOfferScreen(
                                             orderId:
                                                 offersCubit.offers[index].id,
-                                            title: 'عرض سعر جديد',
+                                            title: context.tr.new_price_offer,
                                             status: OrderStatus.offer));
                                     if (mustReloadData != null &&
                                         mustReloadData) {

@@ -10,6 +10,7 @@ import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:emdad/shared/widgets/custom_chip.dart';
 import 'package:emdad/shared/widgets/default_home_title_build_item.dart';
@@ -38,7 +39,7 @@ class CartScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title:
-            const Text('قائمة الطلبات', style: TextStyle(color: Colors.white)),
+            Text(context.tr.orders_list, style: TextStyle(color: Colors.white)),
         backgroundColor: AppColors.primaryColor,
         iconTheme: const IconThemeData(color: Colors.white),
         systemOverlayStyle: const SystemUiOverlayStyle(
@@ -66,7 +67,7 @@ class CartScreen extends StatelessWidget {
               onPressed: () {
                 vendorProfileCubit.getVendorInfo();
               },
-              text: 'Error when load vendor info try again',
+              text: context.tr.error_loading_vendor_info,
             );
           }
           final vendor = VendorProfileCubit.instance(context).getVendorData;
@@ -111,13 +112,13 @@ class CartScreen extends StatelessWidget {
                                   value: CartCubit.instance(context),
                                 ),
                               ],
-                              child: const CategoryScreen(
-                                title: 'All products',
+                              child: CategoryScreen(
+                                title: context.tr.all_products,
                               ),
                             ),
                           );
                         },
-                        text: 'إضافه منتج',
+                        text: context.tr.add_product,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -137,7 +138,7 @@ class CartScreen extends StatelessWidget {
                           Expanded(
                               child: CustomButton(
                             onPressed: () => Navigator.pop(context),
-                            text: 'إلغاء',
+                            text: context.tr.cancel,
                             backgroundColor: AppColors.errorColor,
                           )),
                         ],
@@ -158,8 +159,8 @@ class CartScreen extends StatelessWidget {
       final cartItems = CartCubit.instance(context).cart;
       return Column(
         children: [
-          const ListTile(
-            title: Text('السله'),
+          ListTile(
+            title: Text(context.tr.cart),
             leading: Icon(Icons.shopping_cart, color: Colors.black),
             contentPadding: EdgeInsets.symmetric(horizontal: 16),
           ),
@@ -204,7 +205,7 @@ class _AddAdditionalItems extends StatelessWidget {
         child: Column(
           children: [
             DefaultHomeTitleBuildItem(
-              title: 'طلب خدمة إضافية',
+              title: context.tr.add_additional_service,
               onPressed: () {},
               hasButton: false,
             ),
@@ -217,13 +218,13 @@ class _AddAdditionalItems extends StatelessWidget {
                     child: DefaultFormField(
                       validation: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'هذا الحقل مطلوب';
+                          return context.tr.this_field_required;
                         }
                         return null;
                       },
                       controller: controller,
-                      hintText:
-                          'يمكنك طلب خدمه إضافية غير موجوده داخل منتجات المورد',
+                      hintText: context
+                          .tr.can_add_additional_item_not_in_vendor_products,
                       haveBackground: true,
                     ),
                   ),
@@ -283,7 +284,7 @@ class _TransportationHandler extends StatelessWidget {
           onChanged: (value) {
             cartCubit.toggleHasTransportation();
           },
-          title: const Text('هل تريد خدمه النقل ؟'),
+          title: Text(context.tr.want_delivery),
           secondary: const Icon(Icons.directions_car, color: Colors.black),
           activeColor: AppColors.successColor,
           contentPadding:

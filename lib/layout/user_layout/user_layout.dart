@@ -43,13 +43,13 @@ class _UserLayoutState extends State<UserLayout> {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => UserLayoutCubit(),
+            create: (_) => UserLayoutCubit(context),
           ),
           BlocProvider(
-            create: (context) => UserHomeCubit()..getHomeData(),
+            create: (_) => UserHomeCubit()..getHomeData(),
           ),
-          BlocProvider(create: (_) => OffersCubit()..getRequestOffers()),
-          BlocProvider(create: (_) => MyOrdersCubit()..getMyOrders())
+          BlocProvider(create: (_) => OffersCubit(context)..getRequestOffers()),
+          BlocProvider(create: (_) => MyOrdersCubit(context)..getMyOrders())
         ],
         child: BlocConsumer<UserLayoutCubit, UserLayoutState>(
           listener: (context, state) {},

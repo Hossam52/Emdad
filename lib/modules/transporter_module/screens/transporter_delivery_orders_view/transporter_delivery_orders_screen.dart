@@ -10,6 +10,7 @@ import 'package:emdad/modules/user_module/offers_module/title_with_filter_build_
 import 'package:emdad/modules/user_module/order_view/order_view_screen.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/responsive/responsive_widget.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/default_loader.dart';
 import 'package:emdad/shared/widgets/empty_data.dart';
 import 'package:emdad/shared/widgets/ui_componants/no_data_widget.dart';
@@ -41,12 +42,12 @@ class TransporterDeliveryOrdersScreen extends StatelessWidget {
             onPressed: () {
               deliveryOrdersCubit.getDeliveryOrders();
             },
-            text: 'لقد حدث خطأ رجاء اعد المحاولة',
+            text: context.tr.error_happened_retry_again,
           );
         }
         final orders = deliveryOrdersCubit.orders;
         return responsiveWidget(
-          responsive: (context, deviceInfo) => BlocProvider(
+          responsive: (_, deviceInfo) => BlocProvider(
             create: (context) =>
                 FilterSuuplyRequestsCubit.transporterOrders(orders),
             child: FilterSuuplyRequestsBlocBuilder(
@@ -57,14 +58,14 @@ class TransporterDeliveryOrdersScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       TitleWithFilterBuildItem(
-                        title: 'أوامر التوصيل',
+                        title: context.tr.delivery_orders,
                         filterCubit:
                             FilterSuuplyRequestsCubit.instance(context),
                         changeSortType: (sortType) {},
                         hasSort: false,
                       ),
                       if (orders.isEmpty)
-                        const EmptyData(emptyText: 'لا يوجد اوامر توصيل')
+                        EmptyData(emptyText: context.tr.no_delivery_orders)
                       else
                         ListView.builder(
                           shrinkWrap: true,

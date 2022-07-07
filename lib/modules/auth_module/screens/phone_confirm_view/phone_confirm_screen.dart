@@ -7,6 +7,7 @@ import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:emdad/shared/widgets/custom_text.dart';
 import 'package:emdad/shared/widgets/default_gesture_widget.dart';
@@ -111,8 +112,8 @@ class _ConfirmScreenContentState extends State<ConfirmScreenContent> {
           appBar: AppBar(
             title: CustomText(
               text: widget.verifyOtpStep == VerifyOtpStep.phone
-                  ? 'تاكيد رقم الهاتف'
-                  : 'تاكيد البريد الالكترونى',
+                  ? context.tr.confirm_phone
+                  : context.tr.confirm_email,
               textStyle: secondaryTextStyle(),
             ),
             leading: Container(),
@@ -126,7 +127,7 @@ class _ConfirmScreenContentState extends State<ConfirmScreenContent> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomText(
-                      text: 'برجاء ادخال رقم التاكيد',
+                      text: context.tr.enter_confirmation_code,
                       textStyle: thirdTextStyle(),
                     ),
                     SizedBox(height: 10.h),
@@ -145,7 +146,7 @@ class _ConfirmScreenContentState extends State<ConfirmScreenContent> {
                       animationType: AnimationType.fade,
                       validator: (value) => SharedMethods.defaultValidation(
                         value,
-                        message: 'من فضلك ادخل رمز التاكيد',
+                        message: context.tr.enter_confirmation_code,
                       ),
                       enableActiveFill: true,
                       pinTheme: PinTheme(
@@ -186,8 +187,8 @@ class _ConfirmScreenContentState extends State<ConfirmScreenContent> {
                       children: [
                         CustomText(
                           text: widget.verifyOtpStep == VerifyOtpStep.phone
-                              ? 'رقم هاتفك'
-                              : 'البريد هو',
+                              ? context.tr.your_phone
+                              : context.tr.email,
                           textStyle: thirdTextStyle(),
                         ),
                         const Spacer(),
@@ -206,8 +207,8 @@ class _ConfirmScreenContentState extends State<ConfirmScreenContent> {
                         Expanded(
                           child: DefaultProgressButton(
                             buttonState: authCubit.verifyOtpButtonState,
-                            idleText: 'تاكيد',
-                            failText: 'حدث خطأ',
+                            idleText: context.tr.confirm,
+                            failText: context.tr.error_happened,
                             successText: "تم تاكيد",
                             borderRadius: 4.r,
                             onPressed: () {
@@ -284,7 +285,7 @@ class _ResendCodeState extends State<_ResendCode> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           CustomText(
-            text: ' الوقت المتبقي لاعادة ارسال الكود',
+            text: context.tr.time_to_resend,
             textStyle: thirdTextStyle()
                 .copyWith(color: Colors.grey, fontWeight: FontWeight.w500),
           ),
@@ -328,7 +329,7 @@ class _ResendCodeState extends State<_ResendCode> {
                   }
                 },
                 child: Text(
-                  ' اضغط هنا',
+                  context.tr.press_here,
                   style:
                       thirdTextStyle().copyWith(color: AppColors.primaryColor),
                 ),

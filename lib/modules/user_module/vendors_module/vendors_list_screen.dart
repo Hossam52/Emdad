@@ -39,7 +39,7 @@ class VendorsListScreen extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => FilterVendorCubit(favoriteVendors)..getVendors(),
+          create: (_) => FilterVendorCubit(favoriteVendors)..getVendors(),
         ),
         BlocProvider(
           create: (context) {

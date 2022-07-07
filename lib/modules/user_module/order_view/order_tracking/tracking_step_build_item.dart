@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:dotted_line/dotted_line.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:emdad/shared/styles/app_colors.dart';
@@ -62,7 +63,7 @@ class TrackingStepBuildItem extends StatelessWidget {
                 subtitle: Text(
                   item.dateString != null
                       ? SharedMethods.mappedDateWithSeconds(item.dateString!)
-                      : 'لم يتم بعد',
+                      : context.tr.not_done_yet,
                   style: secondaryTextStyle()
                       .copyWith(fontWeight: FontWeight.w300),
                 ),

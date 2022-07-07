@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:math';
 
+import 'package:emdad/shared/translation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,11 +22,11 @@ typedef OffersBlocConsumer = BlocConsumer<OffersCubit, OffersStates>;
 
 //
 class OffersCubit extends Cubit<OffersStates> {
-  OffersCubit() : super(IntitalOffersState()) {
+  OffersCubit(BuildContext context) : super(IntitalOffersState()) {
     tabItems = [
-      OfferTabItem(title: 'بانتظار الموافقة'),
-      OfferTabItem(title: 'بانتظار التسعير'),
-      OfferTabItem(title: 'الكل'),
+      OfferTabItem(title: context.tr.await_approval),
+      OfferTabItem(title: context.tr.await_quotation),
+      OfferTabItem(title: context.tr.all),
     ];
   }
   static OffersCubit instance(BuildContext context) =>

@@ -7,25 +7,26 @@ import 'package:emdad/modules/transporter_module/screens/transporter_offers_view
 import 'package:emdad/modules/transporter_module/screens/transporter_profile_screen.dart';
 import 'package:emdad/modules/transporter_module/screens/transporter_setting_screen.dart';
 import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TransporterCubit extends Cubit<TransporterState> {
-  TransporterCubit() : super(TransporterInitial()) {
+  TransporterCubit(BuildContext context) : super(TransporterInitial()) {
     bottomItems = [
       CustomBottomNavItemModel(
         child: const TransporterOffersScreen(),
-        title: 'عروض اسعار',
+        title: context.tr.price_offers,
         icon: MyIcons.home,
       ),
       CustomBottomNavItemModel(
         child: const TransporterDeliveryOrdersScreen(),
-        title: 'أوامر توصيل',
+        title: context.tr.delivery_orders,
         icon: Icons.person_add_alt,
       ),
       CustomBottomNavItemModel(
         child: const SettingsScreen(),
-        title: 'الضبط',
+        title: context.tr.settings,
         icon: MyIcons.settings,
       ),
     ];

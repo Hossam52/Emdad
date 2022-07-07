@@ -13,6 +13,7 @@ import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:emdad/shared/widgets/order_items_list_view.dart';
@@ -35,7 +36,7 @@ class OrderOfferScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => OrderCubit(orderId: orderId)..getOrder(),
+      create: (_) => OrderCubit(orderId: orderId)..getOrder(),
       child: Scaffold(
         appBar: AppBar(
           title: Text(title, style: const TextStyle(color: Colors.white)),
@@ -85,11 +86,6 @@ class OrderOfferScreen extends StatelessWidget {
                           );
                         },
                       ),
-                      // AllOrdersListView(
-                      //     vendorId: order.vendorId,
-                      //     trailing: EditOrderItemsWidget(
-                      //       order: order,
-                      //     )),
                       const SizedBox(height: 36),
                       OrderAdditionalItemsListView(order: order),
                       const SizedBox(height: 20),
@@ -110,8 +106,10 @@ class OrderOfferScreen extends StatelessWidget {
                                 : CustomButton(
                                     onPressed: () async {
                                       if (!order.userCanSendPurchaseOrder) {
-                                        SharedMethods.showToast(context,
-                                            'Vendor not provide price offer yet',
+                                        SharedMethods.showToast(
+                                            context,
+                                            context.tr
+                                                .vendor_not_provide_price_offer_yet,
                                             color: AppColors.errorColor,
                                             textColor: Colors.white);
                                         return;
@@ -129,7 +127,7 @@ class OrderOfferScreen extends StatelessWidget {
                                           log('Success');
                                         } else {
                                           SharedMethods.showToast(context,
-                                              'لم تتم عملية الدفع بنجاح برجاء المحاولة مجددا',
+                                              context.tr.payment_fail_try_again,
                                               textColor: Colors.white,
                                               color: AppColors.errorColor);
                                         }
@@ -137,7 +135,8 @@ class OrderOfferScreen extends StatelessWidget {
                                         acceptSupplyRequest(context);
                                       }
                                     },
-                                    text: 'إرسال طلب أمر شراء',
+                                    text:
+                                        context.tr.send_purchase_order_request,
                                     width:
                                         MediaQuery.of(context).size.width * 0.6,
                                     radius: 10,

@@ -5,6 +5,7 @@ import 'package:emdad/modules/user_module/home_module/user_home/user_home_screen
 import 'package:emdad/modules/user_module/my_orders/my_orders_screen.dart';
 import 'package:emdad/modules/user_module/offers_module/offers_screen.dart';
 import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
@@ -12,26 +13,27 @@ import 'package:meta/meta.dart';
 part 'user_layout_state.dart';
 
 class UserLayoutCubit extends Cubit<UserLayoutState> {
-  UserLayoutCubit({bool isGuest = false}) : super(UserLayoutInitial()) {
+  UserLayoutCubit(BuildContext context, {bool isGuest = false})
+      : super(UserLayoutInitial()) {
     bottomItems = [
       CustomBottomNavItemModel(
         child: UserHomeScreen(),
-        title: 'الرئيسية',
+        title: context.tr.main_page,
         icon: MyIcons.home,
       ),
       CustomBottomNavItemModel(
         child: const MyOrdersScreen(),
-        title: 'طلباتي',
+        title: context.tr.my_orders,
         icon: MyIcons.my_orders,
       ),
       CustomBottomNavItemModel(
         child: OffersScreen(),
-        title: 'عروض اسعار',
+        title: context.tr.price_offers,
         icon: MyIcons.tag,
       ),
       CustomBottomNavItemModel(
         child: isGuest ? const GuestSettings() : const SettingsScreen(),
-        title: 'الضبط',
+        title: context.tr.settings,
         icon: MyIcons.settings,
       ),
     ];

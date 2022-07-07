@@ -5,6 +5,7 @@ import 'package:emdad/modules/auth_module/screens/location_picker/location_picke
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:location/location.dart';
@@ -21,12 +22,12 @@ class ChooseLocationBuildItem extends StatelessWidget {
       return OpenMapPicker(
         initialValue: cubit.selectedLocationTest,
         validator: (location) {
-          if (location == null) return 'يجب اختيار الموقع الخاص بك';
+          if (location == null) return context.tr.location_must_specified;
           return null;
         },
-        decoration: const InputDecoration(
-          hintText: "اختر الموقع علي الخريطة",
-          prefixIcon: Icon(
+        decoration: InputDecoration(
+          hintText: context.tr.choose_location,
+          prefixIcon: const Icon(
             Icons.place,
             color: AppColors.textButtonColor,
           ),

@@ -1,4 +1,5 @@
 import 'package:emdad/models/request_models/filter_supply_request_model.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,26 +17,26 @@ typedef MyOrdersBlocConsumer = BlocConsumer<MyOrdersCubit, MyOrdersStates>;
 
 //
 class MyOrdersCubit extends Cubit<MyOrdersStates> {
-  MyOrdersCubit() : super(IntitalMyOrdersState()) {
+  MyOrdersCubit(BuildContext context) : super(IntitalMyOrdersState()) {
     details = [
       OrderTabDetails(
-          title: 'منتظر النقل',
+          title: context.tr.waiting_tranport,
           supplyRequestStatus: SupplyRequestStatus.awaitingTransportation,
           getOrders: () => getMyOrders(),
           getMoreOrders: () => getMoreMyOrders()),
       OrderTabDetails(
           supplyRequestStatus: SupplyRequestStatus.preparing,
-          title: 'قيد التحميل',
+          title: context.tr.in_porcess,
           getOrders: () => getMyOrders(),
           getMoreOrders: () => getMoreMyOrders()),
       OrderTabDetails(
           supplyRequestStatus: SupplyRequestStatus.onWay,
-          title: 'قيد التوصيل',
+          title: context.tr.in_delivery,
           getOrders: () => getMyOrders(),
           getMoreOrders: () => getMoreMyOrders()),
       OrderTabDetails(
           supplyRequestStatus: SupplyRequestStatus.delivered,
-          title: 'عمليات ناجحة',
+          title: context.tr.success_processes,
           getOrders: () => getMyOrders(),
           getMoreOrders: () => getMoreMyOrders()),
     ];

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:emdad/shared/translation_service.dart';
 import 'package:extended_phone_number_input/phone_number_controller.dart';
 import 'package:extended_phone_number_input/phone_number_input.dart';
 import 'package:flutter/material.dart';
@@ -87,48 +88,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         CustomText(
-                          text: 'تسجيل حساب جديد',
+                          text: context.tr.register_account,
                           textStyle: headersTextStyle(),
                         ),
                         SizedBox(height: 40.h),
-                        // CustomTextFormField(
-                        //   controller: phoneController,
-                        //   type: TextInputType.phone,
-                        //   hint: 'ex.0123456789',
-                        //   titleText: 'رقم الهاتف',
-                        //   hasBorder: false,
-                        //   backgroundColor: AppColors.textWhiteGrey,
-                        //   inputFormatters: [
-                        //     SharedMethods.numbersOnlyFormatter()
-                        //   ],
-                        //   isRequired: true,
-                        //   prefix: CountryCodePickerBuildItem(
-                        //     controller: controller,
-                        //     onChange: (value) {
-                        //       cubit.primaryPhoneNumberCode = value.dialCode;
-                        //     },
-                        //     onInit: (value) {
-                        //       cubit.primaryPhoneNumberCode = value!.dialCode;
-                        //     },
-                        //   ),
-                        //   validation: (value) {
-                        //     if (value == null || value.isEmpty) {
-                        //       return 'من فضلك ادخل رقم الهاتف';
-                        //     } else {
-                        //       return null;
-                        //     }
-                        //   },
-                        // ),
                         CountryCodePickerBuildItem(
                           controller: primaryPhoneController,
-                          hintText: 'رقم الهاتف الرئيسي',
+                          hintText: context.tr.main_phone,
                         ),
                         SizedBox(height: 15.h),
                         CustomTextFormField(
                           controller: passwordController,
                           type: TextInputType.visiblePassword,
-                          titleText: 'الرقم السري',
-                          hint: 'الرقم السري',
+                          titleText: context.tr.password,
+                          hint: context.tr.password,
                           hasBorder: false,
                           backgroundColor: AppColors.textWhiteGrey,
                           isSecure: true,
@@ -140,8 +113,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         CustomTextFormField(
                           controller: confirmPasswordController,
                           type: TextInputType.visiblePassword,
-                          titleText: 'تأكيد الرقم السري',
-                          hint: 'الرقم السري',
+                          titleText: context.tr.confirm_password,
+                          hint: context.tr.confirm_password,
                           hasBorder: false,
                           backgroundColor: AppColors.textWhiteGrey,
                           isSecure: true,
@@ -161,14 +134,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         CustomTextFormField(
                           controller: usernameController,
                           type: TextInputType.text,
-                          titleText: 'الاسم',
-                          hint: 'Name',
+                          titleText: context.tr.name,
+                          hint: context.tr.name,
                           hasBorder: false,
                           backgroundColor: AppColors.textWhiteGrey,
                           isRequired: true,
                           validation: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'من فضلك ادخل الاسم';
+                              return context.tr.please_enter_name;
                             } else {
                               return null;
                             }
@@ -178,7 +151,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         CustomTextFormField(
                           controller: emailController,
                           type: TextInputType.text,
-                          titleText: 'الايميل',
+                          titleText: context.tr.email,
                           hint: 'example@domain.com',
                           hasBorder: false,
                           backgroundColor: AppColors.textWhiteGrey,
@@ -190,7 +163,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         CustomTextFormField(
                           controller: alternativeEmailController,
                           type: TextInputType.text,
-                          titleText: 'ايميل احتياطي',
+                          titleText: context.tr.secondary_mail,
                           hint: 'example@domain.com',
                           hasBorder: false,
                           backgroundColor: AppColors.textWhiteGrey,
@@ -200,14 +173,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           },
                         ),
                         SizedBox(height: 15.h),
-
                         CountryCodePickerBuildItem(
                           controller: secondaryPhoneController,
-                          hintText: 'رقم هاتف احتياطي',
+                          hintText: context.tr.secondary_phone,
                         ),
                         SizedBox(height: 10.h),
                         CheckboxFormField(
-                          title: 'الشروط والأحكام',
+                          title: context.tr.conditions_and_terms,
                           validator: (value) =>
                               SharedMethods.defaultCheckboxValidation(value),
                           onSaved: (value) {
@@ -217,9 +189,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         SizedBox(height: 20.h),
                         DefaultProgressButton(
                           buttonState: cubit.registerButtonStates,
-                          idleText: 'انشاء حساب',
-                          failText: 'حدث خطاء',
-                          successText: 'تم التسجيل',
+                          idleText: context.tr.register_account,
+                          failText: context.tr.error_happened,
+                          successText: context.tr.done_register,
                           onPressed: () async {
                             formKey.currentState!.save();
                             if (formKey.currentState!.validate()) {

@@ -2,6 +2,7 @@ import 'package:emdad/common_cubits/filter_supply_requests_cubit/filter_supply_r
 import 'package:emdad/models/enums/enums.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:flutter/material.dart';
 
 class TitleWithFilterBuildItem extends StatelessWidget {
@@ -74,19 +75,19 @@ class TitleWithFilterBuildItem extends StatelessWidget {
               children: [
                 PopupMenuButton<SortBy>(
                   icon: const Icon(Icons.sort),
-                  tooltip: 'ترتيب',
+                  tooltip: context.tr.sort,
                   onSelected: (sortBy) {
                     filterCubit?.changeSortType(sortBy);
                   },
                   itemBuilder: (BuildContext context) => [
-                    const PopupMenuItem(
-                      child: Text('ترتيب حسب'),
+                    PopupMenuItem(
+                      child: Text(context.tr.sort_by),
                       enabled: false,
                     ),
                     PopupMenuItem(
                       value: SortBy.none,
                       child: _buildPopupMenuChild(
-                          'حذف الترتيب', filterCubit!.notSort),
+                          context.tr.remove_sort, filterCubit!.notSort),
                       onTap: () {
                         changeSortType(SortBy.none);
                       },
@@ -94,7 +95,7 @@ class TitleWithFilterBuildItem extends StatelessWidget {
                     PopupMenuItem(
                       value: SortBy.name,
                       child: _buildPopupMenuChild(
-                          'الاسم', filterCubit!.sortByName),
+                          context.tr.name, filterCubit!.sortByName),
                       onTap: () {
                         changeSortType(SortBy.name);
                       },
@@ -102,7 +103,7 @@ class TitleWithFilterBuildItem extends StatelessWidget {
                     PopupMenuItem(
                       value: SortBy.date,
                       child: _buildPopupMenuChild(
-                          'التاريخ', filterCubit!.sortByDate),
+                          context.tr.date, filterCubit!.sortByDate),
                       onTap: () {
                         changeSortType(SortBy.date);
                       },

@@ -38,7 +38,7 @@ class VendorShippingOffersScreen extends StatelessWidget {
         actions: const [ChangeLangWidget(color: Colors.black)],
       ),
       body: BlocProvider(
-        create: (context) => VendorShippingOffersCubit(transportationRequestId)
+        create: (_) => VendorShippingOffersCubit(transportationRequestId)
           ..getVendorTransportationOffers(),
         child: VendorShippingOffersBlocConsumer(
           listener: (context, state) {

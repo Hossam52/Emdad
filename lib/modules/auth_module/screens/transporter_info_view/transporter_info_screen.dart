@@ -10,6 +10,7 @@ import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/custom_text.dart';
 import 'package:emdad/shared/widgets/custom_text_form_field.dart';
 import 'package:emdad/shared/widgets/default_gesture_widget.dart';
@@ -69,7 +70,7 @@ class TransporterInfoScreen extends StatelessWidget {
                         children: [
                           Align(
                             child: CustomText(
-                              text: 'شركه نقل',
+                              text: context.tr.delivery_comapny,
                               textStyle: secondaryTextStyle(),
                             ),
                           ),
@@ -80,7 +81,7 @@ class TransporterInfoScreen extends StatelessWidget {
                             type: TextInputType.text,
                             validation: (String? value) =>
                                 SharedMethods.defaultValidation(value),
-                            titleText: 'آسم المؤسسة',
+                            titleText: context.tr.organization_name,
                             backgroundColor: AppColors.textWhiteGrey,
                             hasBorder: false,
                           ),
@@ -91,13 +92,13 @@ class TransporterInfoScreen extends StatelessWidget {
                             type: TextInputType.text,
                             validation: (String? value) =>
                                 SharedMethods.defaultValidation(value),
-                            titleText: 'السجل التجاري',
+                            titleText: context.tr.commercial_record,
                             backgroundColor: AppColors.textWhiteGrey,
                             hasBorder: false,
                           ),
                           SizedBox(height: 20.h),
                           CustomText(
-                            text: 'الموقع',
+                            text: context.tr.location,
                             textStyle: thirdTextStyle(),
                           ),
                           CustomCountryCityDropdown(
@@ -106,7 +107,7 @@ class TransporterInfoScreen extends StatelessWidget {
                             cities: cubit.cities,
                           ),
                           CustomText(
-                            text: 'وسيلة النقل',
+                            text: context.tr.transportation_method,
                             textStyle: thirdTextStyle()
                                 .copyWith(fontWeight: FontWeight.w500),
                           ),
@@ -127,13 +128,13 @@ class TransporterInfoScreen extends StatelessWidget {
                             opacity: cubit.transporterType.isEmpty ? 0 : 1,
                             duration: const Duration(milliseconds: 400),
                             child: Text(
-                              'مختارة: ${cubit.transporterType.join(', ')}',
+                              '${context.tr.choosen}: ${cubit.transporterType.join(', ')}',
                               style: thirdTextStyle(),
                             ),
                           ),
                           SizedBox(height: 20.h),
                           CustomText(
-                            text: 'الموقع',
+                            text: context.tr.location,
                             textStyle: thirdTextStyle(),
                           ),
                           SizedBox(height: 15.h),
@@ -149,17 +150,17 @@ class TransporterInfoScreen extends StatelessWidget {
                           Align(
                             child: DefaultProgressButton(
                               buttonState: cubit.completeProfileStates,
-                              idleText: 'انهاء',
-                              failText: 'حدث خطأ',
-                              successText: 'تم التسجيل',
+                              idleText: context.tr.finish,
+                              failText: context.tr.error_happened,
+                              successText: context.tr.done_register,
                               onPressed: () {
                                 formKey.currentState!.save();
                                 if (formKey.currentState!.validate()) {
                                   if (cubit.transporterType.isEmpty) {
                                     return showSnackBar(
                                       context: context,
-                                      text:
-                                          'يجب اختيار وسيلة نقل واحدة علي الاقل',
+                                      text: context.tr
+                                          .must_choose_at_least_one_transportaiton_method,
                                       snackBarStates: SnackBarStates.error,
                                     );
                                   }

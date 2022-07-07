@@ -10,6 +10,7 @@ import 'package:emdad/shared/componants/constants.dart';
 import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
 import 'package:emdad/shared/cubit/app_cubit.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/notifications_button.dart';
 import 'package:flutter/material.dart';
@@ -44,10 +45,10 @@ class _TransporterLayoutState extends State<TransporterLayout> {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => TransporterCubit(),
+            create: (_) => TransporterCubit(context),
           ),
           BlocProvider(
-            create: (context) => TransporterOffersCubit()..getOffers(),
+            create: (_) => TransporterOffersCubit()..getOffers(),
           ),
           BlocProvider(
             create: (context) =>
@@ -105,42 +106,42 @@ class _TransporterDrawer extends StatelessWidget {
     return CustomDrawer(
       drawerItems: [
         DrawerListBuildItem(
-          title: 'الرئيسية',
+          title: context.tr.main_page,
           icon: MyIcons.home,
           onTap: () {
             cubit.changeToOffers();
           },
         ),
         DrawerListBuildItem(
-          title: 'أوامر توصيل',
+          title: context.tr.delivery_orders,
           icon: MyIcons.note,
           onTap: () {
             cubit.changeToPurchase();
           },
         ),
         DrawerListBuildItem(
-          title: 'الاشعارات',
+          title: context.tr.notifications,
           icon: MyIcons.bell2,
           onTap: () {},
         ),
         DrawerListBuildItem(
-          title: 'طلب مساعدة',
+          title: context.tr.ask_help,
           icon: MyIcons.question,
           onTap: () {},
         ),
         DrawerListBuildItem(
-          title: 'الدعم والخصوصية',
+          title: context.tr.support_and_privacy,
           icon: MyIcons.support,
           onTap: () {},
         ),
         DrawerListBuildItem(
-          title: 'عنا',
+          title: context.tr.about_us,
           icon: Icons.info_outlined,
           size: 24,
           onTap: () {},
         ),
         DrawerListBuildItem(
-          title: 'الضبط',
+          title: context.tr.settings,
           icon: MyIcons.settings,
           onTap: () {
             cubit.changeToSettings();

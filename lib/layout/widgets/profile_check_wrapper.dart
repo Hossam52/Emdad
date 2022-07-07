@@ -2,6 +2,7 @@ import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/cubit/app_cubit.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/default_loader.dart';
 import 'package:emdad/shared/widgets/empty_data.dart';
 import 'package:emdad/shared/widgets/load_more_data.dart';
@@ -34,7 +35,7 @@ class ProfileCheckWrapper extends StatelessWidget {
                   width: 0.8.sw,
                 ),
                 Text(
-                  'Cant get profile try again',
+                  context.tr.cant_get_profile_try_again,
                   style: headersTextStyle(),
                 ),
                 state is GetUserProfileLoadingState
@@ -44,7 +45,7 @@ class ProfileCheckWrapper extends StatelessWidget {
                           await appCubit.getUserProfile();
                         },
                         child: Text(
-                          'Try again!',
+                          context.tr.try_again,
                           style: headersTextStyle(),
                         ),
                       ),
@@ -55,7 +56,7 @@ class ProfileCheckWrapper extends StatelessWidget {
                     onPressed: () {
                       SharedMethods.signOutVendor(context);
                     },
-                    child: const Text('Logout')),
+                    child: Text(context.tr.logout)),
               ],
             ),
           );

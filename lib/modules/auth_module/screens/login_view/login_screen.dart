@@ -8,6 +8,7 @@ import 'package:emdad/shared/responsive/device_information.dart';
 import 'package:emdad/shared/responsive/responsive_widget.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/custom_text_form_field.dart';
 import 'package:emdad/shared/widgets/default_gesture_widget.dart';
 import 'package:emdad/shared/widgets/default_progress_button.dart';
@@ -25,13 +26,13 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AuthCubit(),
+      create: (_) => AuthCubit(),
       child: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {},
         builder: (context, state) {
           AuthCubit cubit = AuthCubit.get(context);
           return responsiveWidget(
-            responsive: (context, DeviceInformation deviceInformation) {
+            responsive: (_, DeviceInformation deviceInformation) {
               return Scaffold(
                 appBar: AppBar(
                   actions: const [
@@ -51,7 +52,7 @@ class LoginScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'تسجيل الدخول لحسابك',
+                                  context.tr.login_your_account,
                                   style: headersTextStyle().copyWith(),
                                 ),
                                 const SizedBox(
@@ -73,10 +74,10 @@ class LoginScreen extends StatelessWidget {
                                 CustomTextFormField(
                                   controller: phoneController,
                                   type: TextInputType.text,
-                                  hint: 'رقم الهاتف',
+                                  hint: context.tr.phone,
                                   validation: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return 'من فضلك ادخل رقم الهاتف';
+                                      return context.tr.enter_phone;
                                     } else {
                                       return null;
                                     }
@@ -92,7 +93,7 @@ class LoginScreen extends StatelessWidget {
                                 ),
                                 CustomTextFormField(
                                   type: TextInputType.visiblePassword,
-                                  hint: 'الرقم السري',
+                                  hint: context.tr.password,
                                   hasBorder: false,
                                   backgroundColor: AppColors.textWhiteGrey,
                                   borderRadius: 10,
@@ -106,7 +107,7 @@ class LoginScreen extends StatelessWidget {
                                   },
                                   validation: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return 'من فضلك ادخل الرقم السري';
+                                      return context.tr.enter_password;
                                     } else {
                                       return null;
                                     }
@@ -115,8 +116,8 @@ class LoginScreen extends StatelessWidget {
                               ],
                             ),
                             TextButton(
-                              child: const Text(
-                                'هل نسيت كلمة المرور ؟',
+                              child: Text(
+                                context.tr.forgot_password + ' ? ',
                               ),
                               onPressed: () {
                                 navigateTo(
@@ -130,9 +131,9 @@ class LoginScreen extends StatelessWidget {
                               width: double.infinity,
                               child: DefaultProgressButton(
                                 buttonState: cubit.loginButtonState,
-                                idleText: 'تسجيل دخول',
-                                failText: 'حدث خطأ',
-                                successText: 'تم التسجيل',
+                                idleText: context.tr.login,
+                                failText: context.tr.error_happened,
+                                successText: context.tr.done_login,
                                 borderRadius: 10,
                                 onPressed: () {
                                   formKey.currentState!.save();
@@ -163,7 +164,7 @@ class LoginScreen extends StatelessWidget {
                             ),
                             CustomPrimaryButton(
                               buttonColor: AppColors.myGreyColor,
-                              textValue: 'إنشاء حساب',
+                              textValue: context.tr.add_account,
                               textColor: textBlack,
                               onPressed: () {
                                 navigateTo(context, RegisterScreen());

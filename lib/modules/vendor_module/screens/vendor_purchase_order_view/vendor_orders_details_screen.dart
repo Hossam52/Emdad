@@ -71,7 +71,7 @@ class VendorOrderDetailsScreen extends StatelessWidget {
         ],
       ),
       body: BlocProvider(
-        create: (context) => VendorOrderCubit(orderId)..getOrder(),
+        create: (_) => VendorOrderCubit(orderId)..getOrder(),
         child: VendorOrderBlocConsumer(
           listener: (context, state) {
             if (state is QuoteOrderErrorState) {

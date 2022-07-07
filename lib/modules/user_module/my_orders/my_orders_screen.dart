@@ -10,6 +10,7 @@ import 'package:emdad/modules/user_module/order_view/order_statuses_views/order_
 import 'package:emdad/modules/user_module/order_view/order_view_screen.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/default_loader.dart';
 import 'package:emdad/shared/widgets/guest_checker_widget.dart';
 import 'package:emdad/shared/widgets/ui_componants/no_data_widget.dart';
@@ -71,7 +72,7 @@ class MyOrdersScreen extends StatelessWidget {
                             context,
                             OrderNewScreen(
                               orderId: orderId,
-                              title: 'منتظر النقل',
+                              title: context.tr.waiting_tranport,
                               status: OrderStatus.newOrder,
                             ));
                       },
@@ -82,7 +83,7 @@ class MyOrdersScreen extends StatelessWidget {
                             context,
                             OrderInPorgressScreen(
                               orderId: orderId,
-                              title: 'قيد التحميل',
+                              title: context.tr.in_porcess,
                               status: OrderStatus.inProgress,
                             ));
                       },
@@ -92,7 +93,7 @@ class MyOrdersScreen extends StatelessWidget {
                         navigateTo(
                             context,
                             OrderInPorgressScreen(
-                              title: 'قيد التوصيل',
+                              title: context.tr.in_delivery,
                               orderId: orderId,
                               status: OrderStatus.inProgress,
                             ));
@@ -103,7 +104,7 @@ class MyOrdersScreen extends StatelessWidget {
                           context,
                           OrderCompletedScreen(
                             orderId: orderId,
-                            title: 'طلب مكتمل',
+                            title: context.tr.complete_order,
                             status: OrderStatus.completed,
                           ));
                     }),

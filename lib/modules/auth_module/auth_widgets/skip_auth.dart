@@ -1,4 +1,5 @@
 import 'package:emdad/modules/auth_module/cubit/auth_cubit.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,7 +21,7 @@ class SkipAuthButton extends StatelessWidget {
             AuthCubit.get(context).loginGuestUser(context);
           },
           icon: const Icon(Icons.navigate_before),
-          label: const Text('تخطي'),
+          label: Text(context.tr.skip),
         );
       },
     );

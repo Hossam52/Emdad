@@ -1,6 +1,7 @@
 import 'package:emdad/models/supply_request/supply_request.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
@@ -86,11 +87,7 @@ class OrderBuildItem extends StatelessWidget {
                         )
                       else
                         Chip(
-                          label: Text(
-                              // order.vendorProvidePriceOffer
-                              //     ? order.totalOrderPrice.toString()
-                              //     :
-                              'لم يتم اضافة عرض',
+                          label: Text(context.tr.offers_not_added,
                               style: subTextStyle()
                                   .copyWith(color: AppColors.errorColor)),
                           backgroundColor:

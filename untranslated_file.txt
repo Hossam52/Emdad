@@ -1,7 +1,5 @@
 {
   "ar": [
-    "language",
-    "no_data",
-    "try_again"
+    "want_delivery"
   ]
 }

@@ -11,6 +11,7 @@ import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/responsive/device_information.dart';
 import 'package:emdad/shared/responsive/responsive_widget.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/custom_refresh_widget.dart';
 import 'package:emdad/shared/widgets/default_cached_image.dart';
 import 'package:emdad/shared/widgets/default_home_title_build_item.dart';
@@ -90,14 +91,14 @@ class _FavoriteVendors extends StatelessWidget {
         return Column(
           children: [
             DefaultHomeTitleBuildItem(
-              title: 'الموردون المفضلون',
+              title: context.tr.favorite_vendors,
               onPressed: () {
                 navigateTo(
                   context,
                   BlocProvider.value(
                     value: UserHomeCubit.instance(context),
                     child: VendorsListScreen(
-                      title: 'الموردون المفضلون',
+                      title: context.tr.favorite_vendors,
                       favoriteVendors: true,
                     ),
                   ),
@@ -212,11 +213,12 @@ class _AllVendors extends StatelessWidget {
     return UserHomeBlocBuilder(
       builder: (context, state) {
         final vendors = UserHomeCubit.instance(context).vendors;
-        if (vendors.isEmpty) return const EmptyData(emptyText: 'No Vendors');
+        if (vendors.isEmpty)
+          return EmptyData(emptyText: context.tr.no_vendors_available);
         return Column(
           children: [
             DefaultHomeTitleBuildItem(
-              title: 'جميع الموردين',
+              title: context.tr.all_vendors,
               onPressed: () {
                 navigateTo(
                     context,

@@ -164,10 +164,24 @@ class VendorProductCrudCubit extends Cubit<VendorProductCrudStates> {
       if (imagesModel.status) {
         log('${imagesModel.images}');
         final allImages = _getAllImagesList(imagesModel.images);
+        log(allImages.toString());
         final String productName = productNameController.text;
         final String description = productDescriptionController.text;
+        final String productType = productTypeController.text;
         final bool isPriceShown = product.isPriceShown;
-        //TODO: implement edit product api
+        final String notes = productNotesController.text;
+
+        await _vendorServices.productServices.editProductErrorState(
+          EditProductRequestModel(
+              productId: _product.id,
+              name: productName,
+              description: description,
+              productType: productType,
+              units: units,
+              isPriceShown: isPriceShown,
+              images: allImages,
+              notes: notes),
+        );
       } else {
         throw 'Error happened';
       }
@@ -223,11 +237,12 @@ class VendorProductCrudCubit extends Cubit<VendorProductCrudStates> {
     final List<String> allImages = incomingImagesList;
     if (_mainProductImageFile == null) {
       //Means that the vendor not upload preview image
-      allImages.insert(0, _originalMainImage); //Insert the first original one
+      allImages.insert(
+          0, _product.images.first); //Insert the first original one
     }
     if (originalProductImages.isNotEmpty) {
       //Keep the original images as they in list
-      allImages.insertAll(1, originalProductImages);
+      allImages.insertAll(1, _product.images.sublist(1));
     }
     return allImages;
   }

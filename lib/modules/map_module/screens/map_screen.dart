@@ -4,6 +4,7 @@ import 'package:emdad/modules/map_module/screens/map_cubit/map_cubit.dart';
 import 'package:emdad/shared/cubit/app_cubit.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -50,7 +51,7 @@ class _MapScreenState extends State<MapScreen> {
           foregroundColor: Colors.red,
         ),
         body: BlocProvider(
-          create: (context) => MapCubit(
+          create: (_) => MapCubit(
               LatLng(user!.locationObject!.lat, user.locationObject!.lng),
               LatLng(widget.lat, widget.lng)),
           child: MapCubitBlocBuilder(
@@ -109,7 +110,7 @@ class _MyLocationManagement extends StatelessWidget {
                 children: [
                   Expanded(
                     child: ListTile(
-                      title: const Text('اظهار موقعي'),
+                      title: Text(context.tr.show_my_location),
                       onTap: () {
                         MapCubit.instance(context).toggleViewMyLocation();
                       },
@@ -128,7 +129,7 @@ class _MyLocationManagement extends StatelessWidget {
                       onTap: () {
                         MapCubit.instance(context).toggleViewOtherLocation();
                       },
-                      title: const Text('اظهار الموقع الاخر '),
+                      title: Text(context.tr.show_other_location),
                       trailing: Checkbox(
                           value:
                               MapCubit.instance(context).displayOtherLocation,

@@ -2,6 +2,7 @@ import 'package:emdad/modules/user_module/order_view/order_statuses_views/orders
 import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/custom_text.dart';
 import 'package:emdad/shared/widgets/dialogs/edit_price_dialogs.dart';
 import 'package:flutter/material.dart';
@@ -32,9 +33,9 @@ class TransporterPriceOverview extends StatelessWidget {
                     child: Column(
                       children: [
                         OrderTotalRowItem(
-                            title: 'تكلفة الطلب',
+                            title: context.tr.order_cost,
                             value: SharedMethods.getPrice(price)),
-                        const OrderTotalRowItem(title: 'الضريبة', value: '12%'),
+                        OrderTotalRowItem(title: context.tr.tax, value: '12%'),
                       ],
                     ),
                   )),
@@ -47,7 +48,7 @@ class TransporterPriceOverview extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CustomText(
-                        text: 'إجمالي',
+                        text: context.tr.total,
                         textAlign: TextAlign.start,
                         textStyle: subTextStyle().copyWith(color: Colors.white),
                       ),

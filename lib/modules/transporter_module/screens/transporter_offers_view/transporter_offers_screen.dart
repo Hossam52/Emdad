@@ -8,6 +8,7 @@ import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/responsive/responsive_widget.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/custom_refresh_widget.dart';
 import 'package:emdad/shared/widgets/default_cached_image.dart';
 import 'package:emdad/shared/widgets/default_loader.dart';
@@ -42,7 +43,7 @@ class TransporterOffersScreen extends StatelessWidget {
             onPressed: () {
               transporterCubit.getOffers();
             },
-            text: 'لقد حدث خطأ رجاء اعد المحاولة',
+            text: context.tr.error_happened_retry_again,
           );
         }
         final offers = transporterCubit.offers;
@@ -51,7 +52,7 @@ class TransporterOffersScreen extends StatelessWidget {
             await transporterCubit.getOffers();
           },
           child: responsiveWidget(
-            responsive: (context, deviceInfo) => BlocProvider(
+            responsive: (_, deviceInfo) => BlocProvider(
               create: (context) =>
                   FilterSuuplyRequestsCubit.transporterOrders(offers),
               child: FilterSuuplyRequestsBlocBuilder(builder: (context, _) {
@@ -61,15 +62,16 @@ class TransporterOffersScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       TitleWithFilterBuildItem(
-                        title: 'عروض اسعار',
+                        title: context.tr.price_offers,
                         filterCubit:
                             FilterSuuplyRequestsCubit.instance(context),
                         changeSortType: (sortType) {},
                         hasSort: false,
                       ),
                       if (offers.isEmpty)
-                        const Center(
-                            child: EmptyData(emptyText: 'لا يوجد عروض اسعار'))
+                        Center(
+                            child: EmptyData(
+                                emptyText: context.tr.no_price_offers))
                       else
                         ListView.builder(
                           shrinkWrap: true,

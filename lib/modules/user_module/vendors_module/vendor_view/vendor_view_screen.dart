@@ -60,7 +60,7 @@ class VendorViewScreen extends StatelessWidget {
                 VendorProfileCubit(vendorId: vendorId)..getVendorInfo(),
           ),
           BlocProvider(
-            create: (context) => CartCubit(),
+            create: (_) => CartCubit(),
             lazy: false,
           ),
         ],

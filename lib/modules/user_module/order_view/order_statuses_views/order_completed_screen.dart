@@ -30,7 +30,7 @@ class OrderCompletedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     log(status.toString());
     return BlocProvider(
-      create: (context) => OrderCubit(orderId: orderId)..getOrder(),
+      create: (_) => OrderCubit(orderId: orderId)..getOrder(),
       child: Scaffold(
         appBar: AppBar(
           title: Text(title, style: const TextStyle(color: Colors.white)),

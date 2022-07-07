@@ -8,6 +8,7 @@ import 'package:emdad/shared/componants/constants.dart';
 import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class SettingsScreen extends StatelessWidget {
               const ChangePhoneAndEmailAndPasswordWidget(),
               const Divider(height: 0),
               SettingTileBuildItem(
-                title: 'الاشعارات',
+                title: context.tr.notifications,
                 leading: SvgPicture.asset(
                   '${Constants.defaultIconUrl}/notification.svg',
                   width: 15,
@@ -44,7 +45,7 @@ class SettingsScreen extends StatelessWidget {
               ),
               const Divider(height: 0),
               SettingTileBuildItem(
-                title: 'تغيير اللغة',
+                title: context.tr.change_lang,
                 leading: const Icon(MyIcons.translation,
                     color: AppColors.primaryColor, size: 18),
                 trailing: DropdownButton<Object>(
@@ -63,7 +64,7 @@ class SettingsScreen extends StatelessWidget {
               onPressed: () {
                 SharedMethods.signOutVendor(context);
               },
-              text: 'تسجيل خروج',
+              text: context.tr.logout,
             ),
           ),
         ],
@@ -80,7 +81,7 @@ class ChangePhoneAndEmailAndPasswordWidget extends StatelessWidget {
     return Column(
       children: [
         SettingTileBuildItem(
-          title: 'تغير رقم الهاتف',
+          title: context.tr.change_phone_number,
           leading: SvgPicture.asset(
             '${Constants.defaultIconUrl}/phone.svg',
             width: 13,
@@ -91,7 +92,7 @@ class ChangePhoneAndEmailAndPasswordWidget extends StatelessWidget {
         ),
         const Divider(height: 0),
         SettingTileBuildItem(
-          title: 'تغيير الرقم السري',
+          title: context.tr.change_password,
           leading:
               const Icon(MyIcons.lock, color: AppColors.primaryColor, size: 17),
           onTap: () {
@@ -99,7 +100,7 @@ class ChangePhoneAndEmailAndPasswordWidget extends StatelessWidget {
           },
         ),
         SettingTileBuildItem(
-          title: 'تغيير الايميل',
+          title: context.tr.change_mail,
           leading:
               const Icon(Icons.email, color: AppColors.primaryColor, size: 17),
           onTap: () {
@@ -119,14 +120,14 @@ class _PrivacyAndHelp extends StatelessWidget {
     return Column(
       children: [
         SettingTileBuildItem(
-          title: 'الخصوصية',
+          title: context.tr.privacy,
           leading: const Icon(MyIcons.policy,
               color: AppColors.primaryColor, size: 18),
           onTap: () {},
         ),
         const Divider(height: 0),
         SettingTileBuildItem(
-          title: 'المساعدة',
+          title: context.tr.help,
           leading: const Icon(MyIcons.question_fill,
               color: AppColors.primaryColor, size: 18),
           onTap: () {},
@@ -153,7 +154,7 @@ class GuestSettings extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               children: [
                 SettingTileBuildItem(
-                  title: 'تغيير اللغة',
+                  title: context.tr.change_lang,
                   leading: const Icon(MyIcons.translation,
                       color: AppColors.primaryColor, size: 18),
                   trailing: DropdownButton<Object>(
@@ -171,7 +172,7 @@ class GuestSettings extends StatelessWidget {
                 onPressed: () {
                   SharedMethods.signOutVendor(context);
                 },
-                text: 'تسجيل الدخول',
+                text: context.tr.login,
               ),
             ),
           ],

@@ -8,7 +8,9 @@ class ProductModel {
   String productType;
   List<ProductUnit> units;
   bool isPriceShown;
+  List<String> images;
   List<String> imagesUrls;
+  String notes;
   ProductModel(
       {required this.id,
       required this.vendorId,
@@ -17,7 +19,9 @@ class ProductModel {
       required this.productType,
       required this.units,
       required this.isPriceShown,
-      required this.imagesUrls});
+      required this.images,
+      required this.imagesUrls,
+      required this.notes});
   ProductModel.emptyModel()
       : id = '',
         name = '',
@@ -26,7 +30,9 @@ class ProductModel {
         productType = '',
         units = [],
         isPriceShown = true,
-        imagesUrls = [];
+        images = [],
+        imagesUrls = [],
+        notes = '';
 
   Map<String, dynamic> toMap() {
     return {
@@ -37,7 +43,9 @@ class ProductModel {
       'productType': productType,
       'units': units.map((x) => x.toMap()).toList(),
       'isPriceShown': isPriceShown,
-      'images': imagesUrls,
+      'images': images,
+      'imagesUrls': imagesUrls,
+      'notes': notes,
     };
   }
 
@@ -51,7 +59,9 @@ class ProductModel {
       units: List<ProductUnit>.from(
           map['units']?.map((x) => ProductUnit.fromMap(x))),
       isPriceShown: map['isPriceShown'] ?? false,
+      images: List<String>.from(map['images']),
       imagesUrls: List<String>.from(map['imagesUrls']),
+      notes: map['notes'] ?? '',
     );
   }
 
@@ -69,17 +79,20 @@ class ProductModel {
     List<ProductUnit>? units,
     bool? isPriceShown,
     List<String>? images,
+    List<String>? imagesUrls,
+    String? notes,
   }) {
     return ProductModel(
-      id: id ?? this.id,
-      vendorId: vendorId ?? this.vendorId,
-      name: name ?? this.name,
-      description: description ?? this.description,
-      productType: productType ?? this.productType,
-      units: units ?? this.units,
-      isPriceShown: isPriceShown ?? this.isPriceShown,
-      imagesUrls: images ?? this.imagesUrls,
-    );
+        id: id ?? this.id,
+        vendorId: vendorId ?? this.vendorId,
+        name: name ?? this.name,
+        description: description ?? this.description,
+        productType: productType ?? this.productType,
+        units: units ?? this.units,
+        isPriceShown: isPriceShown ?? this.isPriceShown,
+        images: images ?? this.images,
+        imagesUrls: imagesUrls ?? this.imagesUrls,
+        notes: notes ?? this.notes);
   }
 }
 

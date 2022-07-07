@@ -3,6 +3,7 @@ import 'package:emdad/models/transportations/transportation_supply_requests/tran
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:emdad/shared/widgets/custom_text.dart';
@@ -47,7 +48,7 @@ class _TransportProcessScreenState extends State<TransportProcessScreen> {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
         ),
         title: CustomText(
-          text: 'عمليه توصيل',
+          text: context.tr.delivery_process,
           textStyle: primaryTextStyle().copyWith(
             color: Colors.white,
             fontWeight: FontWeight.w700,
@@ -64,7 +65,7 @@ class _TransportProcessScreenState extends State<TransportProcessScreen> {
             CustomTransporterOrderListTile(client: user),
             SizedBox(height: 40.h),
             _DeliveryButton(
-              title: 'تم الوصول ل مكان الاتقاطس',
+              title: context.tr.arrived_pickup_location,
               onPressed: () {
                 setState(() {
                   initialProcessValue++;
@@ -77,7 +78,7 @@ class _TransportProcessScreenState extends State<TransportProcessScreen> {
             CustomTransporterOrderListTile(client: vendor),
             SizedBox(height: 30.h),
             _DeliveryButton(
-              title: 'تم الوصول الي موقع التوصيل',
+              title: context.tr.arrived_delivery_location,
               displayWithSuccess: initialProcessValue <= 1,
               onPressed: () {
                 setState(() {
@@ -89,7 +90,7 @@ class _TransportProcessScreenState extends State<TransportProcessScreen> {
             SizedBox(height: 50.h),
             CustomButton(
               width: 170.w,
-              text: 'تأكيد أنتهاء العملية',
+              text: context.tr.confirm_end_process,
               backgroundColor: Colors.red,
               textStyle: thirdTextStyle()
                   .copyWith(color: Colors.white, fontWeight: FontWeight.w500),
@@ -170,7 +171,7 @@ class _Dialog extends StatelessWidget {
       onWillPop: () async => false,
       child: AlertDialog(
         title: CustomText(
-          text: 'تم الانتهاء من التوصيل بنجاح',
+          text: context.tr.done_delivery,
           textStyle: thirdTextStyle().copyWith(fontWeight: FontWeight.w500),
         ),
         content: CircleAvatar(
@@ -181,7 +182,7 @@ class _Dialog extends StatelessWidget {
         actions: <Widget>[
           CustomButton(
             width: 215.w,
-            text: 'إغلاق',
+            text: context.tr.close,
             backgroundColor: Colors.red,
             textStyle: thirdTextStyle()
                 .copyWith(color: Colors.white, fontWeight: FontWeight.w500),

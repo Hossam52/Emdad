@@ -5,6 +5,7 @@ import 'package:emdad/modules/auth_module/screens/update_profile/update_profile_
 import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:emdad/shared/widgets/default_loader.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class ChangeEmailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => AuthCubit(),
+      create: (_) => AuthCubit(),
       child: Scaffold(
         body: Form(
           key: formKey,
@@ -31,7 +32,7 @@ class ChangeEmailScreen extends StatelessWidget {
                     textColor: Colors.white, color: AppColors.errorColor);
               }
               if (state is ChangeEmailSuccessState) {
-                SharedMethods.showToast(context, 'تم تعديل الايميل بنجاح',
+                SharedMethods.showToast(context, context.tr.done_update_mail,
                     textColor: Colors.white, color: AppColors.successColor);
               }
             },
@@ -47,33 +48,33 @@ class ChangeEmailScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const CustomUpdateProfileAppBar(
-                          title: 'تغيير الايميل',
+                        CustomUpdateProfileAppBar(
+                          title: context.tr.change_mail,
                         ),
                         SizedBox(
                           height:
                               SharedMethods.getHeightFraction(context, 0.08),
                         ),
                         UpdateProfileTextField(
-                          hint: 'Enter your password',
+                          hint: context.tr.enter_your_password,
                           textEditingController: passwordController,
                           validator: (val) {
                             return SharedMethods.passwordValidation(val);
                           },
-                          label: 'Current password',
+                          label: context.tr.current_password,
                         ),
                         UpdateProfileTextField(
-                          hint: 'Enter old email',
+                          hint: context.tr.old_email,
                           textEditingController: oldEmailController,
                           validator: (val) {
                             return SharedMethods.emailValidation(val);
                           },
-                          label: 'Old email',
+                          label: context.tr.old_email,
                         ),
                         UpdateProfileTextField(
-                          hint: 'Enter the new email',
+                          hint: context.tr.enter_the_new_email,
                           textEditingController: newEmailController,
-                          label: 'New email',
+                          label: context.tr.new_email,
                           validator: (val) {
                             return SharedMethods.emailValidation(val);
                           },
@@ -95,7 +96,7 @@ class ChangeEmailScreen extends StatelessWidget {
                               }
                             },
                             backgroundColor: AppColors.primaryColor,
-                            text: 'Send confirmation',
+                            text: context.tr.send_confirmation,
                             height:
                                 SharedMethods.getHeightFraction(context, 0.1),
                             textStyle: primaryTextStyle()
@@ -112,7 +113,7 @@ class ChangeEmailScreen extends StatelessWidget {
                               foregroundColor:
                                   MaterialStateProperty.all(Colors.black),
                             ),
-                            child: const Text('Forget password?'),
+                            child: Text(context.tr.forgot_password + ' ? '),
                           ),
                         )
                       ],

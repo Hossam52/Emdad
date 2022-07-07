@@ -5,6 +5,7 @@ import 'package:emdad/models/supply_request/supply_request.dart';
 import 'package:emdad/modules/user_module/my_orders/my_orders_cubit/my_orders_cubit.dart';
 import 'package:emdad/modules/user_module/my_orders/my_orders_cubit/my_orders_states.dart';
 import 'package:emdad/modules/user_module/offers_module/offers_cubit/offers_cubit.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/custom_refresh_widget.dart';
 import 'package:emdad/shared/widgets/empty_data.dart';
 import 'package:emdad/shared/widgets/load_more_data.dart';
@@ -31,7 +32,7 @@ class MyOrdersTab extends StatelessWidget {
         orderTab.getOrders();
       });
     }
-    if (orders.isEmpty) return const EmptyData(emptyText: 'No orders found');
+    if (orders.isEmpty) return EmptyData(emptyText: context.tr.no_orders_found);
     return CustomRefreshWidget(
       onRefresh: () async {
         await orderTab.getOrders();

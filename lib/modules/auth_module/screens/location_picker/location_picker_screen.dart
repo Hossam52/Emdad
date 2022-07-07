@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:emdad/modules/auth_module/cubit/auth_cubit.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 import 'package:open_location_picker/open_location_picker.dart';
@@ -41,7 +42,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
         return LatLng(event.latitude!, event.longitude!);
       }),
       child: OpenStreetMaps(
-        searchHint: 'ابحث هنا',
+        searchHint: context.tr.search_here,
         myLocationButton: (value) => FloatingActionButton(
           onPressed: () async {
             Location location = Location();

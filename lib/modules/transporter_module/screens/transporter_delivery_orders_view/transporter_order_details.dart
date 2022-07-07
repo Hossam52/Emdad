@@ -9,6 +9,7 @@ import 'package:emdad/modules/user_module/order_view/order_item_build.dart';
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/change_language_widget.dart';
 import 'package:emdad/shared/widgets/custom_buton_with_icon.dart';
 import 'package:emdad/shared/widgets/custom_text.dart';
@@ -40,7 +41,7 @@ class TransporterOrderDetailsScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
         ),
         title: CustomText(
-          text: 'تفاصيل الطلب',
+          text: context.tr.order_details,
           textStyle: primaryTextStyle().copyWith(
             color: Colors.white,
             fontWeight: FontWeight.w700,
@@ -68,7 +69,7 @@ class TransporterOrderDetailsScreen extends StatelessWidget {
                   onPressed: () {
                     orderCubit.getTransport();
                   },
-                  text: 'حدث خطأ في الطلب برجاء المحاولة مجددا');
+                  text: context.tr.error_happened_retry_again);
             }
             final order = orderCubit.order;
             final supplyRequest = order.supplyRequest;
@@ -103,10 +104,12 @@ class TransporterOrderDetailsScreen extends StatelessWidget {
                       items: supplyRequest.requestItems,
                     ),
                     SizedBox(height: 20.h),
-                    rowItem('نوع النقل', order.transportationMethod),
+                    rowItem(
+                        context.tr.delivery_type, order.transportationMethod),
                     if (order.transportationOffer?.notes != null)
-                      rowItem('ملاحظات', order.transportationOffer!.notes),
-                    rowItem('سعر النقل',
+                      rowItem(
+                          context.tr.notes, order.transportationOffer!.notes),
+                    rowItem(context.tr.delivery_price,
                         order.transportationOffer!.price.toString()),
                     SizedBox(height: 20.h),
                     TransporterPriceOverview(
@@ -124,7 +127,7 @@ class TransporterOrderDetailsScreen extends StatelessWidget {
                                 order: order,
                               ));
                         },
-                        text: 'بدأعملية التوصيل',
+                        text: context.tr.start_delivery_process,
                         iconData: Icons.place,
                         textStyle: thirdTextStyle().copyWith(
                             color: Colors.white, fontWeight: FontWeight.w500),

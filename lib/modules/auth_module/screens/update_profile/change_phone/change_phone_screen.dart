@@ -1,4 +1,6 @@
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:emdad/modules/auth_module/cubit/auth_cubit.dart';
+import 'package:emdad/modules/auth_module/screens/register_view/country_code_picker.dart';
 import 'package:emdad/modules/auth_module/screens/register_view/register_screen.dart';
 import 'package:emdad/modules/auth_module/screens/update_profile/update_profile_widgets/background_stack.dart';
 import 'package:emdad/modules/auth_module/screens/update_profile/update_profile_widgets/custom_update_profile_app_bar.dart';
@@ -8,8 +10,10 @@ import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/cubit/app_cubit.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:emdad/shared/widgets/ui_componants/default_loader.dart';
+import 'package:extended_phone_number_input/phone_number_controller.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,7 +45,7 @@ class _ChangePhoneScreenState extends State<ChangePhoneScreen> {
       height: SharedMethods.getHeightFraction(context, 0.03),
     );
     return BlocProvider(
-      create: (context) => AuthCubit(),
+      create: (_) => AuthCubit(),
       child: Scaffold(
         body: Form(
           key: formKey,
@@ -52,7 +56,7 @@ class _ChangePhoneScreenState extends State<ChangePhoneScreen> {
                     textColor: Colors.white, color: AppColors.errorColor);
               }
               if (state is UpdateProfileSuccessState) {
-                SharedMethods.showToast(context, 'تم تعديل رقم الهاتف بنجاح',
+                SharedMethods.showToast(context, context.tr.done_change_phone,
                     textColor: Colors.white, color: AppColors.successColor);
               }
             },
@@ -68,36 +72,19 @@ class _ChangePhoneScreenState extends State<ChangePhoneScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const CustomUpdateProfileAppBar(
-                          title: 'تغيير رقم الهاتف',
+                        CustomUpdateProfileAppBar(
+                          title: context.tr.change_phone_number,
                         ),
                         sizedBox,
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 2,
-                              child: UpdateProfileTextField(
-                                hint: 'Enter new phone number',
-                                textEditingController: phoneNumberController,
-                                label: 'New phone',
-                                validator: (val) {
-                                  return SharedMethods.passwordValidation(val);
-                                },
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: UpdateProfileTextField(
-                                hint: 'Country code',
-                                textEditingController: countryCodeController,
-                                label: 'Country code',
-                                validator: (val) {
-                                  return SharedMethods.passwordValidation(val);
-                                },
-                              ),
-                            ),
-                          ],
+                        Theme(
+                          data: Theme.of(context).copyWith(
+                              inputDecorationTheme: const InputDecorationTheme(
+                                  filled: true, fillColor: Colors.white)),
+                          child: CountryCodePickerBuildItem(
+                              controller: PhoneNumberInputController(context),
+                              hintText: context.tr.your_phone),
                         ),
+                        sizedBox,
                         Divider(
                           color: Colors.grey,
                           thickness: 5,
@@ -117,7 +104,7 @@ class _ChangePhoneScreenState extends State<ChangePhoneScreen> {
                               }
                             },
                             backgroundColor: AppColors.primaryColor,
-                            text: 'Change phone number',
+                            text: context.tr.change_phone,
                             height:
                                 SharedMethods.getHeightFraction(context, 0.1),
                             textStyle: primaryTextStyle()
@@ -131,7 +118,9 @@ class _ChangePhoneScreenState extends State<ChangePhoneScreen> {
                               foregroundColor:
                                   MaterialStateProperty.all(Colors.black),
                             ),
-                            child: const Text('Forget password?'),
+                            child: Text(
+                              context.tr.forgot_password + ' ? ',
+                            ),
                           ),
                         ),
                         SizedBox(
@@ -140,12 +129,12 @@ class _ChangePhoneScreenState extends State<ChangePhoneScreen> {
                         Center(
                           child: RichText(
                               text: TextSpan(
-                                  text: 'Don\'t have account? ',
+                                  text: context.tr.dont_have_account,
                                   style: secondaryTextStyle()
                                       .copyWith(color: Colors.black),
                                   children: [
                                 TextSpan(
-                                    text: 'Register now',
+                                    text: context.tr.register_now,
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () =>
                                           navigateTo(context, RegisterScreen()),

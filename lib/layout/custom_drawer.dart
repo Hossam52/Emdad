@@ -4,6 +4,7 @@ import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/cubit/app_cubit.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/default_cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,8 +23,9 @@ class CustomDrawer extends StatelessWidget {
             SizedBox(height: 28.h),
             for (var item in drawerItems) item,
             DrawerListBuildItem(
-              title:
-                  user == null || user.isGuest ? 'تسجيل الدخول' : 'تسجيل خروج',
+              title: user == null || user.isGuest
+                  ? context.tr.login
+                  : context.tr.logout,
               icon: Icons.logout,
               onTap: () {
                 SharedMethods.signOutVendor(context);

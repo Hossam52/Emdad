@@ -10,6 +10,7 @@ import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/cubit/app_cubit.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:emdad/shared/widgets/profile_picture.dart';
 import 'package:emdad/shared/widgets/shared_componants/custom_country_city_dropdown.dart';
@@ -44,19 +45,19 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       body: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) => ChangeFiltersCubit()
+            create: (_) => ChangeFiltersCubit()
               ..initFilters(context,
                   initialCountryCode: user.country, intialCity: user.city),
           ),
           BlocProvider(
-            create: (context) => AuthCubit(),
+            create: (_) => AuthCubit(),
             lazy: false,
           ),
         ],
         child: BlocConsumer<AuthCubit, AuthState>(
           listener: (context, authState) {
             if (authState is UpdateProfileSuccessState) {
-              SharedMethods.showToast(context, 'تم تحديث بيانات الحساب بنجاح',
+              SharedMethods.showToast(context, context.tr.done_update_profile,
                   color: AppColors.successColor, textColor: Colors.white);
             }
             if (authState is UpdateProfileErrorState) {
@@ -73,8 +74,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      const CustomUpdateProfileAppBar(
-                          title: 'تعديل الملف الشخصي'),
+                      CustomUpdateProfileAppBar(title: context.tr.edit_profile),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
@@ -84,23 +84,23 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                 enabled: false,
                                 textEditingController:
                                     TextEditingController(text: user.name!),
-                                label: 'الاسم',
+                                label: context.tr.name,
                                 hint: '',
                                 validator: (val) {
                                   return null;
                                 }),
                             UpdateProfileTextField(
                                 textEditingController: organizationController,
-                                label: 'اسم المؤسسة',
-                                hint: 'ادخل الاسم',
+                                label: context.tr.organization_name,
+                                hint: context.tr.enter_name,
                                 validator: (val) {
                                   return null;
                                 }),
                             UpdateProfileTextField(
                                 textEditingController:
                                     commericalRegisterController,
-                                label: 'السجل الضريبي',
-                                hint: 'ادخل السجل الضريبي',
+                                label: context.tr.commercial_record,
+                                hint: context.tr.enter_tax_record,
                                 isDigitsOnly: true,
                                 validator: (val) {
                                   return null;
@@ -117,12 +117,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                                     onChange: (country) =>
                                         filtersCubit.changeSelectedCountry(
                                             context, country!),
-                                    title: 'الدولة',
+                                    title: context.tr.country,
                                   ),
                                 ),
                                 Expanded(
                                   child: _CustomDropDown(
-                                    title: 'المدينة',
+                                    title: context.tr.city,
                                     selected: filtersCubit.selectedCity,
                                     items: filtersCubit.cities,
                                     onChange: (city) =>
@@ -135,7 +135,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                             auhtState is UpdateProfileLoadingState
                                 ? const CircularProgressIndicator()
                                 : CustomButton(
-                                    text: 'تعديل',
+                                    text: context.tr.edit,
                                     width: 180.w,
                                     onPressed: () {
                                       log('//${organizationController.text} ${commericalRegisterController.text} ${filtersCubit.selectedCountryCode} ${filtersCubit.selectedCity}');

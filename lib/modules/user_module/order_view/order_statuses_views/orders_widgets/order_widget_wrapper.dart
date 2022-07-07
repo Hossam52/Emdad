@@ -1,5 +1,6 @@
 import 'package:emdad/modules/user_module/order_view/order_cubit/order_cubit.dart';
 import 'package:emdad/modules/user_module/order_view/order_cubit/order_states.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/default_loader.dart';
 import 'package:emdad/shared/widgets/ui_componants/no_data_widget.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class OrderWidgetWrapper extends StatelessWidget {
         if (orderCubit.emtpyOrder) {
           return NoDataWidget(
             onPressed: () {},
-            text: 'No order ',
+            text: context.tr.no_order_,
           );
         }
         return child;

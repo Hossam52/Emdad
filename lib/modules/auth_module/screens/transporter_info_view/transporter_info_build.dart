@@ -4,6 +4,7 @@ import 'package:emdad/modules/auth_module/screens/vendor_info_view/choose_locati
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:emdad/shared/widgets/custom_text.dart';
 import 'package:emdad/shared/widgets/custom_text_form_with_border.dart';
@@ -40,8 +41,7 @@ class _TransporterInfoBuildState extends State<TransporterInfoBuild> {
         AuthCubit cubit = AuthCubit.get(context);
         return SingleChildScrollView(
           physics: const BouncingScrollPhysics(
-              parent: AlwaysScrollableScrollPhysics()
-          ),
+              parent: AlwaysScrollableScrollPhysics()),
           child: Center(
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 16.w),
@@ -50,7 +50,7 @@ class _TransporterInfoBuildState extends State<TransporterInfoBuild> {
                 children: [
                   Align(
                     child: CustomText(
-                      text: 'شركه نقل',
+                      text: context.tr.delivery_comapny,
                       textStyle: secondaryTextStyle(),
                     ),
                   ),
@@ -60,69 +60,67 @@ class _TransporterInfoBuildState extends State<TransporterInfoBuild> {
                     hint: 'الهدي والتقوي',
                     type: TextInputType.text,
                     validate: (String? value) {},
-                    titleText: 'آسم المؤسسة',
+                    titleText: context.tr.organization_name,
                   ),
                   SizedBox(height: 15.h),
                   TextFormFiledWithBorder(
-                    controller: commercialRegisterController,
-                    hint: '١٢٣٤٥٦٧٨',
-                    type: TextInputType.text,
-                    validate: (String? value) {},
-                    titleText: 'السجل التجاري',
-                  ),
+                      controller: commercialRegisterController,
+                      hint: '١٢٣٤٥٦٧٨',
+                      type: TextInputType.text,
+                      validate: (String? value) {},
+                      titleText: context.tr.commercial_record),
                   SizedBox(height: 20.h),
                   CustomText(
-                    text: 'وسيلة النقل',
+                    text: context.tr.transportation_method,
                     textStyle:
-                    thirdTextStyle().copyWith(fontWeight: FontWeight.w500),
+                        thirdTextStyle().copyWith(fontWeight: FontWeight.w500),
                   ),
                   Wrap(
                     children: List.generate(
                       choices.length,
-                          (index) =>
-                          Padding(
-                            padding: EdgeInsets.all(6.r),
-                            child: FilterChip(
-                              avatar: CircleAvatar(
-                                child: Text(
-                                  choices[index].substring(0, 1),
-                                  style: thirdTextStyle(),
-                                ),
-                              ),
-                              label: Text(
-                                choices[index],
-                                style: thirdTextStyle(),
-                              ),
-                              selected: _filters.contains(choices[index]),
-                              onSelected: (selected) {
-                                setState(() {
-                                  if (selected) {
-                                    _filters.add(choices[index]);
-                                  } else {
-                                    _filters.removeWhere(
-                                            (element) =>
-                                        element == choices[index]);
-                                  }
-                                });
-                              },
+                      (index) => Padding(
+                        padding: EdgeInsets.all(6.r),
+                        child: FilterChip(
+                          avatar: CircleAvatar(
+                            child: Text(
+                              choices[index].substring(0, 1),
+                              style: thirdTextStyle(),
                             ),
                           ),
+                          label: Text(
+                            choices[index],
+                            style: thirdTextStyle(),
+                          ),
+                          selected: _filters.contains(choices[index]),
+                          onSelected: (selected) {
+                            setState(() {
+                              if (selected) {
+                                _filters.add(choices[index]);
+                              } else {
+                                _filters.removeWhere(
+                                    (element) => element == choices[index]);
+                              }
+                            });
+                          },
+                        ),
+                      ),
                     ),
                   ),
                   CustomText(
-                    text: 'مختارة: ${_filters.join(', ')}',
+                    text: '${context.tr.choosen}: ${_filters.join(', ')}',
                     textStyle: thirdTextStyle(),
                   ),
                   SizedBox(height: 20.h),
                   CustomText(
-                    text: 'الموقع',
+                    text: context.tr.location,
                     textStyle: thirdTextStyle(),
                   ),
                   SizedBox(height: 15.h),
-                  if(cubit.selectedLocation == null)
+                  if (cubit.selectedLocation == null)
                     ChooseLocationBuildItem(
                       cubit: cubit,
-                    ) else
+                    )
+                  else
                     Text(
                       cubit.selectedLocation.toString(),
                     ),
@@ -135,7 +133,7 @@ class _TransporterInfoBuildState extends State<TransporterInfoBuild> {
                       onPressed: () {
                         navigateToAndFinish(context, const TransporterLayout());
                       },
-                      text: 'انهاء',
+                      text: context.tr.finish,
                       radius: 4.r,
                     ),
                   ),

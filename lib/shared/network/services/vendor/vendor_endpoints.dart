@@ -26,4 +26,8 @@ class VendorEndpoints {
   static String acceptOffer(String offerId) {
     return generatePathVariable(offers, offerId);
   }
+
+  static String editProduct(String orderId) {
+    return generatePathVariable(products, orderId);
+  }
 }

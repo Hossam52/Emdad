@@ -327,5 +327,7 @@
 	"transportation_method_required" : "يجب تحديد وسيلة النقل" ,
 	"prefer_transportation" : "يفضل نقل " ,
 	"can_add_additional_item_not_in_vendor_products" : "يمكنك طلب خدمه إضافية غير موجوده داخل منتجات المورد" ,
-	"add_your_notes_for_the_requester" : "يمكنك كتابة هنا ملاحظاتك لصاحب هذا الطلب" 
+	"add_your_notes_for_the_requester" : "يمكنك كتابة هنا ملاحظاتك لصاحب هذا الطلب" ,
+	"done_edit_product":"تم تعديل المنتج بنجاح"
+
 }

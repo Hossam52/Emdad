@@ -6,6 +6,7 @@ import 'package:emdad/shared/network/local/cache_helper.dart';
 import 'package:emdad/shared/responsive/device_information.dart';
 import 'package:emdad/shared/responsive/responsive_widget.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,7 +27,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   Widget build(BuildContext context) {
     return responsiveWidget(
-        responsive: (context, DeviceInformation deviceInformation) {
+        responsive: (_, DeviceInformation deviceInformation) {
       return Scaffold(
         body: Padding(
           padding: EdgeInsets.symmetric(vertical: 10.h),
@@ -56,7 +57,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     width: 310.w,
                     height: 52.h,
                     backgroundColor: AppColors.primaryColor,
-                    text: isLast ? 'ابدء' : 'التالى',
+                    text: isLast ? context.tr.start : context.tr.next,
                     onPressed: () {
                       if (isLast) {
                         saveOnBoardingState(context);

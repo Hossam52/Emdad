@@ -327,5 +327,6 @@
 	"transportation_method_required" : "Transportation method is required" ,
 	"prefer_transportation" : "Prefer transportation" ,
 	"can_add_additional_item_not_in_vendor_products" : "Can add additional item not exisit in vendor products" ,
-	"add_your_notes_for_the_requester" : "Can wire your notes for the requester"
+	"add_your_notes_for_the_requester" : "Can wire your notes for the requester",
+	"done_edit_product":"Product modified successifully"
 }

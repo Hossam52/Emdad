@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:emdad/layout/widgets/custom_bottom_nav_item.dart';
 import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -21,26 +22,26 @@ typedef VendorBlocConsumer = BlocConsumer<VendorCubit, VendorStates>;
 
 //
 class VendorCubit extends Cubit<VendorStates> {
-  VendorCubit() : super(IntitalVendorState()) {
+  VendorCubit(BuildContext context) : super(IntitalVendorState()) {
     bottomItems = [
       CustomBottomNavItemModel(
         child: VendorOffersScreen(),
-        title: 'طلبات عرض سعر',
+        title: context.tr.orders_price_offer,
         icon: Icons.show_chart_outlined,
       ),
       CustomBottomNavItemModel(
         child: const VendorProductsScreen(),
-        title: 'منتجاتي',
+        title: context.tr.my_products,
         icon: Icons.shopping_cart_outlined,
       ),
       CustomBottomNavItemModel(
         child: const VendorPurchaseOrdersScreen(),
-        title: 'طلبات أوامر الشراء',
+        title: context.tr.purchase_orders_requests,
         icon: Icons.how_to_reg_outlined,
       ),
       CustomBottomNavItemModel(
         child: const SettingsScreen(),
-        title: 'الضبط',
+        title: context.tr.settings,
         icon: MyIcons.settings,
       ),
     ];
@@ -52,19 +53,6 @@ class VendorCubit extends Cubit<VendorStates> {
 
   int currentPageIndex = 0;
 
-  // List<String> titles = [
-  //   'طلب عرض سعر',
-  //   'منتجاتي',
-  //   'طلبات أوامر الشراء',
-  //   'الملف الشخصي',
-  // ];
-
-  // List<Widget> screens = [
-  //   VendorOffersScreen(),
-  //   const VendorProductsScreen(),
-  //   const VendorPurchaseOrdersScreen(),
-  //   const SettingsScreen(),
-  // ];
   CustomBottomNavItemModel get selectedBottomItem =>
       bottomItems[currentPageIndex];
   void changeToOffers() {

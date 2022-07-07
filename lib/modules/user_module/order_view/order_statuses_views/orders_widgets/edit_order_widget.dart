@@ -11,6 +11,7 @@ import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:emdad/shared/widgets/custom_icon_button.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,7 @@ class EditOrderItemsWidget extends StatelessWidget {
           MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (context) => CartCubit(
+                create: (_) => CartCubit(
                   intialCartItems: order.requestItems.map((e) {
                     log(e.productUnit);
                     log(e.units.first.productUnit);
@@ -92,7 +93,8 @@ class EditOrderItemsWidget extends StatelessWidget {
                             textColor: Colors.white);
                       }
                       if (state is ResendOrderRequestSuccessState) {
-                        SharedMethods.showToast(context, 'تم اعادة الطلب بنجاح',
+                        SharedMethods.showToast(
+                            context, context.tr.done_resend_order,
                             color: AppColors.successColor,
                             textColor: Colors.white);
                         Navigator.pop(context, true);
@@ -110,7 +112,7 @@ class EditOrderItemsWidget extends StatelessWidget {
                                 await cartCubit.resendOrderRequest(
                                     supplyRequestId: order.id);
                               },
-                        text: 'اعادة ارسال عرض سعر',
+                        text: context.tr.resend_price_offer,
                         backgroundColor: AppColors.primaryColor,
                       );
                     },

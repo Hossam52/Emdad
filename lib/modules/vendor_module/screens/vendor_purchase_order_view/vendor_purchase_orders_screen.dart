@@ -47,7 +47,7 @@ class VendorPurchaseOrdersScreen extends StatelessWidget {
         }
         final orders = purchaseOrdersCubit.orders;
         return BlocProvider(
-          create: (context) => FilterSuuplyRequestsCubit(orders),
+          create: (_) => FilterSuuplyRequestsCubit(orders),
           child: FilterSuuplyRequestsBlocBuilder(
             builder: (context, _) {
               final orders =

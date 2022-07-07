@@ -9,6 +9,8 @@ import 'package:emdad/modules/vendor_module/screens/vender_add_product_view/widg
 import 'package:emdad/modules/vendor_module/screens/vender_add_product_view/widgets/main_product_image.dart';
 import 'package:emdad/modules/vendor_module/screens/vender_add_product_view/widgets/product_details_widget.dart';
 import 'package:emdad/modules/vendor_module/vendor_cubits/vendor_product_crud_cubit/vendor_product_crud_cubit.dart';
+import 'package:emdad/modules/vendor_module/vendor_cubits/vendor_product_crud_cubit/vendor_product_crud_states.dart';
+import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
 import 'package:emdad/shared/widgets/change_language_widget.dart';
@@ -17,6 +19,7 @@ import 'package:emdad/shared/widgets/custom_text.dart';
 import 'package:emdad/shared/widgets/custom_text_form_field.dart';
 import 'package:emdad/shared/widgets/dialogs/add_new_price.dart';
 import 'package:emdad/shared/widgets/dialogs/confirm_exit_product_edit_dialog.dart';
+import 'package:emdad/shared/widgets/ui_componants/default_circular_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -48,11 +51,17 @@ class _VendorEditProductScreenState extends State<VendorEditProductScreen> {
         return false;
       },
       child: BlocProvider(
-        create: (context) => VendorProductCrudCubit(widget.product),
-        child: VendorProductCrudCubitBlocBuilder(
-          builder: (context, state) {
-            return VendorBlocConsumer(
-              listener: (context, state) {},
+        create: (_) => VendorProductCrudCubit(widget.product),
+        child: VendorProductCrudCubitBlocConsumer(
+          listener: (context, state) {
+            if (state is EditProductSuccessState) {
+              SharedMethods.showToast(context, 'Product modified successifully',
+                  color: AppColors.successColor, textColor: Colors.white);
+              Navigator.pop(context, true);
+            }
+          },
+          builder: (context, crudStates) {
+            return VendorBlocBuilder(
               builder: (context, state) {
                 final productCubit = VendorProductCrudCubit.instance(context);
                 return Scaffold(
@@ -94,16 +103,18 @@ class _VendorEditProductScreenState extends State<VendorEditProductScreen> {
                             children: [
                               ProductDetailsWidget(productCubit: productCubit),
                               Align(
-                                child: CustomButton(
-                                  width: 176.w,
-                                  height: 60.h,
-                                  backgroundColor: AppColors.primaryColor,
-                                  onPressed: () {
-                                    productCubit.editProduct();
-                                  },
-                                  text: 'حفظ',
-                                  radius: 10.r,
-                                ),
+                                child: crudStates is EditProductLoadingState
+                                    ? const DefaultCircularProgressIndicator()
+                                    : CustomButton(
+                                        width: 176.w,
+                                        height: 60.h,
+                                        backgroundColor: AppColors.primaryColor,
+                                        onPressed: () {
+                                          productCubit.editProduct();
+                                        },
+                                        text: 'حفظ',
+                                        radius: 10.r,
+                                      ),
                               ),
                             ],
                           ),
@@ -128,7 +139,7 @@ class _VendorEditProductScreenState extends State<VendorEditProductScreen> {
           bottom: Radius.circular(15.r),
         ),
       ),
-      iconTheme: IconThemeData(color: Colors.white),
+      iconTheme: const IconThemeData(color: Colors.white),
       title: CustomText(
         text: 'تعديل منتج',
         textStyle: primaryTextStyle().copyWith(

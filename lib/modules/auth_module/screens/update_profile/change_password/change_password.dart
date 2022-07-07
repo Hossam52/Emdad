@@ -7,6 +7,7 @@ import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/custom_button.dart';
 import 'package:emdad/shared/widgets/default_loader.dart';
 import 'package:flutter/gestures.dart';
@@ -25,7 +26,7 @@ class ChangePasswordScreen extends StatelessWidget {
       height: SharedMethods.getHeightFraction(context, 0.03),
     );
     return BlocProvider(
-      create: (context) => AuthCubit(),
+      create: (_) => AuthCubit(),
       child: Scaffold(
         body: Form(
           key: formKey,
@@ -36,7 +37,8 @@ class ChangePasswordScreen extends StatelessWidget {
                     textColor: Colors.white, color: AppColors.errorColor);
               }
               if (state is ChangePasswordSuccessState) {
-                SharedMethods.showToast(context, 'تم تعديل كلمة السر بنجاح',
+                SharedMethods.showToast(
+                    context, context.tr.done_change_password,
                     textColor: Colors.white, color: AppColors.successColor);
               }
             },
@@ -52,30 +54,30 @@ class ChangePasswordScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const CustomUpdateProfileAppBar(
-                          title: 'تغيير الرقم السري',
+                        CustomUpdateProfileAppBar(
+                          title: context.tr.change_password,
                         ),
                         sizedBox,
                         UpdateProfileTextField(
-                          hint: 'Enter old password',
+                          hint: context.tr.enter_old_password,
                           textEditingController: oldPasswordController,
-                          label: 'Old password',
+                          label: context.tr.old_password,
                           validator: (val) {
                             return SharedMethods.passwordValidation(val);
                           },
                         ),
                         UpdateProfileTextField(
-                          hint: 'Enter the new password',
+                          hint: context.tr.enter_the_new_password,
                           textEditingController: newPasswordController,
-                          label: 'New password',
+                          label: context.tr.new_password,
                           validator: (val) {
                             return SharedMethods.passwordValidation(val);
                           },
                         ),
                         UpdateProfileTextField(
-                          hint: 'Enter confirmation password',
+                          hint: context.tr.enter_confirmation_password,
                           textEditingController: confirmPasswordController,
-                          label: 'Confirm password',
+                          label: context.tr.confirm_password,
                           validator: (val) {
                             final passwordValidation =
                                 SharedMethods.passwordValidation(val);
@@ -109,7 +111,7 @@ class ChangePasswordScreen extends StatelessWidget {
                               }
                             },
                             backgroundColor: AppColors.primaryColor,
-                            text: 'Send confirmation',
+                            text: context.tr.send_confirmation,
                             height:
                                 SharedMethods.getHeightFraction(context, 0.1),
                             textStyle: primaryTextStyle()
@@ -123,7 +125,7 @@ class ChangePasswordScreen extends StatelessWidget {
                               foregroundColor:
                                   MaterialStateProperty.all(Colors.black),
                             ),
-                            child: const Text('Forget password?'),
+                            child: Text(context.tr.forgot_password + ' ? '),
                           ),
                         ),
                         SizedBox(
@@ -132,12 +134,12 @@ class ChangePasswordScreen extends StatelessWidget {
                         Center(
                           child: RichText(
                               text: TextSpan(
-                                  text: 'Don\'t have account? ',
+                                  text: context.tr.dont_have_account + ' ? ',
                                   style: secondaryTextStyle()
                                       .copyWith(color: Colors.black),
                                   children: [
                                 TextSpan(
-                                    text: 'Register now',
+                                    text: context.tr.register_now,
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () =>
                                           navigateTo(context, RegisterScreen()),

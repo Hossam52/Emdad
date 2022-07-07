@@ -3,6 +3,7 @@ import 'package:emdad/modules/user_module/order_view/order_tracking/order_tracki
 import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/icons/my_icons_icons.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -27,7 +28,7 @@ class TrackingWidget extends StatelessWidget {
                     order: order,
                   ));
             },
-            label: const Text('متابعة العملية'),
+            label: Text(context.tr.track_the_process),
             icon: const Icon(MyIcons.track_order),
             backgroundColor: AppColors.primaryColor,
           ),

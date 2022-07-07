@@ -28,7 +28,7 @@ class RequestTransformDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ChangeFiltersCubit()
+      create: (_) => ChangeFiltersCubit()
         ..initFilters(context)
         ..setIntialValues(
           setSelectedCountryToFirst: true,

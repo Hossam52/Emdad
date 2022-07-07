@@ -4,6 +4,7 @@ import 'package:emdad/shared/componants/components.dart';
 import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/custom_text.dart';
 import 'package:emdad/shared/widgets/custom_text_form_field.dart';
 import 'package:emdad/shared/widgets/default_progress_button.dart';
@@ -27,7 +28,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return Scaffold(
         appBar: AppBar(
           title: CustomText(
-            text: 'نسيت كلمة المرور',
+            text: context.tr.forgot_password,
             textStyle: secondaryTextStyle(),
           ),
         ),
@@ -42,7 +43,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     CustomTextFormField(
                       controller: emailController,
                       type: TextInputType.text,
-                      titleText: 'الايميل',
+                      titleText: context.tr.email,
                       hint: 'Eng.hossam@gmail.com',
                       hasBorder: false,
                       backgroundColor: AppColors.textWhiteGrey,
@@ -53,10 +54,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     SizedBox(height: 20.h),
                     DefaultProgressButton(
                       buttonState: ButtonState.idle,
-                      loadingText: 'جار الارسال',
-                      idleText: 'ارسال الرمز الي الايميل',
-                      failText: 'حدث خطأ',
-                      successText: "تم الارسال",
+                      loadingText: context.tr.sending,
+                      idleText: context.tr.send_code_to_mail,
+                      failText: context.tr.error_happened,
+                      successText: context.tr.done_sending,
                       borderRadius: 4.r,
                       onPressed: () {
                         formKey.currentState!.save();

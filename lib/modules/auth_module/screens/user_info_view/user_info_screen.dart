@@ -6,6 +6,7 @@ import 'package:emdad/modules/auth_module/screens/vendor_info_view/choose_locati
 import 'package:emdad/shared/componants/shared_methods.dart';
 import 'package:emdad/shared/styles/app_colors.dart';
 import 'package:emdad/shared/styles/font_styles.dart';
+import 'package:emdad/shared/translation_service.dart';
 import 'package:emdad/shared/widgets/custom_text.dart';
 import 'package:emdad/shared/widgets/custom_text_form_field.dart';
 import 'package:emdad/shared/widgets/default_progress_button.dart';
@@ -66,7 +67,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                       children: [
                         Align(
                           child: CustomText(
-                            text: 'مطعم \\ كافيه',
+                            text: context.tr.caffe_or_resturant,
                             textStyle: secondaryTextStyle(),
                           ),
                         ),
@@ -77,7 +78,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                           type: TextInputType.text,
                           validation: (String? value) =>
                               SharedMethods.defaultValidation(value),
-                          titleText: 'آسم المؤسسة',
+                          titleText: context.tr.organization_name,
                           backgroundColor: AppColors.textWhiteGrey,
                           hasBorder: false,
                         ),
@@ -88,13 +89,13 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                           type: TextInputType.text,
                           validation: (String? value) =>
                               SharedMethods.defaultValidation(value),
-                          titleText: 'السجل التجاري',
+                          titleText: context.tr.tax,
                           backgroundColor: AppColors.textWhiteGrey,
                           hasBorder: false,
                         ),
                         SizedBox(height: 10.h),
                         CustomText(
-                          text: 'الموقع',
+                          text: context.tr.location,
                           textStyle: thirdTextStyle(),
                         ),
                         SizedBox(height: 10.h),
@@ -117,9 +118,9 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                           alignment: Alignment.center,
                           child: DefaultProgressButton(
                             buttonState: cubit.completeProfileStates,
-                            idleText: 'انهاء',
-                            failText: 'حدث خطأ',
-                            successText: 'تم التسجيل',
+                            idleText: context.tr.finish,
+                            failText: context.tr.error_happened,
+                            successText: context.tr.done_register,
                             onPressed: () {
                               formKey.currentState!.save();
                               if (formKey.currentState!.validate()) {

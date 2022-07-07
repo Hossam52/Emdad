@@ -1,3 +1,5 @@
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:bloc/bloc.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:emdad/layout/guest_layout/guest_user_layout.dart';
@@ -92,13 +94,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => AuthCubit()),
+        BlocProvider(create: (_) => AuthCubit()),
         BlocProvider(
-          create: (context) => AppCubit()..getSettings(),
+          create: (_) => AppCubit()..getSettings(),
           lazy: false,
         ),
-        BlocProvider(create: (context) => TransporterCubit()),
-        BlocProvider(create: (context) => VendorCubit()),
+        BlocProvider(create: (_) => VendorCubit(context)),
       ],
       child: OrientationBuilder(
         builder: (context, orientation) => ScreenUtilInit(
@@ -112,12 +113,12 @@ class MyApp extends StatelessWidget {
             themeMode: ThemeMode.light,
             home: startWidget,
             supportedLocales: L10n.all,
-            locale: Locale('ar'),
+            locale: Locale('en'),
             // locale: Constants.lang != null
             //     ? Locale(Constants.lang!)
             //     : AppCubit.get(context).localeApp,
             localizationsDelegates: const [
-              // AppLocalizations.delegate,
+              AppLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
